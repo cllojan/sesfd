@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styled from "styled-components";
+import {useRouter} from 'next/router';
 import {useContext, useState} from "react";
 import {CartContext} from "@/components/CartContext";
 import BarsIcon from "@/components/icons/Bars";
@@ -21,7 +22,7 @@ const Wrapper = styled.div`
   padding: 20px 0;
 `;
 const StyledNav = styled.nav`
-  ${props => props.mobileNavActive ? `
+  ${props => (props.mobileNavActive || props.cartOpen) ? `
     display: block;
   ` : `
     display: none;
@@ -49,6 +50,7 @@ const NavLink = styled(Link)`
     padding:0;
   }
 `;
+
 const NavButton = styled.button`
   background-color: transparent;
   width: 30px;
@@ -63,7 +65,7 @@ const NavButton = styled.button`
     display: none;
   }
 `;
-const ContInput = styled.div`
+const ContInput = styled.form`
   display:flex;
   align-items: center;
   
@@ -91,31 +93,49 @@ const ButtonSearch = styled.button`
     width:20px;
   }
 `
+
 export default function Header() {
+  const router = useRouter();
   const {cartProducts} = useContext(CartContext);
   const [mobileNavActive,setMobileNavActive] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const handleSearch = (event) => {    
+    event.preventDefault();
+    // Redirigir a la página de búsqueda con el término de búsqueda en la URL
+    router.push({
+      pathname:`/product/search/${searchTerm}`
+    });
+    setSearchTerm("");
+  };
+  
   return (
     <StyledHeader>      
         <Wrapper>
           <Logo href={'/'}>Ecommerce</Logo>
-          <ContInput>
-            <InputSearch />
-            <ButtonSearch>
-            <SearchIcon/>
-
-            </ButtonSearch>
+          <ContInput onSubmit={handleSearch}>
+            
+            <InputSearch type="text" name="search" onChange={(e)=>setSearchTerm(e.target.value)}/>
+            <ButtonSearch type="submit">
+              <SearchIcon/>
+            </ButtonSearch>            
           </ContInput>          
-          <StyledNav mobileNavActive={mobileNavActive}>
-            {/*<NavLink href={'/'}>Inicio</NavLink>*/}
+          <StyledNav mobileNavActive={mobileNavActive} >
+            {/*<NavLink href={'/'}>Inicio</NavLink>
+              <NavLink href={"/categoria"}>Categorias</NavLink>
+            */}
             <NavLink href={'/products'}>Productos</NavLink>
-            <NavLink href={'/categories'}>Categorias</NavLink>
+            
             {/*<NavLink href={'/account'}>Account</NavLink>*/}
-            <NavLink href={'/cart'}>Cart ({cartProducts.length})</NavLink>
+            <NavLink href={"/cart"}>Cart ({cartProducts.length})</NavLink>
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
             <BarsIcon />
           </NavButton>
-        </Wrapper>      
+        </Wrapper>
+        
+           
+
+
     </StyledHeader>
   );
 }
