@@ -116,7 +116,7 @@ export default function Header() {
             
             <InputSearch type="text" name="search" onChange={(e)=>setSearchTerm(e.target.value)}/>
             <ButtonSearch type="submit">
-              <SearchIcon/>
+              
             </ButtonSearch>            
           </ContInput>          
           <StyledNav mobileNavActive={mobileNavActive} >

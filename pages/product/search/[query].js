@@ -11,11 +11,13 @@ import FilterProduct from '@/components/FilterProduct';
 
 
 export default function SearchProduct({products,category}){
+  
     return (
         <>
           <Header />
         
           <Center>
+            
             <Title>All products</Title>
             <div>
             <FilterProduct category={category}></FilterProduct>
@@ -30,10 +32,12 @@ export async function getServerSideProps(context) {
      await mongooseConnect();
      const {query} = context.query
      const categoryIds = ["6490d47f07756020e23836d9", "64a6e321baa8f76629dab656"];
-
+     
+     
     const validCategoryIds = categoryIds.filter((categoryId) =>
       mongoose.Types.ObjectId.isValid(categoryId)
     );
+
      const products = await Product.find({
       $and:[
         {
@@ -51,29 +55,29 @@ export async function getServerSideProps(context) {
       });
 
     //const product = await db.collection("products")        
-    const category = await Category.find().populate('parent')
+    //const category = await Category.find().populate('parent')
+    const category = await Category.find({ parent: { $exists: false } }, 'name');
     const categoriasHijas = {};
-
+    
     for (const categoriaPrincipal of category) {
       const categoriaId = categoriaPrincipal._id;
       const hijas = await Category.find({ parent: categoriaId }, 'name');
-      categoriasHijas[categoriaId] = hijas.map((hija) => ({
-        id: hija._id,
-        name: hija.name
-      }));
+      categoriasHijas[categoriaId] = hijas;
     }
-
+    
     const categoriasJson = category.map((categoriaPrincipal) => ({
       id: categoriaPrincipal._id,
       name: categoriaPrincipal.name,
       parents: categoriasHijas[categoriaPrincipal._id] || []
     }));
-
-    console.log(categoriasJson)
+    for (const categoria of categoriasJson) {
+      categoria.parents = categoria.parents.filter((hija) => !categoriasJson.some((c) => c.id === hija.id));
+    }
+    
     return {
       props: {
         products: JSON.parse(JSON.stringify(products)),
-        category:JSON.parse(JSON.stringify(category))
+        category:JSON.parse(JSON.stringify(categoriasJson))
       }
     }
   }
