@@ -3,10 +3,16 @@ import Featured from "@/components/Featured";
 import {Product} from "@/models/Product";
 import {mongooseConnect} from "@/lib/mongoose";
 import NewProducts from "@/components/NewProducts";
-
+import { Inter } from 'next/font/google'
+ 
+// If loading a variable font, you don't need to specify the font weight
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
 export default function HomePage({featuredProduct,newProducts}) {
   return (
-    <div>
+    <div  className={inter.className}>
       <Header />
       <Featured product={featuredProduct} />
       <NewProducts products={newProducts} />

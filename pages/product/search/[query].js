@@ -16,14 +16,9 @@ export default function SearchProduct({ products, category }) {
     <>
       <Header />
 
-      <Center>
-
-        <Title>All products</Title>
-        <div>
+      <Center>                
           <FilterProduct category={category}></FilterProduct>
-          <ProductsGrid products={products} />
-        </div>
-
+          <ProductsGrid products={products} />        
       </Center>
     </>
   );
@@ -31,13 +26,13 @@ export default function SearchProduct({ products, category }) {
 export async function getServerSideProps(context) {
   await mongooseConnect();
   const { query, categorys,min,max } = context.query
-
+  const searchTerm = query.length === "" ? " " : query;
   const categoryIds = categorys?.length > 0 ? categorys.split(",") : categorys ;    
   console.log(context);
   const productsQuery = {
     $or: [
-      { title: { $regex: query, $options: "i" } },
-      { description: { $regex: query, $options: "i" } },
+      { title: { $regex: searchTerm, $options: "i" } },
+      { description: { $regex: searchTerm, $options: "i" } },
     ],    
   };  
   if (categoryIds?.length > 0) {
