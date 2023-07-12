@@ -1,7 +1,13 @@
 import { use, useState, useContext, useEffect } from "react";
 import { useRouter } from 'next/router';
 import styled from "styled-components";
+import Button from "@/components/Button";
 
+
+const Test = styled.div`
+    
+    margin:20px;
+`
 const Input = styled.input`
     height: 30px;
     padding-left:10px;
@@ -85,6 +91,18 @@ const Label = styled.label`
     font-size:1em;
     margin-top:10px;
 `
+
+const AddCartButton= styled.button`
+  border:none;
+  border-radius:4px;
+  width:100%;
+  height:40px;
+  background:#FACC15;
+  color:#000;
+  font-weight:bolder;  
+  margin-top:10px;
+  vertical-align: middle;
+`
 export default function FilterProduct({ category }) {
     const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState([]);
     const [searchTerm, setSearchTerm] = useState(" ");
@@ -112,7 +130,7 @@ export default function FilterProduct({ category }) {
 
     };
     return (
-        <div className="">
+        <Test className="">
             <form action="" onSubmit={handleSearch}>
                 <Inputs>
                     <Label htmlFor="">Buscar</Label>
@@ -159,9 +177,9 @@ export default function FilterProduct({ category }) {
                         ))
                     }
                 </Category>
-                <button type="submit">Click</button>
+                <AddCartButton type="submit">Buscar</AddCartButton>
             </form>
-        </div>
+        </Test>
 
     )
 }

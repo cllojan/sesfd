@@ -14,7 +14,7 @@ export default function HomePage({featuredProduct,newProducts}) {
   return (
     <div  className={inter.className}>
       <Header />
-      <Featured product={featuredProduct} />
+    
       <NewProducts products={newProducts} />
     </div>
   );

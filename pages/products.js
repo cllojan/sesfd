@@ -8,15 +8,21 @@ import ProductsGrid from "@/components/ProductsGrid";
 import { Category } from '@/models/Category';
 import FilterProduct from '@/components/FilterProduct';
 
+
+const ProductCom = styled.div`
+  width:100%;
+  height:100vh;
+  display:grid;
+  grid-template-columns: 350px 2fr;
+`
 export default function ProductsPage({products,category}) {
   return (
     <>
       <Header />
-      <Center>
-        
+      <ProductCom>        
         <FilterProduct category={category}></FilterProduct>
         <ProductsGrid products={products} />
-      </Center>
+      </ProductCom>
     </>
   );
 }
