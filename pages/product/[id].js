@@ -34,7 +34,7 @@ export default function ProductPage({product}) {
   return (
     <>
       <Header />
-      <Center>
+      <div>
         <ColWrapper>
           <WhiteBox>
             <ProductImages images={product.images} />
@@ -54,7 +54,7 @@ export default function ProductPage({product}) {
             </PriceRow>
           </div>
         </ColWrapper>
-      </Center>
+      </div>
     </>
   );
 }

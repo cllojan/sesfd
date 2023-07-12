@@ -8,12 +8,15 @@ import axios from "axios";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
 
+
+const ConstCart= styled.div`
+ 
+  margin:20px;
+`
 const ColumnsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  @media screen and (min-width: 768px) {
-    grid-template-columns: 1.2fr .8fr;
-  }
+  grid-template-columns: 1fr 1fr;
+  
   gap: 40px;
   margin-top: 40px;
 `;
@@ -22,6 +25,7 @@ const Box = styled.div`
   background-color: #fff;
   border-radius: 10px;
   padding: 30px;
+  box-shadow: 0 0 #0000,0 0 #0000,0 10px 15px -3px #0000001a,0 4px 6px -4px #0000001a;
 `;
 
 const ProductInfoCell = styled.td`
@@ -65,7 +69,14 @@ const CityHolder = styled.div`
   display:flex;
   gap: 5px;
 `;
-
+const ButtonSend = styled.button`
+  border:none;
+  height:40px;
+  border-radius:7px;
+  color:#fff;
+  background-color: #111827;
+  cursor:pointer;
+`
 export default function CartPage() {
   const {cartProducts,addProduct,removeProduct,clearCart} = useContext(CartContext);
   const [products,setProducts] = useState([]);
@@ -134,7 +145,7 @@ export default function CartPage() {
   return (
     <>
       <Header />
-      <Center>
+      <ConstCart>
         <ColumnsWrapper>
           <Box>
             <h2>Cart</h2>
@@ -184,7 +195,7 @@ export default function CartPage() {
           </Box>
           {!!cartProducts?.length && (
             <Box>
-              <h2>Order information</h2>
+              <h2>Informacion</h2>
               <Input type="text"
                      placeholder="Name"
                      value={name}
@@ -217,14 +228,14 @@ export default function CartPage() {
                      value={country}
                      name="country"
                      onChange={ev => setCountry(ev.target.value)}/>
-              <Button black block
+              <ButtonSend black block
                       onClick={goToPayment}>
                 Continue to payment
-              </Button>
+              </ButtonSend>
             </Box>
           )}
         </ColumnsWrapper>
-      </Center>
+      </ConstCart>
     </>
   );
 }

@@ -2,10 +2,10 @@ import styled from "styled-components";
 import ProductBox from "@/components/ProductBox";
 
 const StyledProductsGrid = styled.div`
+  height:0;
   display:flex;
   flex-wrap:wrap;
-  justify-content: center;
-  align-items:center;
+  
   gap:20px;
   margin:20px;
 `;
