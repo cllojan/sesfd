@@ -18,7 +18,7 @@ const ImageButtons = styled.div`
 const ImageButton = styled.div`
     border: 2px solid #ccc;
     ${props => props.active ? `
-      border-color: #ccc;
+      border-color:  #007bff;
     ` : `
       border-color: transparent;
     `}
@@ -28,15 +28,22 @@ const ImageButton = styled.div`
     border-radius: 5px;
   `;
 const BigImageWrapper = styled.div`
+  width:100%;
+  height:550px;
   text-align: center;
+  background-image: url(${(props => props.link)});
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0.75rem;
 `;
 
 export default function ProductImages({images}) {
   const [activeImage,setActiveImage] = useState(images?.[0]);
   return (
     <>
-      <BigImageWrapper>
-        <BigImage src={activeImage} />
+      <BigImageWrapper link={activeImage}>
+        
       </BigImageWrapper>
       <ImageButtons>
         {images?.map(image => (

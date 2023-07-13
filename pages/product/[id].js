@@ -11,50 +11,78 @@ import CartIcon from "@/components/icons/CartIcon";
 import {useContext} from "react";
 import {CartContext} from "@/components/CartContext";
 
+
+const Test = styled.div`
+  margin:20px;
+`
 const ColWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
-  @media screen and (min-width: 768px) {
-    grid-template-columns: .8fr 1.2fr;
-  }
+  grid-template-columns: 2fr 1fr;
+  
   gap: 40px;
   margin: 40px 0;
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns:1fr;
+    grid-template-rows: .8fr 1.2fr;
+  }
 `;
 const PriceRow = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 20px;
-  align-items: center;
+  
 `;
 const Price = styled.span`
   font-size: 1.4rem;
 `;
+const Parh = styled.p`
+  text-align:justify;
+`
 
+const Info = styled.div`
+  margin-top:40px;
+`
+
+const AddCartButton= styled.button`
+  border:none;
+  border-radius:4px;
+  width:100%;
+  height:40px;
+  background:#FACC15;
+  color:#000;
+  font-weight:bolder;  
+  margin-top:10px;
+  vertical-align: middle;
+`
 export default function ProductPage({product}) {
   const {addProduct} = useContext(CartContext);
   return (
     <>
       <Header />
-      <div>
+      <Test>
         <ColWrapper>
-          <WhiteBox>
-            <ProductImages images={product.images} />
-          </WhiteBox>
+        
           <div>
-            <Title>{product.title}</Title>
-            <p>{product.description}</p>
+          <Title>{product.title}</Title>    
+            <ProductImages images={product.images} />
+          </div>
+          <Info>
+            <h3>Descripcion</h3>
+            <Parh>{product.description}</Parh>
             <PriceRow>
               <div>
                 <Price>${product.price}</Price>
               </div>
               <div>
-                <Button primary onClick={() => addProduct(product._id)}>
-                  <CartIcon />Add to cart
-                </Button>
+                <AddCartButton primary onClick={() => addProduct(product._id)}>
+                  Add to cart
+                </AddCartButton>
               </div>
             </PriceRow>
-          </div>
+          </Info>
         </ColWrapper>
-      </div>
+      </Test>
     </>
   );
 }
