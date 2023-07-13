@@ -4,15 +4,23 @@ import {useRouter} from 'next/router';
 import {useContext, useState} from "react";
 import {CartContext} from "@/components/CartContext";
 import BarsIcon from "@/components/icons/Bars";
+import CartIcon from '@/components/icons/CartIcon';
 import SearchIcon from '@/components/icons/Search';
 const StyledHeader = styled.header`
-  background-color: #222;
+  background-color: #fff;
 `;
 const Logo = styled(Link)`
-  color:#fff;
+  color:#000;
   text-decoration:none;
   position: relative;
   z-index: 3;
+  & img{
+    position:absolute;
+    bottom: -80px;
+    right:-80px;
+    width:150px;
+    height:150px;
+  }
 `;
 const Wrapper = styled.div`
   display: flex;
@@ -34,18 +42,25 @@ const StyledNav = styled.nav`
   left: 0;
   right: 0;
   padding: 70px 20px 20px;
-  background-color: #222;
+ 
   @media screen and (min-width: 768px) {
     display: flex;
+    align-items:center;
     position: static;
     padding: 0;
   }
 `;
 const NavLink = styled(Link)`
   display: block;
-  color:#aaa;
+  color:#17202A;
   text-decoration:none;
   padding: 10px 0;
+  svg{
+    margin:0;
+    padding:0;
+    height:25px;
+    width:25px;
+  }
   @media screen and (min-width: 768px) {
     padding:0;
   }
@@ -59,41 +74,85 @@ const NavButton = styled.button`
   color: white;
   cursor: pointer;
   position: relative;
-
+  
   z-index: 3;
   @media screen and (min-width: 768px) {
     display: none;
   }
 `;
 const ContInput = styled.form`
+  position:relative;
   display:flex;
-  align-items: center;
-  
+  flex-direction: row;
+  align-items: center;  
+  justify-content: flex-end;
+  border:1px solid #eee;
+  padding:1px;
   background-color: #fff;
-  width:400px;
-  height: 30px;
-  
+  width:450px;
+  height: 40px;
+  border-radius:50px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  &:focus-within{
+    outline:1px solid #007bff; 
+    
+  }
 `;
 const InputSearch = styled.input`
-  padding-left:15px;
+  flex-grow:2;
   width:100%;
   border:none;
-  padding-left:10px;
+  border-radius:50px;
+  padding-left:16px;
+  font-family: 'Inter';
+ 
   &:focus{
     outline:none;
   }
+  
 `
 const ButtonSearch = styled.button`
-  border:none;
-  width:40px;
-  background:none;
-  cursor:pointer;
+  position: absolute;
+  width:35px;
+  height:35px;
+  top: 50%;
+  right: 8px;
+  
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 9999px;
+  color: #17202A;
+  background-color: #eee;
+  padding: 8px;  
+  transition: color 0.2s;
+  cursor: pointer;
   svg{
     height:20px;
     width:20px;
   }
 `
+const CartLink= styled(NavLink)`
 
+  position:relative;  
+  
+`
+
+const SpanCont = styled.span`
+  position:absolute;
+  bottom: 15px;
+  left:20px;
+  text-align: center;
+  width:20px;
+  height:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background-color:#FACC15;
+  border-radius:50%;
+  font-family:'Roboto Mono',sans-serif;
+  color:#17202A;
+  font-weight: bold;
+`
 export default function Header() {
   const router = useRouter();
   const {cartProducts} = useContext(CartContext);
@@ -111,12 +170,15 @@ export default function Header() {
   return (
     <StyledHeader>      
         <Wrapper>
-          <Logo href={'/'}>Ecommerce</Logo>
+          <Logo href={'/'}>
+            <img src="https://www.logolynx.com/images/logolynx/4c/4c1e9d4c49f1ee74f3bb871a181fea10.png" alt="" srcset="" />
+          </Logo>
+          
           <ContInput onSubmit={handleSearch}>
             
             <InputSearch type="text" name="search" onChange={(e)=>setSearchTerm(e.target.value)}/>
             <ButtonSearch type="submit">
-              
+              <SearchIcon/>
             </ButtonSearch>            
           </ContInput>          
           <StyledNav mobileNavActive={mobileNavActive} >
@@ -125,8 +187,8 @@ export default function Header() {
             */}
             <NavLink href={'/products'}>Productos</NavLink>
             
-            {/*<NavLink href={'/account'}>Account</NavLink>*/}
-            <NavLink href={"/cart"}>Cart ({cartProducts.length})</NavLink>
+            {/*<NavLink href={'/account'}>Account Cart ({cartProducts.length})</NavLink>*/}
+            <CartLink href={"/cart"}><CartIcon/> <SpanCont>{cartProducts.length}</SpanCont></CartLink>
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
             <BarsIcon />

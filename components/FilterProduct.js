@@ -14,7 +14,9 @@ const Input = styled.input`
     border:2px solid #ccc;
     border-radius:5px;
     font-size:14px;
+    
     &:focus{
+        
         outline:none;
         border:2px solid #007bff;
         font-size:14px;
@@ -102,6 +104,11 @@ const AddCartButton= styled.button`
   font-weight:bolder;  
   margin-top:10px;
   vertical-align: middle;
+  font-weight: 500;
+  cursor:pointer;
+
+  font-family:'Inter', Courier, monospace;
+
 `
 export default function FilterProduct({ category }) {
     const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState([]);

@@ -13,9 +13,12 @@ const inter = Inter({
 })
 const ProductWrapper = styled.div`
   background-color: #fff;
+  border:1px solid #eee;
   border-radius: 5px;
   width:270px;
   height: 290px;
+  
+  
 `;
 
 const WhiteBox = styled(Link)`
@@ -78,8 +81,8 @@ const AddCartButton= styled(Button)`
   height:30px;
   background:#FACC15;
   color:#000;
-  font-weight:bolder;
-  
+  font-weight: 500;
+  font-family:'Inter', Courier, monospace;
 `
 export default function ProductBox({_id,title,description,price,images}) {
   const {addProduct} = useContext(CartContext);
@@ -97,7 +100,7 @@ export default function ProductBox({_id,title,description,price,images}) {
           </Price>
           
         </PriceRow>
-        <AddCartButton block onClick={() => addProduct(_id)} primary outline>
+        <AddCartButton className={inter.className} block onClick={() => addProduct(_id)} primary outline>
             Add to cart
           </AddCartButton>
       </ProductInfoBox>
