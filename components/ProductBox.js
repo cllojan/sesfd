@@ -14,7 +14,7 @@ const inter = Inter({
 const ProductWrapper = styled.div`
   background-color: #fff;
   border-radius: 5px;
-  width:250px;
+  width:270px;
   height: 290px;
 `;
 
