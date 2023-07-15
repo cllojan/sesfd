@@ -82,6 +82,7 @@ export default function CartPage() {
   const [products,setProducts] = useState([]);
   const [name,setName] = useState('');
   const [email,setEmail] = useState('');
+  const [cellphone,setCellPhone] = useState('');
   const [city,setCity] = useState('');
   const [postalCode,setPostalCode] = useState('');
   const [streetAddress,setStreetAddress] = useState('');
@@ -114,7 +115,7 @@ export default function CartPage() {
   }
   async function goToPayment() {
     const response = await axios.post('/api/checkout', {
-      name,email,city,postalCode,streetAddress,country,
+      name,email,cellphone,city,postalCode,streetAddress,country,
       cartProducts,
     });
     if (response.data.url) {
@@ -197,7 +198,7 @@ export default function CartPage() {
             <Box>
               <h2>Informacion</h2>
               <Input type="text"
-                     placeholder="Name"
+                     placeholder="Nombre"
                      value={name}
                      name="name"
                      onChange={ev => setName(ev.target.value)} />
@@ -206,7 +207,14 @@ export default function CartPage() {
                      value={email}
                      name="email"
                      onChange={ev => setEmail(ev.target.value)}/>
+              <Input type="text"
+                     placeholder="Celular"
+                     value={email}
+                     name="cell"
+                     onChange={ev => setCellPhone(ev.target.value)}/>
+
               <CityHolder>
+                
                 <Input type="text"
                        placeholder="City"
                        value={city}
@@ -230,7 +238,7 @@ export default function CartPage() {
                      onChange={ev => setCountry(ev.target.value)}/>
               <ButtonSend black block
                       onClick={goToPayment}>
-                Continue to payment
+                Enviar
               </ButtonSend>
             </Box>
           )}
@@ -239,3 +247,4 @@ export default function CartPage() {
     </>
   );
 }
+
