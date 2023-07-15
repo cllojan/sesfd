@@ -209,7 +209,7 @@ export default function CartPage() {
                      onChange={ev => setEmail(ev.target.value)}/>
               <Input type="text"
                      placeholder="Celular"
-                     value={email}
+                     value={cellphone}
                      name="cell"
                      onChange={ev => setCellPhone(ev.target.value)}/>
 
