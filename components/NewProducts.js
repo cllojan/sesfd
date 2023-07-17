@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Center from "@/components/Center";
 import ProductsGrid from "@/components/ProductsGrid";
 
+import SliderProducts from "@/components/SliderProducts";
 const Title = styled.h2`
   font-size: 2rem;
   margin:30px 0 20px;
@@ -16,10 +17,11 @@ const ContProduct = styled.div`
   margin:20px;
 `
 export default function NewProducts({products}) {
+ 
   return (
     <ContProduct>              
       <Title>Nuevos Productos</Title>
-      <ProductsGrid products={products} />
+      <SliderProducts products={products} />
     </ContProduct>
   );
 }

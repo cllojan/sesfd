@@ -7,6 +7,7 @@ import ProductsGrid from "@/components/ProductsGrid";
 
 import { Category } from '@/models/Category';
 import FilterProduct from '@/components/FilterProduct';
+import Footer from "@/components/Footer";
 
 
 const ProductCom = styled.div`
@@ -23,6 +24,7 @@ export default function ProductsPage({products,category}) {
         <FilterProduct category={category}></FilterProduct>
         <ProductsGrid products={products} />
       </ProductCom>
+      <Footer/>
     </>
   );
 }

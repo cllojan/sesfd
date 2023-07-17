@@ -17,7 +17,11 @@
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.10.1",
+    "react-slick": "^0.29.0",
+    "slick-carousel": "^1.8.1",
     "stripe": "^11.16.0",
-    "styled-components": "^5.3.9"
+    "styled-components": "^5.3.9",
+    "swiper": "^10.0.4"
   }
 }
