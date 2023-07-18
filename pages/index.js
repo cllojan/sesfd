@@ -18,6 +18,7 @@ export default function HomePage({featuredProduct,newProducts}) {
   return (
     <div className={inter.className}>
       <Header />      
+        <Featured products={featuredProduct}/>
         <NewProducts products={newProducts} />
       <Footer/>
     

@@ -1,50 +1,65 @@
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import Button from "@/components/Button";
+import ButtonLink from "@/components/ButtonLink";
+import CartIcon from "@/components/icons/CartIcon";
+import {useContext} from "react";
+import {CartContext} from "@/components/CartContext";
 
-const FooterContainer = styled.footer`
-  background-color: #f2f2f2;
-  padding: 20px;
+const Center = styled.div`
+ 
+  margin: 0 auto;
+  padding: 0 40px;
+`;
+const Bg = styled.div`
+  background-color: #222;
+  color:#fff;
+  padding: 10px 0;
+`;
+const Title = styled.h1`
+  margin:0;
+  font-weight:normal;
+  font-size:1.5rem;
+  @media screen and (max-width: 768px) {
+    font-size:3rem;
+  }
+`;
+const Desc = styled.p`
+  color:#aaa;
+  font-size:.8rem;
+`;
+const ColumnsWrapper = styled.div`
+  display:flex;  
+  align-items:center;
+  justify-content: space-between;
+`;
+const Column = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  opacity: ${(props) => (props.visible ? 1 : 0)};
-  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
-  transition: opacity 0.3s ease-in-out;
-  z-index: 9999;
+`;
+const ButtonsWrapper = styled.div`
+  display: flex;
+  gap:10px;
+  margin-top:25px;
 `;
 
-const FooterText = styled.p`
-  font-size: 14px;
-  color: #333;
-`;
-
-const Footer = () => {
-  const [isFooterVisible, setIsFooterVisible] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const isScrolledToBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight;
-      const isScrolledToTop = window.scrollY === 0;
-
-      setIsFooterVisible(isScrolledToBottom && !isScrolledToTop);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
+export default function Featured({product}) {
+  const {addProduct} = useContext(CartContext);
+  function addFeaturedToCart() {
+    addProduct(product._id);
+  }
   return (
-    <FooterContainer visible={isFooterVisible}>
-      <FooterText>This is the footer</FooterText>
-    </FooterContainer>
-  );
-};
+    <Bg>
+      <Center>
+        <ColumnsWrapper>
+          <Column>          
+              <Title>Ecommerce</Title>                          
+          </Column>
+          <Column>
+           <p>Copyright © 2022. All rights reserved.</p>
+          </Column>
+        </ColumnsWrapper>
+      </Center>
 
-export default Footer;
+    </Bg>
+  );
+}
