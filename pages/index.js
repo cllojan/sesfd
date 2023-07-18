@@ -1,12 +1,12 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Featured from "@/components/Featured";
-import styled from "styled-components";
-
 import {Product} from "@/models/Product";
 import {mongooseConnect} from "@/lib/mongoose";
 import NewProducts from "@/components/NewProducts";
 import { Inter } from 'next/font/google'
-import Footer from "@/components/Footer";
+
+import CategoryMain from "@/components/CategoryMain"
 
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({
@@ -20,6 +20,7 @@ export default function HomePage({featuredProduct,newProducts}) {
       <Header />      
         <Featured products={featuredProduct}/>
         <NewProducts products={newProducts} />
+        <CategoryMain />
       <Footer/>
     
     </div>
