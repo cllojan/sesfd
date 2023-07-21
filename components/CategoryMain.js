@@ -68,8 +68,9 @@ const StyledProductsGrid = styled.div`
     justify-content: center;
   }
 `;
-const ProductWrapper = styled.div`
+const ProductWrapper = styled.a`
   background-color: #fff;  
+  text-decoration: none;
   display:flex;
   flex-direction: column;
   align-items:center;
@@ -128,23 +129,23 @@ const Price = styled.div`
   }
 `;
 export default function CategoryMain() {
-    let URL= "https://ecommerce-front-cllojan.vercel.app/product/search/%20?categorys=6490d47f07756020e23836d9,64a6e321baa8f76629dab656";
+    let URL= "https://ecommerce-front-cllojan.vercel.app/product/search/%20?categorys=";
     const listCategory = [
       {
         img:"https://www.lenovo.com/medias/lenovo-laptops-thinkbook-16-gen-4-intel-hero.png?context=bWFzdGVyfHJvb3R8MzQ1OTM2fGltYWdlL3BuZ3xoMjEvaGZkLzEzMjU1MTI1OTkxNDU0LnBuZ3xlMGJjMDAyZjIzYzczYmY0YTY3NTlmODcwMDJjZTBhMzg5M2VlMjFlNTNlZWJkZDMyNDA3MTdlNjc3NjhhZWY5",
         title:"Laptops",
-        code:""
+        code:"64bb1494de4b8c08b057528e"
       },
       {
         img:"https://www.asus.com/media/Odin/websites/global/ProductLine/20200805112237.png",
         title:"PC de Escritorio",
-        code:""
+        code:"64bb148cde4b8c08b057528a"
 
       },
       {
         img:"https://pc213.ru/attachments/Image/apgrejd-modernizaciya-kompyutera-v-moskve.jpg?template=generic",
         title:"Hardware",
-        code:""
+        code:["6490d47f07756020e23836d9","649a0fd76c8734e690b7a51c","64a6e321baa8f76629dab656","64a6e32bbaa8f76629dab659","64a6e334baa8f76629dab65c"]
       },
       {
         img:"https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08319042.png",
@@ -164,7 +165,7 @@ export default function CategoryMain() {
             <StyledProductsGrid >                                            
                 {
                   listCategory?.map((elm,inx) => (
-                <ProductWrapper key={inx}>
+                <ProductWrapper key={inx} href={URL+elm.code?.join("")}>
                     <WhiteBox>
                         <img src={elm.img} alt="" />
                     </WhiteBox>                    
