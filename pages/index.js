@@ -14,14 +14,14 @@ const inter = Inter({
   display: 'swap',
 })
 
-export default function HomePage({featuredProduct,newProducts,productos}) {
+export default function HomePage({featuredProduct,newProducts,teclados,mouses,headset}) {
   return (
     <div className={inter.className}>
       <Header />      
         <Featured products={featuredProduct}/>
         <NewProducts products={newProducts} />
         <CategoryMain />
-        <Perifericos teclados={productos}/>
+        <Perifericos teclados={teclados} mouse={mouses} headset={headset}/>
       <Footer/>
     
     </div>
@@ -31,26 +31,24 @@ export default function HomePage({featuredProduct,newProducts,productos}) {
 export async function getServerSideProps() {
   const featuredProductId = '6490d4aa07756020e23836e2';
   await mongooseConnect();
-  const featuredProduct = await Product.findById(featuredProductId);
-  const categoriasIds = ["6490d47f07756020e23836d9"];
+  const featuredProduct = await Product.findById(featuredProductId);  
   const newProducts = await Product.find({}, null, {sort: {'_id':-1}, limit:10});
-  const products = await Product.find({
-    $and: [
-      {
-        $or: [
-          { title: { $regex: " ", $options: 'i' } },
-          { description: { $regex: " ", $options: 'i' } },
-        ],
-      },
-      { category: { $in: categoriasIds } },
-      
-    ],
+  const teclados = await Product.find({
+    category: "64a6e51cbaa8f76629dab695"
+  });
+  const mouse = await Product.find({
+    category: "64a6e526baa8f76629dab699"
+  });
+  const headset = await Product.find({
+    category: "64a6e53abaa8f76629dab6a2"
   });
   return {
     props: {
       featuredProduct: JSON.parse(JSON.stringify(featuredProduct)),
       newProducts: JSON.parse(JSON.stringify(newProducts)),
-      productos:JSON.parse(JSON.stringify(products)),
+      teclados:JSON.parse(JSON.stringify(teclados)),
+      mouses:JSON.parse(JSON.stringify(mouse)),
+      headset:JSON.parse(JSON.stringify(headset)),
     },
   };
 }

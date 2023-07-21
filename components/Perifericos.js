@@ -25,17 +25,22 @@ const ImagesList = styled.div`
   margin-top: 20px;
 `;
 
-export default function Perifericos({teclados}) {
+export default function Perifericos({teclados,mouse,headset}) {
   const [activeTab, setActiveTab] = useState(0);
+  console.log(teclados)
   const imageLists = [
     {
-      title: "List 1",
+      title: "Teclados",
       images:<Teclados products={teclados}/>
       
     },
     {
-      title: "List 2",
-      images:<CategoryMain />,
+      title: "Mouses",
+      images:<Teclados products={mouse}/>,
+    },
+    {
+      title: "Headset",
+      images:<Teclados products={headset}/>,
     },
     // Agrega más listas de imágenes según tus necesidades
   ];

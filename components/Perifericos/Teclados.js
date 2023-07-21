@@ -12,6 +12,7 @@ const Title = styled.h2`
   }
 `;
 const ContProduct = styled.div`
+  height: 400px;
   display:flex;
   flex-direction: column;
   margin:20px;
@@ -19,9 +20,8 @@ const ContProduct = styled.div`
 export default function Teclados({products}) {
  
   return (
-    <ContProduct>              
-      <Title>Nuevos Productos</Title>
-      <SliderProducts products={products} />
+    <ContProduct>                    
+      <ProductsGrid products={products} />
     </ContProduct>
   );
 }

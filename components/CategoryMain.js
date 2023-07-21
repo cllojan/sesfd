@@ -26,15 +26,22 @@ const ContProduct = styled.div`
 `
 
 const StyledProductsGrid = styled.div`  
-  display:flex;
-  flex-wrap:wrap;  
-  gap:30px;
-  margin:20px;
+  display:flex;  
+  gap:30px;  
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+    align-items:center;
+    justify-content: center;
+  }
 `;
 const ProductWrapper = styled.div`
   background-color: #fff;  
-  width:215px;
-  height: 250px;  
+  width:150px;
+  height: 150px;  
+  margin:35px;
+  @media (max-width: 768px) {
+    margin:30px;
+  }
 `;
 
 const WhiteBox = styled.div`
@@ -45,8 +52,8 @@ const WhiteBox = styled.div`
   justify-content: center;
   border-radius: 10px;
   img{
-    width:250px;
-    height: 200px;
+    max-width:200px;
+    max-height: 150px;
   }
 `;
 
