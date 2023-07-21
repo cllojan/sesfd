@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 
 
 const Test = styled.div`
-    
+    height:100vh;
     margin:20px;
 `
 const Input = styled.input`

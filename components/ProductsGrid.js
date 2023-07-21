@@ -2,10 +2,10 @@ import styled from "styled-components";
 import ProductBox from "@/components/ProductBox";
 
 const StyledProductsGrid = styled.div`
-  height:0;
+  height:100vh;
   display:flex;
   flex-wrap:wrap;
-  
+  overflow-y: scroll;
   gap:20px;
   margin:20px;
 `;

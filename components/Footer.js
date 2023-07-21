@@ -11,6 +11,7 @@ const Center = styled.div`
   padding: 0 40px;
 `;
 const Bg = styled.div`
+
   background-color: #222;
   color:#fff;
   padding: 10px 0;
@@ -42,7 +43,7 @@ const ButtonsWrapper = styled.div`
   margin-top:25px;
 `;
 
-export default function Featured({product}) {
+export default function Footer({product}) {
   const {addProduct} = useContext(CartContext);
   function addFeaturedToCart() {
     addProduct(product._id);

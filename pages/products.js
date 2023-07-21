@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 
 const ProductCom = styled.div`
   width:100%;
-  height:100vh;
+  height:100%;
   display:grid;
   grid-template-columns: 350px 2fr;
 `

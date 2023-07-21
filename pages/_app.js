@@ -3,6 +3,7 @@ import {CartContextProvider} from "@/components/CartContext";
 import { Inter } from 'next/font/google'
 import { httpAgentOptions } from "@/next.config";
 import Head from 'next/head'
+import Footer from "@/components/Footer";
 
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({
@@ -37,6 +38,7 @@ export default function App({ Component, pageProps }) {
           <CartContextProvider >                
             <Component  {...pageProps}  />      
           </CartContextProvider>
+          
         </div>
       
       
