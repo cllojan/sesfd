@@ -23,7 +23,9 @@ const ColumnsWrapper = styled.div`
 
 const Box = styled.div`  
   border-radius: 10px;
-  padding: 30px;  
+  height:400px;
+  padding: 30px;
+  overflow-y:auto;
 `;
 const Input = styled.input`
   width: 100%;
@@ -58,8 +60,17 @@ const InputContainer = styled.div`
   width:600px;
 `
 const ProductInfoCell = styled.td`
+  display:flex;
+  align-items:center;
   padding: 10px 0;
 `;
+
+const Span = styled.span`
+  font-family:"Inter";
+  font-size:14px;
+  font-weight:500;
+  color:#374151;
+`
 const Label = styled.label`
   
   font-family:"Inter";
@@ -67,11 +78,19 @@ const Label = styled.label`
   font-weight:500;
   color:#374151;
 `
+const Td = styled.td`
+  
+  font-family:"Inter";
+  font-size:15px;
+  font-weight:500;
+  color:#374151;
+`
+
 const ProductImageBox = styled.div`
   width: 70px;
   height: 100px;
   padding: 2px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  
   display:flex;
   align-items: center;
   justify-content: center;
@@ -174,8 +193,8 @@ export default function CartPage() {
         <Center>
           <ColumnsWrapper>
             <Box>
-              <h1>Thanks for your order!</h1>
-              <p>We will email you when your order will be sent.</p>
+              <h1>Gracias por ordenar</h1>
+              <p>Nos comunicaremos contigo para continuar con la compra</p>
             </Box>
           </ColumnsWrapper>
         </Center>
@@ -196,9 +215,9 @@ export default function CartPage() {
               <Table>
                 <thead>
                   <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
+                    <th>Productos</th>
+                    <th>Cantidades</th>
+                    <th>Precio</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -208,7 +227,7 @@ export default function CartPage() {
                         <ProductImageBox>
                           <img src={product.images[0]} alt=""/>
                         </ProductImageBox>
-                        {product.title}
+                        <Span>{product.title}</Span>
                       </ProductInfoCell>
                       <td>
                         <Button
@@ -219,15 +238,15 @@ export default function CartPage() {
                         <Button
                           onClick={() => moreOfThisProduct(product._id)}>+</Button>
                       </td>
-                      <td>
+                      <Td>
                         ${cartProducts.filter(id => id === product._id).length * product.price}
-                      </td>
+                      </Td>
                     </tr>
                   ))}
                   <tr>
                     <td></td>
-                    <td></td>
-                    <td>${total}</td>
+                    <Td>Total:</Td>
+                    <Td>${total}</Td>
                   </tr>
                 </tbody>
               </Table>
