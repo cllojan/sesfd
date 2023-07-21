@@ -8,15 +8,48 @@ import SliderProducts from "@/components/SliderProducts";
 import Teclados from "@/components/Perifericos/Teclados";
 const TabsWrapper = styled.div`
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+  align-items:center;
+  position:relative;
+  &::after{
+    content:" ";
+    z-index: 0;
+    position:absolute;
+    bottom:12px;
+    left: 0;
+    width:100%;
+    height: 3px;
+    background-color: #ccc;
+  }
+`;
+const Title = styled.h2`
+  font-size: 2rem;
+  position:relative;
+  font-weight: normal;
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+
+  &::after{
+    z-index: 100;
+    content:" ";
+    position:absolute;
+    top:50px;
+    left: 0;
+    width:100%;
+    height: 3px;
+    background-color: #007bff;
+  }
+`;
+const Tabs = styled.div`
+  display: flex;  
+  margin-left:20px;
 `;
 
 const TabButton = styled.button`
-  background-color: ${({ active }) => (active ? "#333" : "#ddd")};
-  color: ${({ active }) => (active ? "#fff" : "#333")};
-  border: none;
-  padding: 10px 20px;
+  background-color: #fff;
+  color: ${({ active }) => (active ? "#007bff" : "#333")};
+  
+  border: none;  
   cursor: pointer;
 `;
 
@@ -52,6 +85,8 @@ export default function Perifericos({teclados,mouse,headset}) {
   return (
     <div>
       <TabsWrapper>
+        <Title>Perifericos populares</Title>
+        <Tabs>
         {imageLists.map((list, index) => (
           <TabButton
             key={index}
@@ -61,7 +96,10 @@ export default function Perifericos({teclados,mouse,headset}) {
             {list.title}
           </TabButton>
         ))}
+        </Tabs>
+        <hr />
       </TabsWrapper>
+      
       {imageLists[activeTab].images}
       { 
             
