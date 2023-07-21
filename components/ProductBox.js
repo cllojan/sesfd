@@ -101,7 +101,7 @@ export default function ProductBox({_id,title,description,price,images}) {
           
         </PriceRow>
         <AddCartButton className={inter.className} block onClick={() => addProduct(_id)} primary outline>
-            Add to cart
+            Agregar al carrito
           </AddCartButton>
       </ProductInfoBox>
     </ProductWrapper>
