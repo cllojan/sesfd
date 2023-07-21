@@ -6,6 +6,12 @@ import NewProducts from "@/components/NewProducts";
 import CategoryMain from "@/components/CategoryMain"
 import SliderProducts from "@/components/SliderProducts";
 import Teclados from "@/components/Perifericos/Teclados";
+const ContProduct = styled.div`
+  height:450px;
+  display:flex;
+  flex-direction: column;
+  margin:20px;
+`
 const TabsWrapper = styled.div`
   display: flex;
   align-items:center;
@@ -42,13 +48,16 @@ const Title = styled.h2`
 `;
 const Tabs = styled.div`
   display: flex;  
+  margin-top:10px;
   margin-left:20px;
+  gap: 30px;
 `;
 
 const TabButton = styled.button`
   background-color: #fff;
   color: ${({ active }) => (active ? "#007bff" : "#333")};
-  
+  font-size: 1em;
+  transition: all .5s ease;
   border: none;  
   cursor: pointer;
 `;
@@ -83,7 +92,7 @@ export default function Perifericos({teclados,mouse,headset}) {
   };
   
   return (
-    <div>
+    <ContProduct>
       <TabsWrapper>
         <Title>Perifericos populares</Title>
         <Tabs>
@@ -97,7 +106,7 @@ export default function Perifericos({teclados,mouse,headset}) {
           </TabButton>
         ))}
         </Tabs>
-        <hr />
+       
       </TabsWrapper>
       
       {imageLists[activeTab].images}
@@ -110,6 +119,6 @@ export default function Perifericos({teclados,mouse,headset}) {
           ))}
         </ImagesList>*/
       }
-    </div>
+    </ContProduct>
   );
 }
