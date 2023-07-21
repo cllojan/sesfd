@@ -5,7 +5,7 @@ const StyledProductsGrid = styled.div`
   height:100vh;
   display:flex;
   flex-wrap:wrap;
-  overflow-y: scroll;
+  overflow-y: auto;
   gap:20px;
   margin:20px;
 `;

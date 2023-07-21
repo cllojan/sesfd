@@ -10,10 +10,22 @@ const Container = styled.div`
   margin: 0 auto;
   padding: 20px;
 `;
+const TitleH = styled.h2`
+  font-size: 1.5em;
+  margin:30px 0 20px;
+  color:#000;
+  font-weight: normal;
+  font-family: 'Inter',sans-serif;
+  position:relative;
+  @media (max-width: 768px) {
+    text-align: center;
+  }  
+`;
 const Title = styled.h2`
   font-size: 1.5em;
   margin:30px 0 20px;
   font-weight: normal;
+  font-family: 'Inter',sans-serif;
   position:relative;
   @media (max-width: 768px) {
     text-align: center;
@@ -58,6 +70,10 @@ const StyledProductsGrid = styled.div`
 `;
 const ProductWrapper = styled.div`
   background-color: #fff;  
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content: space-between;
   width:150px;
   height: 150px;  
   margin:35px;
@@ -74,8 +90,8 @@ const WhiteBox = styled.div`
   justify-content: center;
   border-radius: 10px;
   img{
-    max-width:200px;
-    max-height: 150px;
+    width:200px;
+    height: 150px;
   }
 `;
 
@@ -87,6 +103,7 @@ const ProductInfoBox = styled.div`
   justify-content: center;
   margin: 20px;
   gap:10px;
+  font-family: 'Inter',sans-serif;
 `;
 
 const PriceRow = styled.div`
@@ -140,13 +157,11 @@ export default function CategoryMain() {
             <StyledProductsGrid >                                            
                 {
                   listCategory?.map((elm,inx) => (
-                    <ProductWrapper key={inx}>
+                <ProductWrapper key={inx}>
                     <WhiteBox>
                         <img src={elm.img} alt="" />
-                    </WhiteBox>
-                    <ProductInfoBox>
-                        <h2 href={"url"}>{elm.title}</h2>                        
-                    </ProductInfoBox>
+                    </WhiteBox>                    
+                    <TitleH href={"url"}>{elm.title}</TitleH>                      
                 </ProductWrapper>
                   ))
                 }                

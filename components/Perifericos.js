@@ -28,9 +28,11 @@ const TabsWrapper = styled.div`
   }
 `;
 const Title = styled.h2`
-  font-size: 2rem;
+  font-size: 1.5rem;
   position:relative;
+  margin:30px 0 30px;
   font-weight: normal;
+  
   @media (max-width: 768px) {
     text-align: center;
   }
@@ -39,7 +41,7 @@ const Title = styled.h2`
     z-index: 100;
     content:" ";
     position:absolute;
-    top:50px;
+    top:44px;
     left: 0;
     width:100%;
     height: 3px;
@@ -48,7 +50,7 @@ const Title = styled.h2`
 `;
 const Tabs = styled.div`
   display: flex;  
-  margin-top:10px;
+  margin-top:5px;
   margin-left:20px;
   gap: 30px;
 `;
