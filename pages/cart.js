@@ -6,7 +6,7 @@ import {useContext, useEffect, useState} from "react";
 import {CartContext} from "@/components/CartContext";
 import axios from "axios";
 import Table from "@/components/Table";
-import Input from "@/components/Input";
+
 
 
 const ConstCart= styled.div`
@@ -21,17 +21,52 @@ const ColumnsWrapper = styled.div`
   margin-top: 40px;
 `;
 
-const Box = styled.div`
-  background-color: #fff;
+const Box = styled.div`  
   border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0 0 #0000,0 0 #0000,0 10px 15px -3px #0000001a,0 4px 6px -4px #0000001a;
+  padding: 30px;  
+`;
+const Input = styled.input`
+  width: 100%;
+  height:15px;
+  font-family:"Inter";
+  font-size:14px;
+  font-weight:500;
+  padding:10px;
+  margin-bottom: 5px;
+  border: 1px solid rgb(229 231 235/1);  
+  border-radius:5px;  
+  
+    &:focus{
+        outline:none;
+        box-shadow: 0 0 0 1.6px #007bff;
+        border-radius:5px;
+    }
 `;
 
+const InputBox = styled.div`
+  
+  width:100%;
+  display:flex;
+  gap:30px;
+  align-items: center;
+`
+const InputContainer = styled.div`
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:600px;
+`
 const ProductInfoCell = styled.td`
   padding: 10px 0;
 `;
-
+const Label = styled.label`
+  
+  font-family:"Inter";
+  font-size:14px;
+  font-weight:500;
+  color:#374151;
+`
 const ProductImageBox = styled.div`
   width: 70px;
   height: 100px;
@@ -65,22 +100,26 @@ const QuantityLabel = styled.span`
   }
 `;
 
-const CityHolder = styled.div`
-  display:flex;
-  gap: 5px;
-`;
 const ButtonSend = styled.button`
   border:none;
+  width:622px;
   height:40px;
-  border-radius:7px;
+  font-family:"Inter";
+  font-weight:500;
+  border-radius:5px;
   color:#fff;
   background-color: #111827;
   cursor:pointer;
+`
+const ContInput = styled.div`
+margin-top:5px;
+  width:100%;
 `
 export default function CartPage() {
   const {cartProducts,addProduct,removeProduct,clearCart} = useContext(CartContext);
   const [products,setProducts] = useState([]);
   const [name,setName] = useState('');
+  const [lastname,setLastName] = useState('');
   const [email,setEmail] = useState('');
   const [cellphone,setCellPhone] = useState('');
   const [city,setCity] = useState('');
@@ -149,7 +188,7 @@ export default function CartPage() {
       <ConstCart>
         <ColumnsWrapper>
           <Box>
-            <h2>Cart</h2>
+            
             {!cartProducts?.length && (
               <div>Your cart is empty</div>
             )}
@@ -195,52 +234,87 @@ export default function CartPage() {
             )}
           </Box>
           {!!cartProducts?.length && (
-            <Box>
-              <h2>Informacion</h2>
-              <Input type="text"
-                     placeholder="Nombre"
-                     value={name}
-                     name="name"
-                     onChange={ev => setName(ev.target.value)} />
-              <Input type="text"
-                     placeholder="Email"
-                     value={email}
-                     name="email"
-                     onChange={ev => setEmail(ev.target.value)}/>
-              <Input type="text"
-                     placeholder="Celular"
+            <InputContainer>
+              
+              <InputBox>
+                <ContInput className="">                                  
+                  <Label htmlFor="">Nombre</Label>
+                  <Input type="text"
+                        
+                        value={name}
+                        name="name"
+                        onChange={ev => setName(ev.target.value)} />
+                </ContInput>                
+                <ContInput>
+                  <Label htmlFor="">Apellido</Label>
+                  <Input type="text"                        
+                        value={lastname}
+                        name="lastname"
+                        onChange={ev => setLastName(ev.target.value)} />
+                </ContInput>
+                
+              </InputBox>
+              <ContInput>
+                <Label htmlFor="">Email</Label>
+                <Input type="text"
+                      
+                      value={email}
+                      name="email"
+                      onChange={ev => setEmail(ev.target.value)}/>
+              </ContInput>
+              
+              <ContInput>
+                <Label>Celular</Label>
+                <Input type="text"                     
                      value={cellphone}
                      name="cell"
                      onChange={ev => setCellPhone(ev.target.value)}/>
-
-              <CityHolder>
+              </ContInput>
+              <InputBox>
                 
-                <Input type="text"
-                       placeholder="City"
+               <ContInput>
+                <Label>Ciudad</Label>
+               <Input type="text"                       
                        value={city}
                        name="city"
                        onChange={ev => setCity(ev.target.value)}/>
+               </ContInput>
+               
+               <ContInput>
+                <Label>Codigo Postal</Label>
                 <Input type="text"
-                       placeholder="Postal Code"
+                       
                        value={postalCode}
                        name="postalCode"
                        onChange={ev => setPostalCode(ev.target.value)}/>
-              </CityHolder>
-              <Input type="text"
-                     placeholder="Street Address"
+               </ContInput>
+                
+              </InputBox>
+              <ContInput>
+                <Label>Direccion</Label>
+                <Input type="text"
+                     
                      value={streetAddress}
                      name="streetAddress"
                      onChange={ev => setStreetAddress(ev.target.value)}/>
-              <Input type="text"
-                     placeholder="Country"
+              </ContInput>
+              <ContInput>
+                <Label>Ciudad</Label>
+                <Input type="text"
+                     
                      value={country}
                      name="country"
                      onChange={ev => setCountry(ev.target.value)}/>
-              <ButtonSend black block
-                      onClick={goToPayment}>
-                Enviar
-              </ButtonSend>
-            </Box>
+              </ContInput>
+              
+              <ContInput>
+                <ButtonSend black block
+                        onClick={goToPayment}>
+                  Enviar
+                </ButtonSend>
+              </ContInput>
+              
+            </InputContainer>
           )}
         </ColumnsWrapper>
       </ConstCart>
