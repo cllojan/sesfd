@@ -6,15 +6,37 @@ import SliderProducts from "@/components/SliderProducts";
 const Title = styled.h2`
   font-size: 2rem;
   margin:30px 0 20px;
+  position:relative;
   font-weight: normal;
   @media (max-width: 768px) {
     text-align: center;
+  }
+  &::after{
+    z-index: 100;
+    content:" ";
+    position:absolute;
+    top:50px;
+    left: 0;
+    width:280px;
+    height: 3px;
+    background-color: #007bff;
   }
 `;
 const ContProduct = styled.div`
   display:flex;
   flex-direction: column;
+  position:relative;
   margin:20px;
+  &::after{
+    content:" ";
+    z-index: 0;
+    position:absolute;
+    top:80px;
+    left: 0;
+    width:100%;
+    height: 3px;
+    background-color: #ccc;
+  }
 `
 export default function NewProducts({products}) {
  

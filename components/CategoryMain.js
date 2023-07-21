@@ -14,15 +14,37 @@ const Title = styled.h2`
   font-size: 1.5em;
   margin:30px 0 20px;
   font-weight: normal;
+  position:relative;
   @media (max-width: 768px) {
     text-align: center;
+  }
+  &::after{
+    z-index: 100;
+    content:" ";
+    position:absolute;
+    top:50px;
+    left: 0;
+    width:255px;
+    height: 3px;
+    background-color: #007bff;
   }
 `;
 const ContProduct = styled.div`
   height:450px;
   display:flex;
+  position:relative;
   flex-direction: column;
   margin:20px;
+  &::after{
+    content:" ";
+    z-index: 0;
+    position:absolute;
+    top:80px;
+    left: 0;
+    width:100%;
+    height: 3px;
+    background-color: #ccc;
+  }
 `
 
 const StyledProductsGrid = styled.div`  
@@ -114,6 +136,7 @@ export default function CategoryMain() {
     return (
         <ContProduct>
             <Title>Categorias Principales</Title>
+            
             <StyledProductsGrid >                                            
                 {
                   listCategory?.map((elm,inx) => (
@@ -122,7 +145,7 @@ export default function CategoryMain() {
                         <img src={elm.img} alt="" />
                     </WhiteBox>
                     <ProductInfoBox>
-                        <Title href={"url"}>{elm.title}</Title>                        
+                        <h2 href={"url"}>{elm.title}</h2>                        
                     </ProductInfoBox>
                 </ProductWrapper>
                   ))
