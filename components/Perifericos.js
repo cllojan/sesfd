@@ -59,6 +59,8 @@ const TabButton = styled.button`
   background-color: #fff;
   color: ${({ active }) => (active ? "#007bff" : "#333")};
   font-size: 1em;
+  font-family:"Inter",sans-serif;
+  font-weight:500;
   transition: all .5s ease;
   border: none;  
   cursor: pointer;
