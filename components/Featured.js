@@ -32,9 +32,9 @@ export default function HeroBanner() {
   return (
     <HeroBannerWrapper>
       <HeroBannerContent>
-        <HeroBannerTitle>Welcome to Our Store</HeroBannerTitle>
-        <HeroBannerDescription>
-          Discover the latest trends in fashion and find your perfect style.
+        <HeroBannerTitle>Bienvenido a nuestra tienda</HeroBannerTitle>
+        <HeroBannerDescription>          
+          Descubre los productos tecnologicos mas populares
         </HeroBannerDescription>
       </HeroBannerContent>
     </HeroBannerWrapper>
