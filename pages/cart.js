@@ -6,6 +6,7 @@ import {useContext, useEffect, useState} from "react";
 import {CartContext} from "@/components/CartContext";
 import axios from "axios";
 import Table from "@/components/Table";
+import CartIcon from '@/components/icons/CartIcon';
 
 
 
@@ -85,7 +86,50 @@ const Td = styled.td`
   font-weight:500;
   color:#374151;
 `
-
+const EmptyCenter = styled.div`
+    
+  position:absolute;
+  top:20%;
+  right:40%;
+  left:40%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+    
+`
+const Empty = styled.div`
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:10px;
+    & span{
+      font-size:30px;
+      font-weight:500;
+    }
+    & a{
+      text-decoration:none;
+      border:none;
+      border-radius:4px;  
+      padding:0 10px;    
+      height:40px;
+      background:#FACC15;
+      color:#000;
+      font-weight:bolder;        
+      vertical-align: middle;
+      font-weight: 500;
+      cursor:pointer;      
+      font-family:'Inter', Courier, monospace;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      & span{
+        font-size:15px;
+        font-weight:500;
+      }
+    }
+`
 const ProductImageBox = styled.div`
   width: 70px;
   height: 100px;
@@ -206,11 +250,19 @@ export default function CartPage() {
       <Header />
       <ConstCart>
         <ColumnsWrapper>
+        {!cartProducts?.length && (
+              <EmptyCenter>
+                  <Empty>
+                    <img src="https://undsgn.com/uncode/wp-content/uploads/2020/06/pngkit_empty-sign-png_3224362-min.png" width="450px" />
+                    <span>Tu carrito esta vacio</span>
+                    <p>¡Oops! Parece que tu carrito está un poco solitario. Descubre componentes increíbles que potenciarán tu computadora. 🖥️🛒✨</p>
+                    <a href="/"><CartIcon/> <span>Ir a Comprar</span></a>
+                  </Empty>
+              </EmptyCenter>
+            )}
           <Box>
             
-            {!cartProducts?.length && (
-              <div>Your cart is empty</div>
-            )}
+            
             {products?.length > 0 && (
               <Table>
                 <thead>

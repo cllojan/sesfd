@@ -5,6 +5,7 @@ import {useContext, useState} from "react";
 import {CartContext} from "@/components/CartContext";
 import BarsIcon from "@/components/icons/Bars";
 import CartIcon from '@/components/icons/CartIcon';
+import LogoIcon from '@/components/icons/LogoIcon';
 import SearchIcon from '@/components/icons/Search';
 const StyledHeader = styled.header`
   background-color: #fff;
@@ -14,12 +15,21 @@ const Logo = styled(Link)`
   text-decoration:none;
   position: relative;
   z-index: 3;
-  & img{
-    position:absolute;
-    bottom: -80px;
-    right:-80px;
-    width:150px;
-    height:150px;
+  display:flex;
+  align-items: center;
+  & svg{        
+    margin:0;
+    width:70px;
+    height: 70px;    
+  }
+  & p{
+    margin:0 ;
+    font-size:30px;
+    font-weight: bold;
+    color:#1B4F72;
+  }
+  & span{
+    color:#FACC15;
   }
 `;
 const Wrapper = styled.div`
@@ -27,7 +37,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-around;
   
-  padding: 20px 0;
+  padding: 5px 0;
 `;
 const StyledNav = styled.nav`
   ${props => (props.mobileNavActive || props.cartOpen) ? `
@@ -170,8 +180,9 @@ export default function Header() {
   return (
     <StyledHeader>      
         <Wrapper>
-          <Logo href={'/'}>
-            <img src="https://www.logolynx.com/images/logolynx/4c/4c1e9d4c49f1ee74f3bb871a181fea10.png" alt="" srcset="" />
+          <Logo href={'/'}>            
+            <LogoIcon/>
+            <p>e<span>-</span>shop</p>
           </Logo>
           
           <ContInput onSubmit={handleSearch}>
