@@ -7,9 +7,14 @@ import BarsIcon from "@/components/icons/Bars";
 import CartIcon from '@/components/icons/CartIcon';
 import LogoIcon from '@/components/icons/LogoIcon';
 import SearchIcon from '@/components/icons/Search';
+import { Montserrat } from 'next/font/google'
 const StyledHeader = styled.header`
   background-color: #fff;
 `;
+const roboto = Montserrat({
+  weight: '500',
+  subsets: ['latin'],
+})
 const Logo = styled(Link)`
   color:#000;
   text-decoration:none;
@@ -182,7 +187,7 @@ export default function Header() {
         <Wrapper>
           <Logo href={'/'}>            
             <LogoIcon/>
-            <p>e<span>-</span>shop</p>
+            <p className={roboto.className}>e<span>-</span>shop</p>
           </Logo>
           
           <ContInput onSubmit={handleSearch}>

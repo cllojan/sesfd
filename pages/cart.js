@@ -7,7 +7,7 @@ import {CartContext} from "@/components/CartContext";
 import axios from "axios";
 import Table from "@/components/Table";
 import CartIcon from '@/components/icons/CartIcon';
-
+import Link from "next/link";
 
 
 const ConstCart= styled.div`
@@ -256,7 +256,7 @@ export default function CartPage() {
                     <img src="https://undsgn.com/uncode/wp-content/uploads/2020/06/pngkit_empty-sign-png_3224362-min.png" width="450px" />
                     <span>Tu carrito esta vacio</span>
                     <p>¡Oops! Parece que tu carrito está un poco solitario. Descubre componentes increíbles que potenciarán tu computadora. 🖥️🛒✨</p>
-                    <a href="/"><CartIcon/> <span>Ir a Comprar</span></a>
+                    <Link href="/"><CartIcon/> <span>Ir a Comprar</span></Link>
                   </Empty>
               </EmptyCenter>
             )}
