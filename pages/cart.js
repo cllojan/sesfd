@@ -2,34 +2,32 @@ import Header from "@/components/Header";
 import styled from "styled-components";
 import Center from "@/components/Center";
 import Button from "@/components/Button";
-import {useContext, useEffect, useState} from "react";
-import {CartContext} from "@/components/CartContext";
+import { useContext, useEffect, useState } from "react";
+import { CartContext } from "@/components/CartContext";
 import axios from "axios";
 import Table from "@/components/Table";
 import CartIcon from '@/components/icons/CartIcon';
 import Link from "next/link";
+import Image from "next/image";
 
 
-const ConstCart= styled.div`
- 
-  margin:20px;
+const ConstCart = styled.div`
+ margin:20px;
 `
 const ColumnsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  
-  gap: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(550px,1fr));
+  gap:20px;
   margin-top: 40px;
 `;
 
 const Box = styled.div`  
-  border-radius: 10px;
+  
   height:400px;
-  padding: 30px;
+  
   overflow-y:auto;
 `;
-const Input = styled.input`
-  width: 100%;
+const Input = styled.input`  
   height:15px;
   font-family:"Inter";
   font-size:14px;
@@ -37,28 +35,51 @@ const Input = styled.input`
   padding:10px;
   margin-bottom: 5px;
   border: 1px solid rgb(229 231 235/1);  
-  border-radius:5px;  
-  
+  border-radius:5px;    
     &:focus{
         outline:none;
         box-shadow: 0 0 0 1.6px #007bff;
         border-radius:5px;
     }
+    
+     
+`;
+const Select = styled.select`
+  width: 100%;
+  
+  font-family:"Inter";
+  font-size:14px;
+  font-weight:500;
+  padding:8px;
+  margin-bottom: 5px;
+  border: 1px solid rgb(229 231 235/1);  
+  border-radius:5px;  
+  cursor:pointer;
+    &:focus{
+        outline:none;
+        box-shadow: 0 0 0 1.6px #007bff;
+        border-radius:5px;
+    }
+    &::-ms-expand {
+        display: none; /* Para ocultar la flecha en IE 10 y versiones anteriores */
+    }
+    & option:nth-child(1) {
+      margin-top:20px;
+      
+      color: #333;
+    }
 `;
 
-const InputBox = styled.div`
-  
-  width:100%;
+const InputBox = styled.div`  
+  width: 100%;
   display:flex;
-  gap:30px;
-  align-items: center;
+  gap:10px;
 `
-const InputContainer = styled.div`
+const InputContainer = styled.div`      
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  width:600px;
 `
 const ProductInfoCell = styled.td`
   display:flex;
@@ -165,7 +186,7 @@ const QuantityLabel = styled.span`
 
 const ButtonSend = styled.button`
   border:none;
-  width:622px;
+  width:100%;
   height:40px;
   font-family:"Inter";
   font-weight:500;
@@ -175,24 +196,28 @@ const ButtonSend = styled.button`
   cursor:pointer;
 `
 const ContInput = styled.div`
-margin-top:5px;
   width:100%;
+  margin-top:5px;
+  display:flex;
+  flex-direction: column;
+  gap:0.5em;
+  
 `
 export default function CartPage() {
-  const {cartProducts,addProduct,removeProduct,clearCart} = useContext(CartContext);
-  const [products,setProducts] = useState([]);
-  const [name,setName] = useState('');
-  const [lastname,setLastName] = useState('');
-  const [email,setEmail] = useState('');
-  const [cellphone,setCellPhone] = useState('');
-  const [city,setCity] = useState('');
-  const [postalCode,setPostalCode] = useState('');
-  const [streetAddress,setStreetAddress] = useState('');
-  const [country,setCountry] = useState('');
-  const [isSuccess,setIsSuccess] = useState(false);
+  const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
+  const [products, setProducts] = useState([]);
+  const [name, setName] = useState('');
+  const [lastname, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [cellphone, setCellPhone] = useState('');
+  const [city, setCity] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [streetAddress, setStreetAddress] = useState('');
+  const [country, setCountry] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
   useEffect(() => {
     if (cartProducts.length > 0) {
-      axios.post('/api/cart', {ids:cartProducts})
+      axios.post('/api/cart', { ids: cartProducts })
         .then(response => {
           setProducts(response.data);
         })
@@ -216,13 +241,18 @@ export default function CartPage() {
     removeProduct(id);
   }
   async function goToPayment() {
+
     const response = await axios.post('/api/checkout', {
-      name,email,cellphone,city,postalCode,streetAddress,country,
+      name, email, cellphone, city, postalCode, streetAddress, country,
       cartProducts,
     });
+    /*
+    if(response.data.status == 200){
+      setIsSuccess(true)
+    }
     if (response.data.url) {
       window.location = response.data.url;
-    }
+    }*/
   }
   let total = 0;
   for (const productId of cartProducts) {
@@ -250,19 +280,19 @@ export default function CartPage() {
       <Header />
       <ConstCart>
         <ColumnsWrapper>
-        {!cartProducts?.length && (
-              <EmptyCenter>
-                  <Empty>
-                    <img src="https://undsgn.com/uncode/wp-content/uploads/2020/06/pngkit_empty-sign-png_3224362-min.png" width="450px" />
-                    <span>Tu carrito esta vacio</span>
-                    <p>¡Oops! Parece que tu carrito está un poco solitario. Descubre componentes increíbles que potenciarán tu computadora. 🖥️🛒✨</p>
-                    <Link href="/"><CartIcon/> <span>Ir a Comprar</span></Link>
-                  </Empty>
-              </EmptyCenter>
-            )}
+          {!cartProducts?.length && (
+            <EmptyCenter>
+              <Empty>
+                <Image src="/emptyCart.png" width={450} height={240} />
+                <span>Tu carrito esta vacio</span>
+                <p>¡Oops! Parece que tu carrito está un poco solitario. Descubre componentes increíbles que potenciarán tu computadora. 🖥️🛒✨</p>
+                <Link href="/"><CartIcon /> <span>Ir a Comprar</span></Link>
+              </Empty>
+            </EmptyCenter>
+          )}
           <Box>
-            
-            
+
+
             {products?.length > 0 && (
               <Table>
                 <thead>
@@ -277,7 +307,7 @@ export default function CartPage() {
                     <tr key={product._id}>
                       <ProductInfoCell>
                         <ProductImageBox>
-                          <img src={product.images[0]} alt=""/>
+                          <img src={product.images[0]} alt="" />
                         </ProductImageBox>
                         <Span>{product.title}</Span>
                       </ProductInfoCell>
@@ -306,85 +336,86 @@ export default function CartPage() {
           </Box>
           {!!cartProducts?.length && (
             <InputContainer>
-              
+
               <InputBox>
-                <ContInput className="">                                  
+                <ContInput className="">
                   <Label htmlFor="">Nombre</Label>
                   <Input type="text"
-                        
-                        value={name}
-                        name="name"
-                        onChange={ev => setName(ev.target.value)} />
-                </ContInput>                
+
+                    value={name}
+                    name="name"
+                    onChange={ev => setName(ev.target.value)} />
+                </ContInput>
                 <ContInput>
                   <Label htmlFor="">Apellido</Label>
-                  <Input type="text"                        
-                        value={lastname}
-                        name="lastname"
-                        onChange={ev => setLastName(ev.target.value)} />
+                  <Input type="text"
+                    value={lastname}
+                    name="lastname"
+                    onChange={ev => setLastName(ev.target.value)} />
                 </ContInput>
-                
+
               </InputBox>
               <ContInput>
                 <Label htmlFor="">Email</Label>
                 <Input type="text"
-                      
-                      value={email}
-                      name="email"
-                      onChange={ev => setEmail(ev.target.value)}/>
+
+                  value={email}
+                  name="email"
+                  onChange={ev => setEmail(ev.target.value)} />
               </ContInput>
-              
+
               <ContInput>
                 <Label>Celular</Label>
-                <Input type="text"                     
-                     value={cellphone}
-                     name="cell"
-                     onChange={ev => setCellPhone(ev.target.value)}/>
+                <Input type="text"
+                  value={cellphone}
+                  name="cell"
+                  onChange={ev => setCellPhone(ev.target.value)} />
               </ContInput>
               <InputBox>
-                
-               <ContInput>
-                <Label>Ciudad</Label>
-               <Input type="text"                       
-                       value={city}
-                       name="city"
-                       onChange={ev => setCity(ev.target.value)}/>
-               </ContInput>
-               
-               <ContInput>
-                <Label>Codigo Postal</Label>
-                <Input type="text"
-                       
-                       value={postalCode}
-                       name="postalCode"
-                       onChange={ev => setPostalCode(ev.target.value)}/>
-               </ContInput>
-                
+
+
+                <ContInput>
+                  <Label>Ciudad</Label>
+                  <Input type="text"
+                    value={city}
+                    name="city"
+                    onChange={ev => setCity(ev.target.value)} />
+                </ContInput>
+
+                <ContInput>
+                  <Label>Canton</Label>
+                  <Input type="text"
+
+                    value={postalCode}
+                    name="postalCode"
+                    onChange={ev => setPostalCode(ev.target.value)} />
+                </ContInput>
+
               </InputBox>
               <ContInput>
-                <Label>Direccion</Label>
-                <Input type="text"
-                     
-                     value={streetAddress}
-                     name="streetAddress"
-                     onChange={ev => setStreetAddress(ev.target.value)}/>
-              </ContInput>
-              <ContInput>
                 <Label>Ciudad</Label>
                 <Input type="text"
-                     
-                     value={country}
-                     name="country"
-                     onChange={ev => setCountry(ev.target.value)}/>
+
+                  value={streetAddress}
+                  name="streetAddress"
+                  onChange={ev => setStreetAddress(ev.target.value)} />
               </ContInput>
-              
+              <ContInput>
+                <Label>Direccion 2 (Opcional)</Label>
+                <Input type="text"
+
+                  value={country}
+                  name="country"
+                  onChange={ev => setCountry(ev.target.value)} />
+              </ContInput>
+
               <ContInput>
                 <ButtonSend black block
-                        onClick={goToPayment}>
+                  onClick={goToPayment}>
                   Enviar
                 </ButtonSend>
               </ContInput>
-              
+
             </InputContainer>
           )}
         </ColumnsWrapper>
