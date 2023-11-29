@@ -2,7 +2,11 @@ import { use, useState, useContext, useEffect } from "react";
 import { useRouter } from 'next/router';
 import styled from "styled-components";
 import Button from "@/components/Button";
-
+import { Poppins } from 'next/font/google'
+const roboto = Poppins({
+    weight: '500',
+    subsets: ['latin'],
+  })
 
 const FilterContainer = styled.div`
     height:100vh;
@@ -67,7 +71,7 @@ const Inputs = styled.div`
 `
 
 const Category = styled.div`
-    height:400px;
+    height:300px;
     overflow-y:scroll;
     scrollbar-width:thin;
     scrollbar-color:#ccc transparent;
@@ -91,8 +95,9 @@ const Category = styled.div`
 
 const Label = styled.label`
     font-size:1em;
-    margin-top:10px;
+    
 `
+
 
 const AddCartButton = styled.button`
   border:none;
@@ -149,15 +154,17 @@ export default function FilterProduct({ category }) {
         <FilterContainer className="">
             <form action="" onSubmit={handleSearch}>
                 <Inputs>
-                    <Label htmlFor="">Buscar</Label>
+                    <Label className={roboto.className}>Buscar</Label>
                     <Input type="text" name="search" autoComplete="off" onChange={(e) => setSearchTerm(e.target.value)} />
-                    <Label htmlFor="">Menor</Label>
+                    <Label className={roboto.className}>Menor</Label>
                     <Input type="number" name="menor" value={priceMin} onChange={(e) => setPriceMin(e.target.value)} />
-                    <Label htmlFor="">Mayor</Label>
+                    <Label className={roboto.className}>Mayor</Label>
                     <Input type="number" name="mayor" value={priceMax} onChange={(e) => setPriceMax(e.target.value)} />
                 </Inputs>
                 <Space />
-                <Label htmlFor="">Categorias</Label>
+                <Space />
+                <Label className={roboto.className} style={{ fontSize:"1.3em",fontWeight:"500",color:"#626567" }}>Categorias</Label>
+                <Space />
                 <Category className="container_ca">
                     {
                         category?.map((elm, inx) => (
@@ -167,7 +174,7 @@ export default function FilterProduct({ category }) {
                                 {
                                     elm.parents.length > 0 ?
                                         <div>
-                                            <label>{elm.name}</label>
+                                            <label className={roboto.className} style={{ marginLeft:"3px",fontSize:"1.1em",fontWeight:"500",color:"#626567" }}>{elm.name}</label>
                                         {elm.parents.map((em, i) => (
                                             <Box key={i} className="cont" style={{ marginLeft: "30px" }}>
                                                 <CheckBox
@@ -181,7 +188,7 @@ export default function FilterProduct({ category }) {
                                                     data-parent-id={elm.name}
                                                 />
                                                 
-                                                <label htmlFor="">{em.name}</label>
+                                                <label className={roboto.className} style={{ fontSize:"0.9em"}}>{em.name}</label>
                                             </Box>
                                         ))}
 
@@ -196,7 +203,7 @@ export default function FilterProduct({ category }) {
                                             onChange={e => handleChange(e)}
     
                                         />
-                                        <label htmlFor="">{elm.name}</label>
+                                        <Label className={roboto.className} style={{ fontSize:"0.9em"}}>{elm.name}</Label>
                                     </Box>
                                 }
                             </div>
