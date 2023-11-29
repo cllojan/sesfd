@@ -14,6 +14,7 @@ import Image from "next/image";
 const ConstCart = styled.div`
  margin:20px;
 `
+
 const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(550px,1fr));
@@ -22,10 +23,9 @@ const ColumnsWrapper = styled.div`
 `;
 
 const Box = styled.div`  
+  width:100%;
+  height:400px;  
   
-  height:400px;
-  
-  overflow-y:auto;
 `;
 const Input = styled.input`  
   height:15px;
@@ -75,11 +75,15 @@ const InputBox = styled.div`
   display:flex;
   gap:10px;
 `
-const InputContainer = styled.div`      
+const InputContainer = styled.div`    
+  
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
+  @media (max-width:768px){
+    width:95%;
+  }
 `
 const ProductInfoCell = styled.td`
   display:flex;
@@ -151,6 +155,7 @@ const Empty = styled.div`
       }
     }
 `
+
 const ProductImageBox = styled.div`
   width: 70px;
   height: 100px;
@@ -325,12 +330,15 @@ export default function CartPage() {
                       </Td>
                     </tr>
                   ))}
+                  
+                </tbody>
+                <tfoot>
                   <tr>
                     <td></td>
                     <Td>Total:</Td>
                     <Td>${total}</Td>
                   </tr>
-                </tbody>
+                </tfoot>
               </Table>
             )}
           </Box>

@@ -29,7 +29,7 @@ const Logo = styled(Link)`
   }
   & p{
     margin:0 ;
-    font-size:30px;
+    font-size:1.5em;
     font-weight: bold;
     color:#1B4F72;
   }

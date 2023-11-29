@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Button from "@/components/Button";
 
 
-const Test = styled.div`
+const FilterContainer = styled.div`
     height:100vh;
     margin:20px;
 `
@@ -94,7 +94,7 @@ const Label = styled.label`
     margin-top:10px;
 `
 
-const AddCartButton= styled.button`
+const AddCartButton = styled.button`
   border:none;
   border-radius:4px;
   width:100%;
@@ -116,28 +116,37 @@ export default function FilterProduct({ category }) {
     const [priceMin, setPriceMin] = useState(0);
     const [priceMax, setPriceMax] = useState(1000);
     const router = useRouter();
-
+    const selectedParent = (e) => {
+        console.log(e)
+    }
     const handleChange = (e) => {
-        const categoriaSeleccionada = e.target.value;
+        const categoriaSeleccionada = e.target.value;        
+        console.log(e)
+        if(e.target.classList[2] == "parent"){
+            console.log(categoriasSeleccionadas)
+        }
         if (categoriasSeleccionadas.includes(categoriaSeleccionada)) {
             let inxC = categoriasSeleccionadas.indexOf(categoriaSeleccionada)
             categoriasSeleccionadas.splice(inxC, 1);
+            
         } else {
             setCategoriasSeleccionadas([...categoriasSeleccionadas, categoriaSeleccionada]);
+            
         }
 
     };
 
+
     const handleSearch = (event) => {
         event.preventDefault();
-
+        
         const categoriasQuery = categoriasSeleccionadas.join(',');
-
+        
         router.push(`/product/search/${searchTerm}?categorys=${categoriasQuery}&min=${priceMin}&max=${priceMax}`);
 
     };
     return (
-        <Test className="">
+        <FilterContainer className="">
             <form action="" onSubmit={handleSearch}>
                 <Inputs>
                     <Label htmlFor="">Buscar</Label>
@@ -147,38 +156,48 @@ export default function FilterProduct({ category }) {
                     <Label htmlFor="">Mayor</Label>
                     <Input type="number" name="mayor" value={priceMax} onChange={(e) => setPriceMax(e.target.value)} />
                 </Inputs>
-                <Space/>            
+                <Space />
                 <Label htmlFor="">Categorias</Label>
-                <Category className="container_ca">                
+                <Category className="container_ca">
                     {
                         category?.map((elm, inx) => (
                             <div className="" key={inx} >
-                                <Box>
-                                    <CheckBox
-                                        type='checkbox'
-                                        value={elm.id}
-                                        onChange={e => handleChange(e)}
-
-                                    />
-                                    <label htmlFor="">{elm.name}</label>
-                                </Box>
                                 
+
                                 {
                                     elm.parents.length > 0 ?
-                                        elm.parents.map((em, i) => (
+                                        <div>
+                                            <label>{elm.name}</label>
+                                        {elm.parents.map((em, i) => (
                                             <Box key={i} className="cont" style={{ marginLeft: "30px" }}>
                                                 <CheckBox
-                                                    type='checkbox'
-                                                    value={em.id}
 
+                                                    type='checkbox'
+                                                    value={em._id}
+                                                    id={em._id}
+                                                    className="child"
                                                     onChange={e => handleChange(e)}
-                                                    checked={categoriasSeleccionadas.includes(elm.id)}
+                                                    
                                                     data-parent-id={elm.name}
                                                 />
+                                                
                                                 <label htmlFor="">{em.name}</label>
                                             </Box>
-                                        ))
-                                        : <Space/>
+                                        ))}
+
+                                        </div>
+                                        
+                                        : <Box>
+                                        <CheckBox
+                                            type='checkbox'
+                                            value={elm.id}
+                                            id={elm.id}
+                                            className="parent"
+                                            onChange={e => handleChange(e)}
+    
+                                        />
+                                        <label htmlFor="">{elm.name}</label>
+                                    </Box>
                                 }
                             </div>
                         ))
@@ -186,7 +205,7 @@ export default function FilterProduct({ category }) {
                 </Category>
                 <AddCartButton type="submit">Buscar</AddCartButton>
             </form>
-        </Test>
+        </FilterContainer>
 
     )
 }
