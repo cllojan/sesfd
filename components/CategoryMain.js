@@ -42,11 +42,13 @@ const Title = styled.h2`
   }
 `;
 const ContProduct = styled.div`
-  height:450px;
+  
+  
   display:flex;
   position:relative;
   flex-direction: column;
-  margin:20px;
+  margin:40px 20px;
+  
   &::after{
     content:" ";
     z-index: 0;
@@ -74,12 +76,14 @@ const ProductWrapper = styled.a`
   display:flex;
   flex-direction: column;
   align-items:center;
-  justify-content: space-between;
+  justify-content: space-between;  
   width:150px;
-  height: 150px;  
+  height: 150px;    
   margin:35px;
   @media (max-width: 768px) {
     margin:30px;
+    width:150px;
+  height: 150px;    
   }
 `;
 
@@ -162,6 +166,7 @@ export default function CategoryMain() {
         <ContProduct>
             <Title>Categorias Principales</Title>
             
+
             <StyledProductsGrid >                                            
                 {
                   listCategory?.map((elm,inx) => (

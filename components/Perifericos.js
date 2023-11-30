@@ -7,35 +7,40 @@ import CategoryMain from "@/components/CategoryMain"
 import SliderProducts from "@/components/SliderProducts";
 import Teclados from "@/components/Perifericos/Teclados";
 const ContProduct = styled.div`
-  height:450px;
+  
   display:flex;
   flex-direction: column;
-  margin:20px;
+  margin:0 20px;
+
 `
 const TabsWrapper = styled.div`
   display: flex;
   align-items:center;
   position:relative;
+  
   &::after{
-    content:" ";
     z-index: 0;
+    content:" ";
     position:absolute;
-    bottom:12px;
+    top:74px;
     left: 0;
     width:100%;
     height: 3px;
     background-color: #ccc;
   }
+  @media (max-width: 768px) {
+    flex-direction: column;
+  
+  }
+
 `;
 const Title = styled.h2`
-  font-size: 1.5rem;
+  font-size: 1.5em;
   position:relative;
   margin:30px 0 30px;
   font-weight: normal;
   
-  @media (max-width: 768px) {
-    text-align: center;
-  }
+ 
 
   &::after{
     z-index: 100;
@@ -47,12 +52,14 @@ const Title = styled.h2`
     height: 3px;
     background-color: #007bff;
   }
+ 
 `;
 const Tabs = styled.div`
   display: flex;  
   margin-top:5px;
   margin-left:20px;
   gap: 30px;
+  overflow: hidden;
 `;
 
 const TabButton = styled.button`

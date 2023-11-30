@@ -23,10 +23,12 @@ const Title = styled.h2`
   }
 `;
 const ContProduct = styled.div`
+  
   display:flex;
+  margin:0 20px;
   flex-direction: column;
   position:relative;
-  margin:20px;
+  
   &::after{
     content:" ";
     z-index: 0;

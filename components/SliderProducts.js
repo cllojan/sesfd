@@ -6,9 +6,9 @@ import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  
+  margin:0 40px;
+  padding:0;
 `;
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;

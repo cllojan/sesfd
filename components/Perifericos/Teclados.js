@@ -16,6 +16,7 @@ const ContProduct = styled.div`
   display:flex;
   flex-direction: column;
   margin:20px;
+  overflow: hidden;
 `
 export default function Teclados({products}) {
  
