@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 const HeroBannerWrapper = styled.div`
-  background-image: url("https://images.shopcdn.co.uk/ef/10/ef108b7f84bbd94f610326d7edb18dd5/1024x1024/webp/fit?quality=100");
-  background-size: cover;
-  
+  background-image: url("/featured/fit.webp");
+  background-size: cover;  
+  background-repeat: no-repeat;  
   height: 500px; /* Ajusta la altura según tus necesidades */
   display: flex;
   align-items: center;
