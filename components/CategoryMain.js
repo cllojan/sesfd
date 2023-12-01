@@ -2,9 +2,10 @@ import styled from "styled-components";
 import Center from "@/components/Center";
 import ProductsGrid from "@/components/ProductsGrid";
 import ProductBox from "@/components/ProductBox";
-
+import Image from "next/image";
 import SliderProducts from "@/components/SliderProducts";
 
+import {Laptop} from "@/public/category/20200805112237.png"
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -137,28 +138,28 @@ export default function CategoryMain() {
     let URL= "https://ecommerce-front-cllojan.vercel.app/product/search/%20?categorys=";
     const listCategory = [
       {
-        img:"https://www.lenovo.com/medias/lenovo-laptops-thinkbook-16-gen-4-intel-hero.png?context=bWFzdGVyfHJvb3R8MzQ1OTM2fGltYWdlL3BuZ3xoMjEvaGZkLzEzMjU1MTI1OTkxNDU0LnBuZ3xlMGJjMDAyZjIzYzczYmY0YTY3NTlmODcwMDJjZTBhMzg5M2VlMjFlNTNlZWJkZDMyNDA3MTdlNjc3NjhhZWY5",
+        img:"/category/20200805112237.png",
         title:"Laptops",
         code: URL + "64bb1494de4b8c08b057528e"
       },
       {
-        img:"https://www.asus.com/media/Odin/websites/global/ProductLine/20200805112237.png",
+        img:"/category/20200805112237.png",
         title:"PC de Escritorio",
         code: URL + "64bb148cde4b8c08b057528a"
 
       },
       {
-        img:"https://pc213.ru/attachments/Image/apgrejd-modernizaciya-kompyutera-v-moskve.jpg?template=generic",
+        img:"/category/20200805112237.png",
         title:"Hardware",
         code:URL + ["6490d47f07756020e23836d9","649a0fd76c8734e690b7a51c","64a6e321baa8f76629dab656","64a6e32bbaa8f76629dab659","64a6e334baa8f76629dab65c"].join(",")
       },
       {
-        img:"https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c08319042.png",
+        img:"/category/20200805112237.png",
         title:"Monitores",
         code:URL+"64a6e52ebaa8f76629dab69d"
       },
       {
-        img:"https://i0.wp.com/www.tecnosmart.com.ec/wp-content/uploads/2022/06/TECLADO-LOGITECH-MECANICO-G413-SE-G-TACTILE-BLACK-920-010433_TECLADOS_9287_1.png?fit=600%2C399&ssl=1",
+        img:"/category/20200805112237.png",
         title:"Teclados",
         code:URL+"64a6e51cbaa8f76629dab695"
       },
@@ -173,7 +174,7 @@ export default function CategoryMain() {
                   listCategory?.map((elm,inx) => (
                 <ProductWrapper key={inx} href={elm.code}>
                     <WhiteBox>
-                        <img src={elm.img} alt="" />
+                        <Image src={elm.img} alt="" width={150} height={150} />
                     </WhiteBox>                    
                     <TitleH href={"url"}>{elm.title}</TitleH>                      
                 </ProductWrapper>
