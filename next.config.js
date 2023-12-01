@@ -4,6 +4,16 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        pathname: '/v0/b/bucket-ecommerce.appspot.com/o/**'
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig

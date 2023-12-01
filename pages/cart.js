@@ -16,8 +16,8 @@ const ConstCart = styled.div`
 `
 
 const ColumnsWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(550px,1fr));
+  display: flex;
+  flex-direction: row;
   gap:20px;
   margin-top: 40px;
 `;
@@ -284,6 +284,7 @@ export default function CartPage() {
     <>
       <Header />
       <ConstCart>
+        Seguir comprando
         <ColumnsWrapper>
           {!cartProducts?.length && (
             <EmptyCenter>
@@ -341,90 +342,94 @@ export default function CartPage() {
                 </tfoot>
               </Table>
             )}
+            
           </Box>
           {!!cartProducts?.length && (
-            <InputContainer>
+            <div>
+              <button>Compra directa</button><button>Paypal</button>
+              <InputContainer>
 
-              <InputBox>
-                <ContInput className="">
-                  <Label htmlFor="">Nombre</Label>
-                  <Input type="text"
+<InputBox>
+  <ContInput className="">
+    <Label htmlFor="">Nombre</Label>
+    <Input type="text"
 
-                    value={name}
-                    name="name"
-                    onChange={ev => setName(ev.target.value)} />
-                </ContInput>
-                <ContInput>
-                  <Label htmlFor="">Apellido</Label>
-                  <Input type="text"
-                    value={lastname}
-                    name="lastname"
-                    onChange={ev => setLastName(ev.target.value)} />
-                </ContInput>
+      value={name}
+      name="name"
+      onChange={ev => setName(ev.target.value)} />
+  </ContInput>
+  <ContInput>
+    <Label htmlFor="">Apellido</Label>
+    <Input type="text"
+      value={lastname}
+      name="lastname"
+      onChange={ev => setLastName(ev.target.value)} />
+  </ContInput>
 
-              </InputBox>
-              <ContInput>
-                <Label htmlFor="">Email</Label>
-                <Input type="text"
+</InputBox>
+<ContInput>
+  <Label htmlFor="">Email</Label>
+  <Input type="text"
 
-                  value={email}
-                  name="email"
-                  onChange={ev => setEmail(ev.target.value)} />
-              </ContInput>
+    value={email}
+    name="email"
+    onChange={ev => setEmail(ev.target.value)} />
+</ContInput>
 
-              <ContInput>
-                <Label>Celular</Label>
-                <Input type="text"
-                  value={cellphone}
-                  name="cell"
-                  onChange={ev => setCellPhone(ev.target.value)} />
-              </ContInput>
-              <InputBox>
+<ContInput>
+  <Label>Celular</Label>
+  <Input type="text"
+    value={cellphone}
+    name="cell"
+    onChange={ev => setCellPhone(ev.target.value)} />
+</ContInput>
+<InputBox>
 
 
-                <ContInput>
-                  <Label>Ciudad</Label>
-                  <Input type="text"
-                    value={city}
-                    name="city"
-                    onChange={ev => setCity(ev.target.value)} />
-                </ContInput>
+  <ContInput>
+    <Label>Ciudad</Label>
+    <Input type="text"
+      value={city}
+      name="city"
+      onChange={ev => setCity(ev.target.value)} />
+  </ContInput>
 
-                <ContInput>
-                  <Label>Canton</Label>
-                  <Input type="text"
+  <ContInput>
+    <Label>Canton</Label>
+    <Input type="text"
 
-                    value={postalCode}
-                    name="postalCode"
-                    onChange={ev => setPostalCode(ev.target.value)} />
-                </ContInput>
+      value={postalCode}
+      name="postalCode"
+      onChange={ev => setPostalCode(ev.target.value)} />
+  </ContInput>
 
-              </InputBox>
-              <ContInput>
-                <Label>Ciudad</Label>
-                <Input type="text"
+</InputBox>
+<ContInput>
+  <Label>Ciudad</Label>
+  <Input type="text"
 
-                  value={streetAddress}
-                  name="streetAddress"
-                  onChange={ev => setStreetAddress(ev.target.value)} />
-              </ContInput>
-              <ContInput>
-                <Label>Direccion 2 (Opcional)</Label>
-                <Input type="text"
+    value={streetAddress}
+    name="streetAddress"
+    onChange={ev => setStreetAddress(ev.target.value)} />
+</ContInput>
+<ContInput>
+  <Label>Direccion 2 (Opcional)</Label>
+  <Input type="text"
 
-                  value={country}
-                  name="country"
-                  onChange={ev => setCountry(ev.target.value)} />
-              </ContInput>
+    value={country}
+    name="country"
+    onChange={ev => setCountry(ev.target.value)} />
+</ContInput>
 
-              <ContInput>
-                <ButtonSend black block
-                  onClick={goToPayment}>
-                  Enviar
-                </ButtonSend>
-              </ContInput>
+<ContInput>
+  <ButtonSend black block
+    onClick={goToPayment}>
+    Enviar
+  </ButtonSend>
+</ContInput>
 
-            </InputContainer>
+</InputContainer>
+            </div>
           )}
         </ColumnsWrapper>
       </ConstCart>

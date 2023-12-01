@@ -49,6 +49,7 @@ const ContProduct = styled.div`
   flex-direction: column;
   margin:40px 20px;
   
+  
   &::after{
     content:" ";
     z-index: 0;

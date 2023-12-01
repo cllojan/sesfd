@@ -5,7 +5,7 @@ import Link from "next/link";
 import {useContext} from "react";
 import {CartContext} from "@/components/CartContext";
 import { Inter } from 'next/font/google'
- 
+import Image from "next/image";
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({
   subsets: ['latin'],
@@ -86,11 +86,14 @@ const AddCartButton= styled(Button)`
 `
 export default function ProductBox({_id,title,description,price,images}) {
   const {addProduct} = useContext(CartContext);
-  const url = '/product/'+_id;
+  const url = '/product/'+_id;  
+  const parteRelativa = images?.[0].replace(/^https:\/\/firebasestorage\.googleapis\.com\/v0\/b\/bucket-ecommerce\.appspot\.com\/o\//, '');
+
+  console.log(parteRelativa)
   return (
     <ProductWrapper className={inter.className}>
       <WhiteBox href={url}>        
-          <img src={images?.[0]} alt=""/>        
+          <Image  src={images?.[0]} alt="uwu" width="300" height="300"/>
       </WhiteBox>
       <ProductInfoBox>
         <Title href={url}>{title}</Title>
