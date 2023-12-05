@@ -9,10 +9,22 @@ import Table from "@/components/Table";
 import CartIcon from '@/components/icons/CartIcon';
 import Link from "next/link";
 import Image from "next/image";
+import { PayPalButtons } from '@paypal/react-paypal-js'
+import { Montserrat, Lato } from 'next/font/google'
+import swal from 'sweetalert';
+import { useRouter } from 'next/router';
+
+
+const roboto = Montserrat({
+  weight: '500',
+  subsets: ['latin'],
+})
 
 
 const ConstCart = styled.div`
- margin:20px;
+  
+  margin:20px;
+  
 `
 
 const ColumnsWrapper = styled.div`
@@ -23,9 +35,26 @@ const ColumnsWrapper = styled.div`
 `;
 
 const Box = styled.div`  
+position:relative;
   width:100%;
-  height:400px;  
+  height:520px;
+  overflow-y: auto;  
+  display:flex;
+  flex-direction: column;
+  gap:30px;
   
+  
+  scroll-margin: 50px 0 0 50px;
+  &::-webkit-scrollbar{           
+      width:8px;
+    }    
+    &::-webkit-scrollbar-thumb{
+        background-color:#AED6F1 ;                
+        border-radius:4px;
+    }
+    &::-webkit-scrollbar-thumb:hover{
+        background-color:#2E86C1;
+    }
 `;
 const Input = styled.input`  
   height:15px;
@@ -181,8 +210,10 @@ const ProductImageBox = styled.div`
 `;
 
 const QuantityLabel = styled.span`
-  padding: 0 15px;
-  display: block;
+  
+    padding: 0 15px;
+    display: block;    
+    
   @media screen and (min-width: 768px) {
     display: inline-block;
     padding: 0 10px;
@@ -207,6 +238,73 @@ const ContInput = styled.div`
   flex-direction: column;
   gap:0.5em;
   
+
+`
+const ContProduct = styled.div`
+  width: 98%;
+  display:grid;
+  grid-template-columns: 3fr 1fr 0.5fr;
+  padding:25px 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(229 231 235/1);  
+  border-radius:5px;    
+ 
+`
+
+const Product = styled.div`
+  margin-left:20px;
+  display:flex;
+  flex-direction: row;
+  gap:20px;
+`
+const ButtonsContainer = styled.div`  
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+`
+
+const EshopButton = styled.button`  
+  height:35px;
+  border:none;
+  background:#ffc439;
+  cursor:pointer;
+  font-family:"Inter";
+  color:#17202A ;
+  font-weight:500;
+  border-radius: 5px;
+`
+const Total = styled.p`
+  background: #fff;
+    position:sticky;
+    right:0;
+    bottom:0;
+    padding:10px;
+    
+    font-size:25px;
+    font-weight: 500;
+    text-align: right;
+    margin-right: 20px;
+  span{
+    font-size:20px;
+  }
+`
+const ProductInfo = styled.div`
+  
+  p{
+    font-family:"Inter";
+    color:#111827 ;
+    font-weight:500;
+  }
+  span{
+    color:#374151 ;
+    font-weight:400;    
+    margin-top: -15px;
+  }
+`
+const ContCantity = styled.div`
+  
 `
 export default function CartPage() {
   const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
@@ -220,6 +318,7 @@ export default function CartPage() {
   const [streetAddress, setStreetAddress] = useState('');
   const [country, setCountry] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     if (cartProducts.length > 0) {
       axios.post('/api/cart', { ids: cartProducts })
@@ -246,11 +345,25 @@ export default function CartPage() {
     removeProduct(id);
   }
   async function goToPayment() {
-
+    if(name == "" || lastname=="" || email=="" || cellphone=="" || streetAddress==""){
+      swal ( "Oops" ,  "Parece que te faltan algunos campos de llenar" ,  "error" )
+      return
+    }
+    
+    swal({
+      title: "¡Gracias por tu compra!",
+      text: "Tu pedido está en proceso. Te contactaremos pronto.",
+      icon: "success",
+      button: "OK",
+    });
+    
     const response = await axios.post('/api/checkout', {
       name, email, cellphone, city, postalCode, streetAddress, country,
       cartProducts,
     });
+    clearCart()
+    router.push('/');
+
     /*
     if(response.data.status == 200){
       setIsSuccess(true)
@@ -284,7 +397,7 @@ export default function CartPage() {
     <>
       <Header />
       <ConstCart>
-        Seguir comprando
+
         <ColumnsWrapper>
           {!cartProducts?.length && (
             <EmptyCenter>
@@ -296,139 +409,138 @@ export default function CartPage() {
               </Empty>
             </EmptyCenter>
           )}
-          <Box>
+
+          {products?.length > 0 && (
+            <Box>
+              {products.map((product,inx) => (
+                <ContProduct key={inx}>
+                  <Product>
+                    <Image src={product.images[0]} width="100" height="100" />
+                    <ProductInfo>
+                      <p>{product.title}</p>
+                      <span>$ {product.price}</span>
+                    </ProductInfo>
+                  </Product>
+                  <ContCantity>
+                    <Button
+                      onClick={() => lessOfThisProduct(product._id)}>-</Button>
+                    <QuantityLabel>
+                      {cartProducts.filter(id => id === product._id).length}
+                    </QuantityLabel>
+                    <Button
+                      onClick={() => moreOfThisProduct(product._id)}>+</Button>
+                  </ContCantity>
+                  <div>${cartProducts.filter(id => id === product._id).length * product.price}</div>
+                </ContProduct>
+
+              ))}
+
+              <Total>Total: <span>${Math.round(total)}</span></Total>
+              
+            </Box>
+          )}
 
 
-            {products?.length > 0 && (
-              <Table>
-                <thead>
-                  <tr>
-                    <th>Productos</th>
-                    <th>Cantidades</th>
-                    <th>Precio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map(product => (
-                    <tr key={product._id}>
-                      <ProductInfoCell>
-                        <ProductImageBox>
-                          <img src={product.images[0]} alt="" />
-                        </ProductImageBox>
-                        <Span>{product.title}</Span>
-                      </ProductInfoCell>
-                      <td>
-                        <Button
-                          onClick={() => lessOfThisProduct(product._id)}>-</Button>
-                        <QuantityLabel>
-                          {cartProducts.filter(id => id === product._id).length}
-                        </QuantityLabel>
-                        <Button
-                          onClick={() => moreOfThisProduct(product._id)}>+</Button>
-                      </td>
-                      <Td>
-                        ${cartProducts.filter(id => id === product._id).length * product.price}
-                      </Td>
-                    </tr>
-                  ))}
-                  
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td></td>
-                    <Td>Total:</Td>
-                    <Td>${total}</Td>
-                  </tr>
-                </tfoot>
-              </Table>
-            )}
-            
-          </Box>
           {!!cartProducts?.length && (
             <div>
-              <button>Compra directa</button><button>Paypal</button>
+              <ButtonsContainer>
+                <EshopButton
+
+                >
+                  Compra directa
+                </EshopButton>
+                <PayPalButtons
+                  style={{
+                    height: 35,
+                    color: 'blue',
+                    label: 'pay',
+                    layout: 'horizontal'
+                  }}
+                />
+
+              </ButtonsContainer>
               <InputContainer>
 
-<InputBox>
-  <ContInput className="">
-    <Label htmlFor="">Nombre</Label>
-    <Input type="text"
+                <InputBox>
+                  <ContInput className="">
+                    <Label htmlFor="">Nombre</Label>
+                    <Input type="text"
 
-      value={name}
-      name="name"
-      onChange={ev => setName(ev.target.value)} />
-  </ContInput>
-  <ContInput>
-    <Label htmlFor="">Apellido</Label>
-    <Input type="text"
-      value={lastname}
-      name="lastname"
-      onChange={ev => setLastName(ev.target.value)} />
-  </ContInput>
+                      value={name}
+                      name="name"
+                      onChange={ev => setName(ev.target.value)} />
+                  </ContInput>
+                  <ContInput>
+                    <Label htmlFor="">Apellido</Label>
+                    <Input type="text"
+                      value={lastname}
+                      name="lastname"
+                      onChange={ev => setLastName(ev.target.value)} />
+                  </ContInput>
 
-</InputBox>
-<ContInput>
-  <Label htmlFor="">Email</Label>
-  <Input type="text"
+                </InputBox>
+                <ContInput>
+                  <Label htmlFor="">Email</Label>
+                  <Input type="text"
 
-    value={email}
-    name="email"
-    onChange={ev => setEmail(ev.target.value)} />
-</ContInput>
+                    value={email}
+                    name="email"
+                    onChange={ev => setEmail(ev.target.value)} />
+                </ContInput>
 
-<ContInput>
-  <Label>Celular</Label>
-  <Input type="text"
-    value={cellphone}
-    name="cell"
-    onChange={ev => setCellPhone(ev.target.value)} />
-</ContInput>
-<InputBox>
+                <ContInput>
+                  <Label>Celular</Label>
+                  <Input type="text"
+                    value={cellphone}
+                    name="cell"
+                    onChange={ev => setCellPhone(ev.target.value)} />
+                </ContInput>
+                <InputBox>
 
 
-  <ContInput>
-    <Label>Ciudad</Label>
-    <Input type="text"
-      value={city}
-      name="city"
-      onChange={ev => setCity(ev.target.value)} />
-  </ContInput>
+                  <ContInput>
+                    <Label>Ciudad</Label>
+                    <Input type="text"
+                      value={city}
+                      name="city"
+                      onChange={ev => setCity(ev.target.value)} />
+                  </ContInput>
 
-  <ContInput>
-    <Label>Canton</Label>
-    <Input type="text"
+                  <ContInput>
+                    <Label>Canton</Label>
+                    <Input type="text"
 
-      value={postalCode}
-      name="postalCode"
-      onChange={ev => setPostalCode(ev.target.value)} />
-  </ContInput>
+                      value={postalCode}
+                      name="postalCode"
+                      onChange={ev => setPostalCode(ev.target.value)} />
+                  </ContInput>
 
-</InputBox>
-<ContInput>
-  <Label>Ciudad</Label>
-  <Input type="text"
+                </InputBox>
+                <ContInput>
+                  <Label>Ciudad</Label>
+                  <Input type="text"
 
-    value={streetAddress}
-    name="streetAddress"
-    onChange={ev => setStreetAddress(ev.target.value)} />
-</ContInput>
-<ContInput>
-  <Label>Direccion 2 (Opcional)</Label>
-  <Input type="text"
+                    value={streetAddress}
+                    name="streetAddress"
+                    onChange={ev => setStreetAddress(ev.target.value)} />
+                </ContInput>
+                <ContInput>
+                  <Label>Direccion 2 (Opcional)</Label>
+                  <Input type="text"
 
-    value={country}
-    name="country"
-    onChange={ev => setCountry(ev.target.value)} />
-</ContInput>
+                    value={country}
+                    name="country"
+                    onChange={ev => setCountry(ev.target.value)} />
+                </ContInput>
 
-<ContInput>
-  <ButtonSend black block
-    onClick={goToPayment}>
-    Enviar
-  </ButtonSend>
-</ContInput>
+                <ContInput>
+                  <ButtonSend black block
+                    onClick={goToPayment}>
+                    Enviar
+                  </ButtonSend>
+                </ContInput>
 
-</InputContainer>
+              </InputContainer>
             </div>
           )}
         </ColumnsWrapper>

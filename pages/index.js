@@ -6,6 +6,7 @@ import {mongooseConnect} from "@/lib/mongoose";
 import NewProducts from "@/components/NewProducts";
 import { Inter } from 'next/font/google'
 
+
 import CategoryMain from "@/components/CategoryMain"
 import Perifericos from "@/components/Perifericos";
 // If loading a variable font, you don't need to specify the font weight
@@ -17,6 +18,7 @@ const inter = Inter({
 export default function HomePage({featuredProduct,newProducts,teclados,mouses,headset}) {
   return (
     <div className={inter.className}>
+      
       <Header />      
         <Featured products={featuredProduct}/>
         <NewProducts products={newProducts} />

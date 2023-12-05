@@ -18,6 +18,7 @@ export default async function handler(req,res) {
   const uniqueIds = [...new Set(productsIds)];
   const productsInfos = await Product.find({_id:uniqueIds});
 
+  
   let line_items = [];
   for (const productId of uniqueIds) {
     const productInfo = productsInfos.find(p => p._id.toString() === productId);

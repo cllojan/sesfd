@@ -13,6 +13,9 @@ const HeroBannerWrapper = styled.div`
   background-color: rgba(0, 0, 0, 0.6); /* Cambia el valor de la opacidad aquí */
 `;
 
+
+
+
 const HeroBannerContent = styled.div`
   max-width: 800px;
   margin: 0 auto;

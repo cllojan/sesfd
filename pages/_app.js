@@ -1,22 +1,26 @@
 import {createGlobalStyle} from "styled-components";
 import {CartContextProvider} from "@/components/CartContext";
 import { Inter } from 'next/font/google'
-import { httpAgentOptions } from "@/next.config";
 import Head from 'next/head'
-import Footer from "@/components/Footer";
-
+import { PayPalScriptProvider} from '@paypal/react-paypal-js'
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
 })
 const GlobalStyles = createGlobalStyle`
-  
+
+  @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;1,100;1,300;1,700&display=swap');
+
   body{
     background-color: #fff;
     padding:0;
     margin:0;
     
+  }
+
+  .swal-modal{
+    font-family: 'Lato', sans-serif;
   }
 `;
 
@@ -33,10 +37,14 @@ export default function App({ Component, pageProps }) {
       </Head>
       <GlobalStyles />
       
+    
 
         <div className={inter.className}>
           <CartContextProvider >                
-            <Component  {...pageProps}  />      
+            
+              <PayPalScriptProvider>
+              <Component  {...pageProps}  /> 
+            </PayPalScriptProvider>     
           </CartContextProvider>
           
         </div>
