@@ -80,7 +80,7 @@ const ImagesList = styled.div`
 
 export default function Perifericos({teclados,mouse,headset}) {
   const [activeTab, setActiveTab] = useState(0);
-  console.log(teclados)
+  
   const imageLists = [
     {
       title: "Teclados",

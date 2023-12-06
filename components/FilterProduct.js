@@ -121,15 +121,10 @@ export default function FilterProduct({ category }) {
     const [priceMin, setPriceMin] = useState(0);
     const [priceMax, setPriceMax] = useState(1000);
     const router = useRouter();
-    const selectedParent = (e) => {
-        console.log(e)
-    }
+    
     const handleChange = (e) => {
         const categoriaSeleccionada = e.target.value;        
-        console.log(e)
-        if(e.target.classList[2] == "parent"){
-            console.log(categoriasSeleccionadas)
-        }
+        
         if (categoriasSeleccionadas.includes(categoriaSeleccionada)) {
             let inxC = categoriasSeleccionadas.indexOf(categoriaSeleccionada)
             categoriasSeleccionadas.splice(inxC, 1);

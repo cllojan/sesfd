@@ -87,9 +87,9 @@ const AddCartButton= styled(Button)`
 export default function ProductBox({_id,title,description,price,images}) {
   const {addProduct} = useContext(CartContext);
   const url = '/product/'+_id;  
-  const parteRelativa = images?.[0].replace(/^https:\/\/firebasestorage\.googleapis\.com\/v0\/b\/bucket-ecommerce\.appspot\.com\/o\//, '');
+  
 
-  console.log(parteRelativa)
+  
   return (
     <ProductWrapper className={inter.className}>
       <WhiteBox href={url}>        

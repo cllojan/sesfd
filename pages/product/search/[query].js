@@ -28,7 +28,7 @@ export async function getServerSideProps(context) {
   const { query, categorys,min,max } = context.query
   const searchTerm = query.length === "" ? " " : query;
   const categoryIds = categorys?.length > 0 ? categorys.split(",") : categorys ;    
-  console.log(context);
+  
   const productsQuery = {
     $or: [
       { title: { $regex: searchTerm, $options: "i" } },

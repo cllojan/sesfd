@@ -1,11 +1,7 @@
 import styled from "styled-components";
-import Center from "@/components/Center";
-import ProductsGrid from "@/components/ProductsGrid";
-import ProductBox from "@/components/ProductBox";
-import Image from "next/image";
-import SliderProducts from "@/components/SliderProducts";
 
-import {Laptop} from "@/public/category/20200805112237.png"
+import Image from "next/image";
+
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -96,10 +92,7 @@ const WhiteBox = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  img{
-    width:200px;
-    height: 150px;
-  }
+  
 `;
 
 
@@ -138,28 +131,28 @@ export default function CategoryMain() {
     let URL= "https://ecommerce-front-cllojan.vercel.app/product/search/%20?categorys=";
     const listCategory = [
       {
-        img:"/category/20200805112237.png",
+        img:"/category/laptop.webp",
         title:"Laptops",
         code: URL + "64bb1494de4b8c08b057528e"
       },
       {
-        img:"/category/20200805112237.png",
+        img:"/category/PC.png",
         title:"PC de Escritorio",
         code: URL + "64bb148cde4b8c08b057528a"
 
       },
       {
-        img:"/category/20200805112237.png",
+        img:"/category/hardware.jpg",
         title:"Hardware",
         code:URL + ["6490d47f07756020e23836d9","649a0fd76c8734e690b7a51c","64a6e321baa8f76629dab656","64a6e32bbaa8f76629dab659","64a6e334baa8f76629dab65c"].join(",")
       },
       {
-        img:"/category/20200805112237.png",
+        img:"/category/Monitor.webp",
         title:"Monitores",
         code:URL+"64a6e52ebaa8f76629dab69d"
       },
       {
-        img:"/category/20200805112237.png",
+        img:"/category/teclado.webp",
         title:"Teclados",
         code:URL+"64a6e51cbaa8f76629dab695"
       },
@@ -174,7 +167,12 @@ export default function CategoryMain() {
                   listCategory?.map((elm,inx) => (
                 <ProductWrapper key={inx} href={elm.code}>
                     <WhiteBox>
-                        <Image src={elm.img} alt="" width={150} height={150} />
+                        <Image src={elm.img} alt="" width={150} height={150} sizes="100vw"
+        // Make the image display full width
+        style={{
+          width: '100%',
+          height: 'auto',
+        }} />
                     </WhiteBox>                    
                     <TitleH href={"url"}>{elm.title}</TitleH>                      
                 </ProductWrapper>
