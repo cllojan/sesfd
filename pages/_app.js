@@ -18,10 +18,10 @@ const GlobalStyles = createGlobalStyle`
     margin:0;
     
   }
-
-  .swal-modal{
+  .swal2-container{
     font-family: 'Lato', sans-serif;
   }
+  
 `;
 
 export default function App({ Component, pageProps }) {

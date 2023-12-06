@@ -1,17 +1,17 @@
 import Header from "@/components/Header";
 import styled from "styled-components";
-import Center from "@/components/Center";
+
 import Button from "@/components/Button";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/components/CartContext";
 import axios from "axios";
-import Table from "@/components/Table";
+
 import CartIcon from '@/components/icons/CartIcon';
 import Link from "next/link";
 import Image from "next/image";
-import { PayPalButtons } from '@paypal/react-paypal-js'
+
 import { Montserrat, Lato } from 'next/font/google'
-import swal from 'sweetalert';
+import Swal from 'sweetalert2'
 import { useRouter } from 'next/router';
 
 
@@ -416,16 +416,19 @@ export default function CartPage() {
   async function goToPayment() {
     
     if (nombre == "" || apellido == "" || email == "" || celular == "" || direccion == "") {
-      swal("Oops", "Parece que te faltan algunos campos de llenar", "error")
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",        
+      });
       return
     }
-
-    swal({
+    Swal.fire({
       title: "¡Gracias por tu compra!",
       text: "Nos comunicaremos contigo para continuar con la compra",
       icon: "success",
-      button: "OK",
-    });
+      button: "OK"
+    });   
     //console.log("Seleccionados", provinciaSeleccionada,cantonSeleccionada,parroquiaSeleccionada)
     let provincia = provincias[provinciaSeleccionada].provincia
     let canton = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].canton
