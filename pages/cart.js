@@ -373,8 +373,8 @@ export default function CartPage() {
       .then(data => {
         // Actualizar el estado con los datos de las provincias
         setProvincias(data);
-        setCantones(data[1].cantones);                
-        setParroquias(data[1].cantones[101].parroquias)
+        setCantones(data[provinciaSeleccionada].cantones);                
+        setParroquias(data[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias)
       })
       .catch(error => {
         console.error('Error al obtener datos:', error);
@@ -382,11 +382,17 @@ export default function CartPage() {
   }, []);
 
   const handleProvinciaChange = (event) => {    
-    const provinciaSeleccionada = event.target.value;    
-    const cantonesDeProvincia = provincias[provinciaSeleccionada]?.cantones || [];       
+    const provinciaSelec = event.target.value;    
+    const cantonesDeProvincia = provincias[provinciaSelec]?.cantones || [];       
     
     setCantones(cantonesDeProvincia);  
-    setProvinciaSeleccionada(provinciaSeleccionada);
+    setProvinciaSeleccionada(provinciaSelec);
+    setCantonSeleccionada(String(Object.keys(provincias[provinciaSeleccionada].cantones)[0]));
+    let a =  cantonSeleccionada
+    console.log(a)
+    console.log(provincias[provinciaSelec].cantones[a])
+    
+    setParroquias(parroquias);
   };
   const handleCantonChange = (event) => {    
     
@@ -544,7 +550,7 @@ export default function CartPage() {
                   <Label>Canton</Label>
                   <Select type="text"
                     onChange={handleCantonChange}
-                    name="city"
+                    
                   >
                     {
                      Object.entries(cantones)?.map((canton) => (
@@ -559,12 +565,10 @@ export default function CartPage() {
               </InputBox>
               <ContInput>
                 <Label>Parroquia</Label>
-                <Select type="text"
-                    onChange={handleProvinciaChange}
-                    name="city"
+                <Select type="text"                                        
                   >
                     {
-                     Object.entries(parroquias)?.map((parroquia) => (
+                     Object.entries(parroquias).map((parroquia) => (
                         <option key={parroquia[0]} value={parroquia[0]}>
                           {parroquias[parroquia[0]]}
                         </option>
