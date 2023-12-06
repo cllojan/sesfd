@@ -24,18 +24,28 @@ const roboto = Montserrat({
 const ConstCart = styled.div`
   
   margin:20px;
-  
+  @media (max-width:768px){
+    width: 100vw;
+  }
 `
 
 const ColumnsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap:20px;
+  
+  align-items: center;
+  justify-content: stretch;
   margin-top: 40px;
+  @media (max-width:768px){
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
 `;
 
 const Box = styled.div`  
-position:relative;
+  position:relative;
   width:100%;
   height:520px;
   overflow-y: auto;  
@@ -43,7 +53,14 @@ position:relative;
   flex-direction: column;
   gap:30px;
   
-  
+  @media (max-width:768px){
+    width:100vw;
+    & img{
+      width:80px;
+      height: 80px;
+    }
+  }
+
   scroll-margin: 50px 0 0 50px;
   &::-webkit-scrollbar{           
       width:8px;
@@ -70,7 +87,11 @@ const Input = styled.input`
         box-shadow: 0 0 0 1.6px #007bff;
         border-radius:5px;
     }
-    
+    &[type="number"]::-webkit-inner-spin-button,
+    &[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
      
 `;
 const Select = styled.select`
@@ -103,15 +124,21 @@ const InputBox = styled.div`
   width: 100%;
   display:flex;
   gap:10px;
+  @media (max-width:768px){
+    max-width:191px;
+    
+  }
 `
 const InputContainer = styled.div`    
   
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
+  
   @media (max-width:768px){
     width:95%;
+    align-items: normal;
+    justify-content:start;  
   }
 `
 const ProductInfoCell = styled.td`
@@ -237,9 +264,12 @@ const ContInput = styled.div`
   display:flex;
   flex-direction: column;
   gap:0.5em;
-  
+  @media screen and (max-width: 768px) {
+    
+  }
 
 `
+
 const ContProduct = styled.div`
   width: 98%;
   display:grid;
@@ -257,6 +287,7 @@ const Product = styled.div`
   margin-left:20px;
   display:flex;
   flex-direction: row;
+  align-items: center;
   gap:20px;
 `
 const ButtonsContainer = styled.div`  
@@ -317,7 +348,13 @@ export default function CartPage() {
   const [postalCode, setPostalCode] = useState('');
   const [streetAddress, setStreetAddress] = useState('');
   const [country, setCountry] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false);
+
+  const [provincias, setProvincias] = useState([]);
+  const [cantones, setCantones] = useState([]);
+  const [parroquias, setParroquias] = useState([]);
+  const [provinciaSeleccionada, setProvinciaSeleccionada] = useState('1'); 
+  const [cantonSeleccionada, setCantonSeleccionada] = useState('101'); 
+
   const router = useRouter();
   useEffect(() => {
     if (cartProducts.length > 0) {
@@ -330,33 +367,55 @@ export default function CartPage() {
     }
   }, [cartProducts]);
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    if (window?.location.href.includes('success')) {
-      setIsSuccess(true);
-      clearCart();
-    }
+    // Realizar la solicitud a la API
+    fetch('https://gist.githubusercontent.com/emamut/6626d3dff58598b624a1/raw/166183f4520c4603987c55498df8d2983703c316/provincias.json')
+      .then(response => response.json())
+      .then(data => {
+        // Actualizar el estado con los datos de las provincias
+        setProvincias(data);
+        setCantones(data[1].cantones);                
+        setParroquias(data[1].cantones[101].parroquias)
+      })
+      .catch(error => {
+        console.error('Error al obtener datos:', error);
+      });
   }, []);
+
+  const handleProvinciaChange = (event) => {    
+    const provinciaSeleccionada = event.target.value;    
+    const cantonesDeProvincia = provincias[provinciaSeleccionada]?.cantones || [];       
+    
+    setCantones(cantonesDeProvincia);  
+    setProvinciaSeleccionada(provinciaSeleccionada);
+  };
+  const handleCantonChange = (event) => {    
+    
+    const cantonSeleccionada = event.target.value;    
+    const parroquias = provincias[provinciaSeleccionada]?.cantones[cantonSeleccionada].parroquias || []
+    
+    setParroquias(parroquias);  
+    setCantonSeleccionada(cantonSeleccionada);
+  };
   function moreOfThisProduct(id) {
     addProduct(id);
   }
   function lessOfThisProduct(id) {
     removeProduct(id);
   }
+
   async function goToPayment() {
-    if(name == "" || lastname=="" || email=="" || cellphone=="" || streetAddress==""){
-      swal ( "Oops" ,  "Parece que te faltan algunos campos de llenar" ,  "error" )
+    if (name == "" || lastname == "" || email == "" || cellphone == "" || streetAddress == "") {
+      swal("Oops", "Parece que te faltan algunos campos de llenar", "error")
       return
     }
-    
+
     swal({
       title: "¡Gracias por tu compra!",
-      text: "Tu pedido está en proceso. Te contactaremos pronto.",
+      text: "Nos comunicaremos contigo para continuar con la compra",
       icon: "success",
       button: "OK",
     });
-    
+
     const response = await axios.post('/api/checkout', {
       name, email, cellphone, city, postalCode, streetAddress, country,
       cartProducts,
@@ -378,21 +437,7 @@ export default function CartPage() {
     total += price;
   }
 
-  if (isSuccess) {
-    return (
-      <>
-        <Header />
-        <Center>
-          <ColumnsWrapper>
-            <Box>
-              <h1>Gracias por ordenar</h1>
-              <p>Nos comunicaremos contigo para continuar con la compra</p>
-            </Box>
-          </ColumnsWrapper>
-        </Center>
-      </>
-    );
-  }
+
   return (
     <>
       <Header />
@@ -402,7 +447,7 @@ export default function CartPage() {
           {!cartProducts?.length && (
             <EmptyCenter>
               <Empty>
-                <Image src="/emptyCart.png" width={450} height={240} />
+                <Image src="/emptyCart.png" alt="Carrito " width={450} height={240} />
                 <span>Tu carrito esta vacio</span>
                 <p>¡Oops! Parece que tu carrito está un poco solitario. Descubre componentes increíbles que potenciarán tu computadora. 🖥️🛒✨</p>
                 <Link href="/"><CartIcon /> <span>Ir a Comprar</span></Link>
@@ -412,10 +457,10 @@ export default function CartPage() {
 
           {products?.length > 0 && (
             <Box>
-              {products.map((product,inx) => (
+              {products.map((product, inx) => (
                 <ContProduct key={inx}>
                   <Product>
-                    <Image src={product.images[0]} width="100" height="100" />
+                    <Image src={product.images[0]} alt={product.title} width="100" height="100" />
                     <ProductInfo>
                       <p>{product.title}</p>
                       <span>$ {product.price}</span>
@@ -436,112 +481,115 @@ export default function CartPage() {
               ))}
 
               <Total>Total: <span>${Math.round(total)}</span></Total>
-              
+
             </Box>
           )}
 
 
           {!!cartProducts?.length && (
-            <div>
-              <ButtonsContainer>
-                <EshopButton
 
-                >
-                  Compra directa
-                </EshopButton>
-                <PayPalButtons
-                  style={{
-                    height: 35,
-                    color: 'blue',
-                    label: 'pay',
-                    layout: 'horizontal'
-                  }}
-                />
-
-              </ButtonsContainer>
-              <InputContainer>
-
-                <InputBox>
-                  <ContInput className="">
-                    <Label htmlFor="">Nombre</Label>
-                    <Input type="text"
-
-                      value={name}
-                      name="name"
-                      onChange={ev => setName(ev.target.value)} />
-                  </ContInput>
-                  <ContInput>
-                    <Label htmlFor="">Apellido</Label>
-                    <Input type="text"
-                      value={lastname}
-                      name="lastname"
-                      onChange={ev => setLastName(ev.target.value)} />
-                  </ContInput>
-
-                </InputBox>
-                <ContInput>
-                  <Label htmlFor="">Email</Label>
+            <InputContainer>
+              <InputBox>
+                <ContInput className="">
+                  <Label htmlFor="">Nombre</Label>
                   <Input type="text"
 
-                    value={email}
-                    name="email"
-                    onChange={ev => setEmail(ev.target.value)} />
+                    value={name}
+                    name="name"
+                    onChange={ev => setName(ev.target.value)} />
                 </ContInput>
-
                 <ContInput>
-                  <Label>Celular</Label>
+                  <Label htmlFor="">Apellido</Label>
                   <Input type="text"
-                    value={cellphone}
-                    name="cell"
-                    onChange={ev => setCellPhone(ev.target.value)} />
+                    value={lastname}
+                    name="lastname"
+                    onChange={ev => setLastName(ev.target.value)} />
                 </ContInput>
-                <InputBox>
 
+              </InputBox>
+              <ContInput>
+                <Label htmlFor="">Email</Label>
+                <Input type="text"
 
-                  <ContInput>
-                    <Label>Ciudad</Label>
-                    <Input type="text"
-                      value={city}
-                      name="city"
-                      onChange={ev => setCity(ev.target.value)} />
-                  </ContInput>
+                  value={email}
+                  name="email"
+                  onChange={ev => setEmail(ev.target.value)} />
+              </ContInput>
 
-                  <ContInput>
-                    <Label>Canton</Label>
-                    <Input type="text"
-
-                      value={postalCode}
-                      name="postalCode"
-                      onChange={ev => setPostalCode(ev.target.value)} />
-                  </ContInput>
-
-                </InputBox>
+              <ContInput>
+                <Label>Celular</Label>
+                <Input type="number"
+                  value={cellphone}
+                  name="cell"
+                  onChange={ev => setCellPhone(ev.target.value)} />
+              </ContInput>
+              <InputBox>
                 <ContInput>
-                  <Label>Ciudad</Label>
-                  <Input type="text"
+                  <Label>Provincia</Label>
 
-                    value={streetAddress}
-                    name="streetAddress"
-                    onChange={ev => setStreetAddress(ev.target.value)} />
-                </ContInput>
-                <ContInput>
-                  <Label>Direccion 2 (Opcional)</Label>
-                  <Input type="text"
 
-                    value={country}
-                    name="country"
-                    onChange={ev => setCountry(ev.target.value)} />
+                  <Select type="text"
+                    onChange={handleProvinciaChange}
+                    
+                  >
+                    {
+                      Object.entries(provincias).map((elm, inx) => (
+                        <option key={elm[0]} value={elm[0]}>{provincias[elm[0]].provincia}</option>
+                      ))
+                    }
+                  </Select>
                 </ContInput>
 
                 <ContInput>
-                  <ButtonSend black block
-                    onClick={goToPayment}>
-                    Enviar
-                  </ButtonSend>
+                  <Label>Canton</Label>
+                  <Select type="text"
+                    onChange={handleCantonChange}
+                    name="city"
+                  >
+                    {
+                     Object.entries(cantones)?.map((canton) => (
+                        <option key={canton[0]} value={canton[0]}>
+                          {cantones[canton[0]].canton}
+                        </option>
+                      ))
+                     }
+                  </Select>
                 </ContInput>
 
-              </InputContainer>
-            </div>
+              </InputBox>
+              <ContInput>
+                <Label>Parroquia</Label>
+                <Select type="text"
+                    onChange={handleProvinciaChange}
+                    name="city"
+                  >
+                    {
+                     Object.entries(parroquias)?.map((parroquia) => (
+                        <option key={parroquia[0]} value={parroquia[0]}>
+                          {parroquias[parroquia[0]]}
+                        </option>
+                      ))
+                     }
+                  </Select>
+              </ContInput>
+              <ContInput>
+                <Label>Direccion 2 (Opcional)</Label>
+                <Input type="text"
+
+                  value={country}
+                  name="country"
+                  onChange={ev => setCountry(ev.target.value)} />
+              </ContInput>
+
+              <ContInput>
+                <ButtonSend black block
+                  onClick={goToPayment}>
+                  Enviar
+                </ButtonSend>
+              </ContInput>
+
+            </InputContainer>
+
           )}
         </ColumnsWrapper>
       </ConstCart>
