@@ -340,20 +340,18 @@ const ContCantity = styled.div`
 export default function CartPage() {
   const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
-  const [name, setName] = useState('');
-  const [lastname, setLastName] = useState('');
+  const [nombre, setNombre] = useState('');
+  const [apellido, setApellido] = useState('');
   const [email, setEmail] = useState('');
-  const [cellphone, setCellPhone] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [streetAddress, setStreetAddress] = useState('');
-  const [country, setCountry] = useState('');
+  const [celular, setCelular] = useState('');
+  const [direccion, setDireccion] = useState('');
 
   const [provincias, setProvincias] = useState([]);
   const [cantones, setCantones] = useState([]);
   const [parroquias, setParroquias] = useState([]);
   const [provinciaSeleccionada, setProvinciaSeleccionada] = useState('1'); 
   const [cantonSeleccionada, setCantonSeleccionada] = useState('101'); 
+  const [parroquiaSeleccionada, setParroquiaSeleccionada] =useState("10101");
 
   const router = useRouter();
   useEffect(() => {
@@ -381,18 +379,19 @@ export default function CartPage() {
       });
   }, []);
 
+
   const handleProvinciaChange = (event) => {    
     const provinciaSelec = event.target.value;    
     const cantonesDeProvincia = provincias[provinciaSelec]?.cantones || [];       
     
     setCantones(cantonesDeProvincia);  
     setProvinciaSeleccionada(provinciaSelec);
-    setCantonSeleccionada(String(Object.keys(provincias[provinciaSeleccionada].cantones)[0]));
-    let a =  cantonSeleccionada
-    console.log(a)
-    console.log(provincias[provinciaSelec].cantones[a])
+    let cantonSelecc = String(Object.keys(provincias[provinciaSelec].cantones)[0])
+    setCantonSeleccionada(cantonSelecc)
+    let parroquiasSle = provincias[provinciaSelec]?.cantones[cantonSelecc].parroquias || []
+    setParroquias(parroquiasSle);
+    setParroquiaSeleccionada(String(Object.keys(parroquiasSle)[0]))
     
-    setParroquias(parroquias);
   };
   const handleCantonChange = (event) => {    
     
@@ -400,8 +399,13 @@ export default function CartPage() {
     const parroquias = provincias[provinciaSeleccionada]?.cantones[cantonSeleccionada].parroquias || []
     
     setParroquias(parroquias);  
+    setParroquiaSeleccionada(String(Object.keys(parroquias)[0]))
     setCantonSeleccionada(cantonSeleccionada);
   };
+
+  const handleParroquiaChange = (event) => {
+    setParroquiaSeleccionada(event.target.value)
+  }
   function moreOfThisProduct(id) {
     addProduct(id);
   }
@@ -410,7 +414,8 @@ export default function CartPage() {
   }
 
   async function goToPayment() {
-    if (name == "" || lastname == "" || email == "" || cellphone == "" || streetAddress == "") {
+    
+    if (nombre == "" || apellido == "" || email == "" || celular == "" || direccion == "") {
       swal("Oops", "Parece que te faltan algunos campos de llenar", "error")
       return
     }
@@ -421,9 +426,14 @@ export default function CartPage() {
       icon: "success",
       button: "OK",
     });
-
+    //console.log("Seleccionados", provinciaSeleccionada,cantonSeleccionada,parroquiaSeleccionada)
+    let provincia = provincias[provinciaSeleccionada].provincia
+    let canton = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].canton
+    let parroquia = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias[parroquiaSeleccionada]
+    
+    
     const response = await axios.post('/api/checkout', {
-      name, email, cellphone, city, postalCode, streetAddress, country,
+      name:nombre + apellido, email, cellphone:celular, city:parroquia, postalCode:canton, streetAddress:direccion, country:provincia,
       cartProducts,
     });
     clearCart()
@@ -500,16 +510,16 @@ export default function CartPage() {
                   <Label htmlFor="">Nombre</Label>
                   <Input type="text"
 
-                    value={name}
-                    name="name"
-                    onChange={ev => setName(ev.target.value)} />
+                    value={nombre}
+                    name="nombre"
+                    onChange={ev => setNombre(ev.target.value)} />
                 </ContInput>
                 <ContInput>
                   <Label htmlFor="">Apellido</Label>
                   <Input type="text"
-                    value={lastname}
-                    name="lastname"
-                    onChange={ev => setLastName(ev.target.value)} />
+                    value={apellido}
+                    name="apellido"
+                    onChange={ev => setApellido(ev.target.value)} />
                 </ContInput>
 
               </InputBox>
@@ -525,9 +535,9 @@ export default function CartPage() {
               <ContInput>
                 <Label>Celular</Label>
                 <Input type="number"
-                  value={cellphone}
-                  name="cell"
-                  onChange={ev => setCellPhone(ev.target.value)} />
+                  value={celular}
+                  name="celular"
+                  onChange={ev => setCelular(ev.target.value)} />
               </ContInput>
               <InputBox>
                 <ContInput>
@@ -566,6 +576,7 @@ export default function CartPage() {
               <ContInput>
                 <Label>Parroquia</Label>
                 <Select type="text"                                        
+                onChange={handleParroquiaChange}
                   >
                     {
                      Object.entries(parroquias).map((parroquia) => (
@@ -577,12 +588,12 @@ export default function CartPage() {
                   </Select>
               </ContInput>
               <ContInput>
-                <Label>Direccion 2 (Opcional)</Label>
+                <Label>Direccion</Label>
                 <Input type="text"
 
-                  value={country}
-                  name="country"
-                  onChange={ev => setCountry(ev.target.value)} />
+                  value={direccion}
+                  name="direccion"
+                  onChange={ev => setDireccion(ev.target.value)} />
               </ContInput>
 
               <ContInput>
