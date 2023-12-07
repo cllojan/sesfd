@@ -419,7 +419,7 @@ export default function CartPage() {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Something went wrong!",        
+        text: "Parece que te faltan algunos campos de llenar",        
       });
       return
     }
