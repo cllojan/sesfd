@@ -56,7 +56,7 @@ const AddCartButton= styled.button`
   vertical-align: middle;
 `
 export default function ProductPage({product}) {
-  const {addProduct} = useContext(CartContext);
+  const {addProduct} = useContext(CartContext);  
   return (
     <>
       <Header />
@@ -74,7 +74,7 @@ export default function ProductPage({product}) {
               <div>
                 <Price>${product.price}</Price>
               </div>
-              <div>
+              <div>                
                 <AddCartButton primary onClick={() => addProduct(product._id)}>
                   Add to cart
                 </AddCartButton>
