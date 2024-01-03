@@ -540,8 +540,8 @@ export default function CartPage() {
                 <Input type="number"
                   value={celular}
                   name="celular"
-                  maxLength="10"
-                  onChange={ev => setCelular(ev.target.value)} />
+                  
+                  onChange={e => setCelular( e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10))} />
               </ContInput>
               <InputBox>
                 <ContInput>
