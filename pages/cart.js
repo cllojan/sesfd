@@ -429,14 +429,14 @@ export default function CartPage() {
       icon: "success",
       button: "OK"
     });   
-    //console.log("Seleccionados", provinciaSeleccionada,cantonSeleccionada,parroquiaSeleccionada)
+    
     let provincia = provincias[provinciaSeleccionada].provincia
     let canton = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].canton
     let parroquia = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias[parroquiaSeleccionada]
     
     
     const response = await axios.post('/api/checkout', {
-      name:nombre + apellido, email, cellphone:celular, city:parroquia, postalCode:canton, streetAddress:direccion, country:provincia,
+      name:nombre + apellido, email, cellphone:celular, parish:parroquia, canton, streetAddress:direccion, province:provincia,
       cartProducts,
     });
     clearCart()

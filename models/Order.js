@@ -5,10 +5,10 @@ const OrderSchema = new Schema({
   name:String,
   email:String,
   cellphone:String,
-  city:String,
-  postalCode:String,
+  parish:String,
+  canton:String,
   streetAddress:String,
-  country:String,
+  province:String,
   paid:Boolean,
 }, {
   timestamps: true,
