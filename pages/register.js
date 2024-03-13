@@ -8,7 +8,7 @@ export default function RegisterPage(){
         event.preventDefault()
         try{
             const response = await axios.post('/api/auth/signup', {
-                name,email,password
+                fullname:name,email,password
             });
             console.log(response)
         }catch(e){
@@ -36,7 +36,7 @@ export default function RegisterPage(){
                     name="password"
                     onChange={e => setPassword(e.target.value)}
                     />
-                <button >Registrar</button>
+                <button onClick={e =>  handleSubmit(e)}>Registrar</button>
             </form>
         </div>
     )
