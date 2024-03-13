@@ -10,6 +10,7 @@ export default function RegisterPage(){
             const response = await axios.post('/api/auth/signup', {
                 name,email,password
             });
+            console.log(response)
         }catch(e){
             console.log(e)
         }
@@ -17,7 +18,7 @@ export default function RegisterPage(){
       }
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            <form >
                 <input 
                 type="text" 
                 placeholder="a" 
