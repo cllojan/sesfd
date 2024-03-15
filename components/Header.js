@@ -8,6 +8,10 @@ import CartIcon from '@/components/icons/CartIcon';
 import LogoIcon from '@/components/icons/LogoIcon';
 import SearchIcon from '@/components/icons/Search';
 import { Montserrat } from 'next/font/google'
+
+import { useSession } from "next-auth/react"
+
+
 const StyledHeader = styled.header`
   background-color: #fff;
 `;
@@ -70,6 +74,7 @@ const NavLink = styled(Link)`
   color:#17202A;
   text-decoration:none;
   padding: 10px 0;
+  
   svg{
     margin:0;
     padding:0;
@@ -173,6 +178,8 @@ export default function Header() {
   const {cartProducts} = useContext(CartContext);
   const [mobileNavActive,setMobileNavActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const {data, status} = useSession();
+  console.log(status)
   const handleSearch = (event) => {    
     event.preventDefault();
     // Redirigir a la página de búsqueda con el término de búsqueda en la URL
@@ -205,6 +212,19 @@ export default function Header() {
             
             {/*<NavLink href={'/account'}>Account Cart ({cartProducts.length})</NavLink>*/}
             <CartLink href={"/cart"}><CartIcon/> <SpanCont>{cartProducts.length}</SpanCont></CartLink>
+            {
+              status != "authenticated" ? <>
+                <NavLink href={'/login'}>Iniciar Sesión</NavLink>
+                <NavLink href={'/register'}>Registrar</NavLink>
+                </>
+                :(
+            <><NavLink href={'/dashboard/profile'} >
+              {console.log(data.user.perfil_image)}
+                <img src={data.user.perfil_image} width="35px" height="35px"/>
+              </NavLink></>
+              )
+            }
+            
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
             <BarsIcon />

@@ -1,10 +1,12 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { User } from "@/models/User";
 import { NextResponse } from 'next/server'
+
 import bcrypt from "bcryptjs"
+
 export default async function handle(req, res) {
   
-  const { fullname, email, password } = req.body
+  const { fullname, email, password,perfil_image } = req.body
   if (!password || password.length < 6) {
     return res.json(
       {
@@ -22,7 +24,7 @@ export default async function handle(req, res) {
   
     if(userFound) return res.json(
       {
-        message:"Email already exist",status:409
+        message:"El correo electronico existe",status:409
       },
       {
         status: 409,
@@ -33,7 +35,7 @@ export default async function handle(req, res) {
       email,
       password:hashPassword,
       fullname,
-      
+      perfil_image: perfil_image
     })
     const newUser = await user.save()
   

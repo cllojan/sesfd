@@ -3,6 +3,7 @@ import {CartContextProvider} from "@/components/CartContext";
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
 import { PayPalScriptProvider} from '@paypal/react-paypal-js'
+import Providers from "@/components/Providers";
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({
   subsets: ['latin'],
@@ -37,11 +38,16 @@ export default function App({ Component, pageProps }) {
         
       </Head>
       <GlobalStyles />          
-        <div className={inter.className}>
-          <CartContextProvider >                                        
-              <Component  {...pageProps}  />             
-          </CartContextProvider>          
-        </div>                  
+       
+          <Providers>
+            <div className={inter.className}>
+              <CartContextProvider >                                        
+                  <Component  {...pageProps}  />             
+              </CartContextProvider>
+            </div>  
+          </Providers>
+          
+                        
     </>
   );
 }
