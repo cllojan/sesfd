@@ -3,7 +3,6 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
-import Button from "@/components/Button";
 
 const InputContainer = styled.div`    
   
@@ -92,15 +91,15 @@ const Input = styled.input`
 `;
 export default function RegisterForm() {
     const [name, setName] = useState("")
+    const [lastname, setLastname] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const router = useRouter()
     async function handleSubmit(event) {
-        event.preventDefault()
-        console.log(process.env.NEXTAUTH_URL)
+        event.preventDefault()        
         try {
             const response = await axios.post('/api/auth/signup', {
-                fullname: name, email, password,  perfil_image: `/avatar.png`
+                name:name,lastname:lastname, email, password,  perfil_image: `/avatar.png`
             });
             const res = await signIn("credentials", {
                 email: email,
@@ -115,6 +114,7 @@ export default function RegisterForm() {
         }
 
     }
+    
     return (
         <FormContainer>
             
@@ -132,9 +132,9 @@ export default function RegisterForm() {
                 <ContInput>
                   <Label htmlFor="">Apellido</Label>
                   <Input type="text"
-                    value={name}
+                    value={lastname}
                     name="apellido"
-                    onChange={ev => setName(ev.target.value)} />
+                    onChange={ev => setLastname(ev.target.value)} />
                 </ContInput>
 
               </InputBox>

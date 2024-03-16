@@ -28,14 +28,16 @@ export const authOptions = {
     ],
      
     callbacks:{
-        jwt({account, token, user,profile, session}){
-            if(user) token.user=user
-            console.log(user)
+        jwt({account, token,trigger,user,profile, session}){
+            
+            if(trigger === "update"){
+                return {...token,...session.user}
+            }
             return token
         },
         session({session,token}){
             session.user = token.user
-            console.log(session)
+            
             return session
         }
 

@@ -20,6 +20,7 @@ const roboto = Montserrat({
   subsets: ['latin'],
 })
 const Logo = styled(Link)`
+
   color:#000;
   text-decoration:none;
   position: relative;
@@ -44,11 +45,11 @@ const Logo = styled(Link)`
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  
+  justify-content: space-evenly;
   padding: 5px 0;
 `;
 const StyledNav = styled.nav`
+  margin-left: 180px;
   ${props => (props.mobileNavActive || props.cartOpen) ? `
     display: block;
   ` : `
@@ -85,7 +86,17 @@ const NavLink = styled(Link)`
     padding:0;
   }
 `;
-
+const NavReg= styled(NavLink)`
+  padding: 10px 10px;  
+`
+const NavLogin = styled(NavLink)`
+    display: block;
+    color:#fEfefe;
+    text-decoration:none;
+    background-color: #007bFF;
+    padding: 10px 10px;
+    border-radius: 7px;
+`
 const NavButton = styled.button`
   background-color: transparent;
   width: 30px;
@@ -101,6 +112,7 @@ const NavButton = styled.button`
   }
 `;
 const ContInput = styled.form`
+  margin-left: 40px;
   position:relative;
   display:flex;
   flex-direction: row;
@@ -156,7 +168,11 @@ const CartLink= styled(NavLink)`
   position:relative;  
   
 `
-
+const Account = styled.div`
+  margin-left:20px;
+  display: flex;
+  gap:20px;
+`
 const SpanCont = styled.span`
   position:absolute;
   bottom: 15px;
@@ -208,23 +224,24 @@ export default function Header() {
             {/*<NavLink href={'/'}>Inicio</NavLink>
               <NavLink href={"/categoria"}>Categorias</NavLink>
             */}
-            <NavLink href={'/products'}>Productos</NavLink>
+            <NavLink href={'/products'}>Productos</NavLink>            
             
-            {/*<NavLink href={'/account'}>Account Cart ({cartProducts.length})</NavLink>*/}
             <CartLink href={"/cart"}><CartIcon/> <SpanCont>{cartProducts.length}</SpanCont></CartLink>
+            <Account>
             {
               status != "authenticated" ? <>
-                <NavLink href={'/login'}>Iniciar Sesión</NavLink>
-                <NavLink href={'/register'}>Registrar</NavLink>
+                <NavLogin href={'/login'}>Iniciar Sesión</NavLogin>
+                <NavReg href={'/register'}>Registrar</NavReg>
                 </>
                 :(
             <><NavLink href={'/dashboard/profile'} >
-              {console.log(data.user.perfil_image)}
-                <img src={data.user.perfil_image} width="35px" height="35px"/>
+              {console.log(data?.user?.perfil_image)}
+                <img src={data?.user?.perfil_image} width="35px" height="35px"/>
               </NavLink></>
               )
             }
-            
+            </Account>
+
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
             <BarsIcon />

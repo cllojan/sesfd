@@ -1,12 +1,156 @@
 "use client"
 import Header from "@/components/Header";
+import Modal from "@/components/Modal";
+import axios from "axios";
 import { useSession } from "next-auth/react"
-function ProfilePage(){
-    const {data, status} = useSession();
-    
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+
+import Swal from 'sweetalert2'
+
+const ContainerProfile = styled.div`
+    position: relative;
+`
+const BackgroundProfile = styled.div`
+    width: 100%;
+    height: 300px;
+    background: #ff9966;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ff5e62, #ff9966);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ff5e62, #ff9966); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+`
+const ProfileImage = styled.img`
+    z-index: 1;
+    position: absolute;
+    max-width: 200px;
+    max-height: 200px;
+    top:200px;
+    left: 40px;
+  `;
+const Profile = styled.div`
+    padding-top: 80px;
+    padding-left: 80px;
+    position: relative;     
+    display: flex;
+    gap:20px;
+    align-items: center;
+    background-color:#ECF0F1 ;
+`
+
+const Info = styled.div`
+    width: 300px;
+`
+const HistoryOrder = styled.div`
+    max-width: 400px;
+`
+const Order = styled.div``
+const NavInfo = styled.div`
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+`
+const Span = styled.span`
+    font-weight: 600;
+`
+const Hr = styled.hr`
+    border:none;
+    width:100%;
+    height:3px;
+    background-color: #007bFF;
+`
+const ButtonSend = styled.button`
+    margin-top: 20px;
+  border:none;
+  width:100%;
+  height:40px;
+  font-family:"Inter";
+  font-weight:500;
+  border-radius:5px;
+  color:#fff;
+  background-color:  #007bFF;
+  cursor:pointer;
+`
+function ProfilePage() {
+    const { data, update } = useSession();
+    console.log(data)
+    const [products, setProducts] = useState([]);    
+    const [name, setName] = useState(data?.user.name);
+    const [lastname, setLastName] = useState(data?.user.lastname);
+    const [email, setEmail] = useState(data?.user.email);
+    const [cellphone, setCellphone] = useState(data?.user.cellphone);
+    const [parish, setparish] = useState(data?.user.parish);
+    const [canton, setPanton] = useState(data?.user.canton);
+    const [province, setPovince] = useState(data?.user.province);
+    const [streetAddress, setstreetAddress] = useState(data?.user.streetAddress);
+    console.log(canton)
+    const [isOpen, setIsOpen] = useState(false);
+    function handleDisplayModal() {
+
+        setIsOpen(!isOpen);
+    };
     return <>
-        <Header/>
-        <div>Profile</div>
+        <Header />
+        {isOpen && <Modal handleDisplayModal={handleDisplayModal} data={data} />}
+
+        <ContainerProfile>
+            <BackgroundProfile></BackgroundProfile>
+            <ProfileImage src={data?.user?.perfil_image}  ></ProfileImage>
+            <Profile>
+                <Info>
+                    <h1>{data?.user?.name} {data?.user?.lastname}</h1>
+                    <Hr />
+                    <NavInfo>
+                        <li>
+                            <Span>Email</Span>
+                            <br />
+                            {data?.user?.email}
+                        </li>
+                        <li>
+                            <Span>Celular</Span>
+                            <br />
+                            {data?.user?.cellphone}
+                        </li>
+                        <Hr />
+                        <li>
+                            <Span>Direccion</Span>
+                            <br />
+                            {data?.user?.streetAddress}
+                        </li>
+                        <li>
+                            <Span>Provincia</Span>
+                            <br />
+                            {data?.user?.province}
+                        </li>
+                        <li>
+                            <Span>Canton</Span>
+                            <br />
+                            {data?.user?.canton}
+                        </li>
+                        <li>
+                            <Span>Parroquia</Span>
+                            <br />
+                            {data?.user?.parish}
+                        </li>
+                    </NavInfo>
+                    <ButtonSend onClick={handleDisplayModal} >Actualizar</ButtonSend>
+                </Info>
+                <HistoryOrder>
+                    <Order>
+                        asdasdasd
+                    </Order>
+                    <Order>
+                        asdasdasd
+                    </Order>
+                    <Order>
+                        asdasdasd
+                    </Order>
+                    <Order>
+                        asdasdasd
+                    </Order>
+                </HistoryOrder>
+            </Profile>
+        </ContainerProfile>
     </>
 }
 

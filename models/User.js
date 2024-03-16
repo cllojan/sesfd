@@ -1,9 +1,15 @@
 import { model, models, Schema } from "mongoose";
 
 const UserSchema = new Schema({
-    fullname: {
+    name: {
         type: String,
-        required: [true, "Fullname is required"],
+        required: [true, "name is required"],
+        minLength: [3, "Fullname must be at leastes 2 characters "],
+        maxLength: [50, "Fullname must be ast most 50 characters"]
+    },
+    lastname: {
+        type: String,
+        required: [true, "lastname is required"],
         minLength: [3, "Fullname must be at leastes 2 characters "],
         maxLength: [50, "Fullname must be ast most 50 characters"]
     },
@@ -21,8 +27,13 @@ const UserSchema = new Schema({
         required: [true, "Contrasena es requerido"],
         select: false,
     },
+    cellphone:String,
+    parish:String,
+    canton:String,
+    streetAddress:String,
+    province:String,
     perfil_image:String,
-    history_order:Object
+    history_order:Object,
 
 
 }, {
