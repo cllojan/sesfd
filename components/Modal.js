@@ -33,6 +33,7 @@ const ModalContentContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  font-family:"Inter", sans-serif;
 `;
 const ModalBodyContainer = styled.div`
   padding: 1rem 1rem;
@@ -42,10 +43,11 @@ const ModalTitle = styled.h2`
   padding: 0 1rem;
   color:#374151;
   align-self: flex-start;
+  
 `;
 const Label = styled.label`
   
-  font-family:"Inter";
+  font-family:"Inter", sans-serif;
   font-size:14px;
   font-weight:500;
     align-self: flex-start;
