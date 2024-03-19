@@ -33,10 +33,10 @@ export const authOptions = {
             if(trigger === "update"){
                 return {...token,...session.user}
             }
-            return token
+            return {...token,...user}
         },
         session({session,token}){
-            session.user = token.user
+            session.user = token
             
             return session
         }

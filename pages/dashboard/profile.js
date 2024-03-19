@@ -73,17 +73,16 @@ const ButtonSend = styled.button`
 `
 function ProfilePage() {
     const { data, update } = useSession();
+    
+    const name = data?.user.name || data?.user._doc.name;
+    const lastname = data?.user.lastname || data?.user._doc.lastname;
+    const email = data?.user.email|| data?.user._doc.email;
+    const cellphone = data?.user.cellphone || data?.user._doc.cellphone;
+    const parish = data?.user.parish || data?.user._doc.parish;
+    const canton = data?.user.canton || data?.user._doc.canton;
+    const province = data?.user.province || data?.user._doc.province;
+    const streetAddress = data?.user.streetAddress || data?.user._doc.streetAddress;
     console.log(data)
-    const [products, setProducts] = useState([]);    
-    const [name, setName] = useState(data?.user.name);
-    const [lastname, setLastName] = useState(data?.user.lastname);
-    const [email, setEmail] = useState(data?.user.email);
-    const [cellphone, setCellphone] = useState(data?.user.cellphone);
-    const [parish, setparish] = useState(data?.user.parish);
-    const [canton, setPanton] = useState(data?.user.canton);
-    const [province, setPovince] = useState(data?.user.province);
-    const [streetAddress, setstreetAddress] = useState(data?.user.streetAddress);
-    console.log(canton)
     const [isOpen, setIsOpen] = useState(false);
     function handleDisplayModal() {
 
@@ -95,42 +94,42 @@ function ProfilePage() {
 
         <ContainerProfile>
             <BackgroundProfile></BackgroundProfile>
-            <ProfileImage src={data?.user?.perfil_image}  ></ProfileImage>
+            <ProfileImage src={data?.user?.perfil_image ? data?.user?.perfil_image  :"/avatar.png"}  ></ProfileImage>
             <Profile>
                 <Info>
-                    <h1>{data?.user?.name} {data?.user?.lastname}</h1>
+                    <h1>{name} {lastname}</h1>
                     <Hr />
                     <NavInfo>
                         <li>
                             <Span>Email</Span>
                             <br />
-                            {data?.user?.email}
+                            {email}
                         </li>
                         <li>
                             <Span>Celular</Span>
                             <br />
-                            {data?.user?.cellphone}
+                            {cellphone}
                         </li>
                         <Hr />
                         <li>
                             <Span>Direccion</Span>
                             <br />
-                            {data?.user?.streetAddress}
+                            {streetAddress}
                         </li>
                         <li>
                             <Span>Provincia</Span>
                             <br />
-                            {data?.user?.province}
+                            {province}
                         </li>
                         <li>
                             <Span>Canton</Span>
                             <br />
-                            {data?.user?.canton}
+                            {canton}
                         </li>
                         <li>
                             <Span>Parroquia</Span>
                             <br />
-                            {data?.user?.parish}
+                            {parish}
                         </li>
                     </NavInfo>
                     <ButtonSend onClick={handleDisplayModal} >Actualizar</ButtonSend>

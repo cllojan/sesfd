@@ -31,7 +31,7 @@ export default async function handle(req, res) {
         canton:"",
         streetAddress:"",
         province:"",
-        perfil_image:"",
+        perfil_image:"/avatar.png",
         history_order:{},
       })
 
@@ -65,6 +65,7 @@ export default async function handle(req, res) {
       province,      
       history_order} = req.body
       try {
+
         let response = await User.updateOne({_id},{
           name,
           lastname,
@@ -74,7 +75,7 @@ export default async function handle(req, res) {
           streetAddress,
           province,
           });
-        console.log(response)
+        console.log("PUT:",_id)
           res.json(true)     
       } catch (error) {
         console.log(error)

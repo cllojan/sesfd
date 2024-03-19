@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+
 import { useState,useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { uploadFile } from "@/pages/firebase/config";
 const ModalContainer = styled.article`
   position: fixed;
   left: 0;
@@ -133,15 +134,16 @@ const Select = styled.select`
 const Modal = ({ handleDisplayModal, data }) => {
     const { session, update } = useSession();
 
-    const [name, setName] = useState(data?.user.name);
-    const [lastname, setLastname] = useState(data?.user.lastname);
-    const [email, setEmail] = useState(data?.user.email);
-    const [cellphone, setCellphone] = useState(data?.user.cellphone);
-    const [parish, setparish] = useState(data?.user.parish);
-    const [canton, setPanton] = useState(data?.user.canton);
-    const [province, setPovince] = useState(data?.user.province);
-    const [streetAddress, setstreetAddress] = useState(data?.user.streetAddress);
-
+    const [name, setName] = useState(data?.user.name || data?.user._doc.name);
+    const [lastname, setLastName] = useState(data?.user.lastname || data?.user._doc.lastname);
+    const [email, setEmail] = useState(data?.user.email|| data?.user._doc.email);
+    const [cellphone, setCellphone] = useState(data?.user.cellphone || data?.user._doc.cellphone);
+    const [parish, setparish] = useState(data?.user.parish || data?.user._doc.parish);
+    const [canton, setPanton] = useState(data?.user.canton || data?.user._doc.canton);
+    const [province, setPovince] = useState(data?.user.province || data?.user._doc.province);
+    const [streetAddress, setstreetAddress] = useState(data?.user.streetAddress || data?.user._doc.streetAddress);
+    const [perfilImage, setPerfilImage] = useState(data?.user.perfil_image || data?.user._doc.perfil_image);
+    
     const [provincias, setProvincias] = useState([]);
     const [cantones, setCantones] = useState([]);
     const [parroquias, setParroquias] = useState([]);
@@ -198,14 +200,17 @@ const Modal = ({ handleDisplayModal, data }) => {
     async function handleSubmit(event) {
 
         event.preventDefault()    
-        let id  = data?.user._id    
+        let id  = data?.user._doc._id
         let provincia = provincias[provinciaSeleccionada].provincia
         let canton = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].canton
         let parroquia = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias[parroquiaSeleccionada]
-        try {
+        try {            
+            const imgRes = await uploadFile(perfilImage);
+            
             const response = await axios.put('/api/auth/signup', {
-                _id: id,name,lastname, email, cellphone,parish:parroquia,canton,streetAddress,province:provincia,
-            });            
+                _id: id,name,lastname, email, cellphone,parish:parroquia,canton,streetAddress,province:provincia,perfil_image:imgRes,
+            });         
+             
             const rpo = await update({
                 ...data,
                 user:{
@@ -214,11 +219,11 @@ const Modal = ({ handleDisplayModal, data }) => {
                     lastname,
                     email,
                     cellphone,
-                    parish:parroquia,canton,streetAddress,province:provincia
+                    parish:parroquia,canton,streetAddress,province:provincia,perfil_image:imgRes
                 }
             })
-            console.log(rpo)
-            if (response.statusText == "OK") return router.push("/dashboard/profile")            
+            console.log(response)
+            if (response.status == 200) return router.push("/dashboard/profile")
         } catch (e) {
             console.log(e)
         }
@@ -228,10 +233,7 @@ const Modal = ({ handleDisplayModal, data }) => {
     return (
         <ModalContainer >
             <ModalContentContainer>
-                <AiOutlineCloseCircle
-                    className="close-icon"
-                    onClick={handleDisplayModal}
-                />
+                
                 <ModalTitle>Actualizar Informacion</ModalTitle>
                 <HorizontalDivider backgroundColor="#007bFF" />
                 <ModalBodyContainer>
@@ -268,6 +270,7 @@ const Modal = ({ handleDisplayModal, data }) => {
                                     onChange={handleProvinciaChange}
                                     
                                 >
+                                    
                                     {
                                     Object.entries(provincias).map((elm, inx) => (
                                         <option key={elm[0]} value={elm[0]}>{provincias[elm[0]].provincia}</option>
@@ -308,7 +311,8 @@ const Modal = ({ handleDisplayModal, data }) => {
                         value={streetAddress}
                         name="direccion"
                         onChange={ev => setstreetAddress(ev.target.value)}  />
-                        
+                        <Label>Foto de perfil</Label>
+                        <Input type="file" onChange={e => setPerfilImage(e.target?.files[0])} accept="image/*"/>
                         <FormBox>
                             <Button backgroundColor="#007bFF" color="white" onClick={e => handleSubmit(e)}>
                                 Actualizar
