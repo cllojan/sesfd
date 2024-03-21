@@ -33,7 +33,7 @@ const ModalContentContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  font-family:"Inter", sans-serif;
+  
 `;
 const ModalBodyContainer = styled.div`
   padding: 1rem 1rem;
@@ -47,7 +47,7 @@ const ModalTitle = styled.h2`
 `;
 const Label = styled.label`
   
-  font-family:"Inter", sans-serif;
+  font-family: 'Lato', sans-serif;
   font-size:14px;
   font-weight:500;
     align-self: flex-start;
@@ -62,7 +62,7 @@ const HorizontalDivider = styled.div`
 `;
 const Input = styled.input`  
   height:15px;
-  font-family:"Inter";
+  font-family: 'Lato', sans-serif;
   font-size:14px;
   font-weight:500;
   padding:10px;
@@ -91,7 +91,7 @@ const Form = styled.form`
 const Button = styled.button`
     width:100%;
     height:40px;
-    font-family:"Inter";
+    font-family: 'Lato', sans-serif;
     font-weight:500;
     border-radius:5px;
     color:#fff;
@@ -134,17 +134,17 @@ const Select = styled.select`
     }
 `;
 const Modal = ({ handleDisplayModal, data }) => {
-    const { session, update } = useSession();
+    
 
-    const [name, setName] = useState(data?.user.name || data?.user._doc.name);
-    const [lastname, setLastName] = useState(data?.user.lastname || data?.user._doc.lastname);
-    const [email, setEmail] = useState(data?.user.email || data?.user._doc.email);
-    const [cellphone, setCellphone] = useState(data?.user.cellphone || data?.user._doc.cellphone);
-    const [parish, setparish] = useState(data?.user.parish || data?.user._doc.parish);
-    const [canton, setPanton] = useState(data?.user.canton || data?.user._doc.canton);
-    const [province, setPovince] = useState(data?.user.province || data?.user._doc.province);
-    const [streetAddress, setstreetAddress] = useState(data?.user.streetAddress || data?.user._doc.streetAddress);
-    const [perfilImage, setPerfilImage] = useState(data?.user.perfil_image || data?.user._doc.perfil_image);
+    const [name, setName] = useState(data.name);
+    const [lastname, setLastname] = useState(data.lastname);
+    const [email, setEmail] = useState(data.email );
+    const [cellphone, setCellphone] = useState(data.cellphone);
+    const [parish, setparish] = useState(data.parish);
+    const [canton, setPanton] = useState(data.canton);
+    const [province, setPovince] = useState(data.province);
+    const [streetAddress, setstreetAddress] = useState(data.streetAddress);
+    const [perfilImage, setPerfilImage] = useState(data.perfil_image);
 
     const [provincias, setProvincias] = useState([]);
     const [cantones, setCantones] = useState([]);
@@ -202,7 +202,7 @@ const Modal = ({ handleDisplayModal, data }) => {
     async function handleSubmit(event) {
 
         event.preventDefault()
-        let id = data?.user._doc._id
+        let id = data._id
         let provincia = provincias[provinciaSeleccionada].provincia
         let canton = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].canton
         let parroquia = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias[parroquiaSeleccionada]
@@ -223,23 +223,8 @@ const Modal = ({ handleDisplayModal, data }) => {
                 history_order:{},
             });
 
-            const rpo = await update({
-                ...data,
-                user: {
-                    ...data?.user,
-                    name,
-                    lastname,
-                    email,
-                    cellphone,
-                    parish: parroquia,
-                    canton,
-                    streetAddress,
-                    province: provincia,
-                    perfil_image: imgRes
-                }
-            })
-            console.log(response)
-            if (response.status == 200) return router.push("/dashboard/profile")
+            
+            if (response.status == 200) window.location.reload()
         } catch (e) {
             console.log(e)
         }

@@ -1,9 +1,7 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { User } from "@/models/User";
 import { NextResponse } from 'next/server'
-
 import bcrypt from "bcryptjs"
-
 
 export default async function handle(req, res) {
   const { method } = req;
@@ -66,8 +64,8 @@ export default async function handle(req, res) {
       province,      
       history_order} = req.body
       try {
-        //const values = Object.values(history_order);
-        //let line_items = await getOrders(values)
+        
+        
         
         let response = await User.updateOne({_id},{
           name,

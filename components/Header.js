@@ -195,7 +195,7 @@ export default function Header() {
   const [mobileNavActive,setMobileNavActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const {data, status} = useSession();
-  console.log(status)
+  
   const handleSearch = (event) => {    
     event.preventDefault();
     // Redirigir a la página de búsqueda con el término de búsqueda en la URL
@@ -235,7 +235,7 @@ export default function Header() {
                 </>
                 :(
             <><NavLink href={'/dashboard/profile'} >
-              {console.log(data?.user?.perfil_image)}
+              
                 <img src={data?.user?.perfil_image} width="35px" height="35px"/>
               </NavLink></>
               )

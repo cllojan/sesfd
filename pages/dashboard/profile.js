@@ -2,12 +2,13 @@
 import Header from "@/components/Header";
 import Modal from "@/components/Modal";
 import {User }from "@/models/User";
+import {mongooseConnect} from "@/lib/mongoose";
 
-
-import axios from "axios";
-import { useSession } from "next-auth/react"
+import { getSession, useSession } from "next-auth/react"
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import getOrders from "@/utils/getOrders";
+
 
 
 
@@ -67,27 +68,27 @@ const ButtonSend = styled.button`
   border:none;
   width:100%;
   height:40px;
-  font-family:"Inter";
+  font-family: 'Lato', sans-serif;
   font-weight:500;
   border-radius:5px;
   color:#fff;
   background-color:  #007bFF;
   cursor:pointer;
 `
-function ProfilePage({userData}) {
-    const { data, update } = useSession();
+function ProfilePage({data,orders}) {
+        
     
-    const name = data?.user.name || data?.user._doc.name;
-    const lastname = data?.user.lastname || data?.user._doc.lastname;
-    const email = data?.user.email|| data?.user._doc.email;
-    const cellphone = data?.user.cellphone || data?.user._doc.cellphone;
-    const parish = data?.user.parish || data?.user._doc.parish;
-    const canton = data?.user.canton || data?.user._doc.canton;
-    const province = data?.user.province || data?.user._doc.province;
-    const streetAddress = data?.user.streetAddress || data?.user._doc.streetAddress;
+    const [name,setName] = useState(data.name)
+    const [lastname,setLastname] = useState(data.lastname)
+    const [email,setEmail] = useState(data.email)
+    const [cellphone,setCellphone] = useState(data.cellphone)
+    const [parish,setParish] = useState(data.parish)
+    const [canton,setCanton ]= useState(data.canton)
+    const [province,setProvince] = useState(data.province)
+    const [streetAddress,setStreetaddress] = useState(data.streetAddress )
 
-    const [orders, setOrders] = useState()
-    console.log(userData)
+    
+    
     const [isOpen, setIsOpen] = useState(false);
     function handleDisplayModal() {
 
@@ -95,7 +96,7 @@ function ProfilePage({userData}) {
     };
 
     
-    
+   
     return <>
         <Header />
         {isOpen && <Modal handleDisplayModal={handleDisplayModal} data={data} />}
@@ -143,18 +144,11 @@ function ProfilePage({userData}) {
                     <ButtonSend onClick={handleDisplayModal} >Actualizar</ButtonSend>
                 </Info>
                 <HistoryOrder>
-                    <Order>
-                        asdasdasd
-                    </Order>
-                    <Order>
-                        asdasdasd
-                    </Order>
-                    <Order>
-                        asdasdasd
-                    </Order>
-                    <Order>
-                        asdasdasd
-                    </Order>
+                   {
+                    orders.map(elm => (
+                        <h1>{elm.hora}</h1>
+                    ))
+                   }
                 </HistoryOrder>
             </Profile>
         </ContainerProfile>
@@ -162,3 +156,36 @@ function ProfilePage({userData}) {
 }
 
 export default ProfilePage
+
+export async function getServerSideProps(ctx){
+    await mongooseConnect();
+    const session = await getSession(ctx)
+    let id = session.user.sub
+    const user = await User.findById(id);  
+    let order = user.history_order
+    console.log(order)
+    var items  =[]
+    if(order){
+        
+        for(let e of order){
+            let itemp ={}
+            let rep = await getOrders(e.items)
+            itemp["items"] = rep
+            itemp["hora"] = e.hora
+            itemp["fecha"]= e.fecha
+            itemp["total"] = e.total
+            items.push(itemp)
+        }
+    }else{
+        order = []
+    }
+    
+    
+    
+    return {
+        props:{
+            data: JSON.parse(JSON.stringify(user)),
+            orders:JSON.parse(JSON.stringify(items))
+        }
+    }
+}

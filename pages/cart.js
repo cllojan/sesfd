@@ -339,7 +339,7 @@ const ContCantity = styled.div`
   
 `
 export default function CartPage() {
-  const { data,update } = useSession()
+  const { data, update } = useSession()
   const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
 
@@ -348,7 +348,7 @@ export default function CartPage() {
   const [email, setEmail] = useState(data.user.email || data.user._doc.email);
   const [celular, setCelular] = useState(data.user.cellphone || data.user._doc.cellphone);
 
-  
+
   const [parish, setparish] = useState(data?.user.parish || data?.user._doc.parish);
   const [canton, setPanton] = useState(data?.user.canton || data?.user._doc.canton);
   const [province, setPovince] = useState(data?.user.province || data?.user._doc.province);
@@ -423,6 +423,13 @@ export default function CartPage() {
     removeProduct(id);
   }
 
+
+  let total = 0;
+  for (const productId of cartProducts) {
+    const price = products.find(p => p._id === productId)?.price || 0;
+    total += price;
+  }
+
   async function goToPayment() {
     let id = data?.user._doc._id
     if (nombre == "" || apellido == "" || email == "" || celular == "" || direccion == "") {
@@ -447,20 +454,27 @@ export default function CartPage() {
           return acc;
       }, {});
     }*/
-    let  cartTemp = cartProducts
+    let cartTemp = cartProducts
+    const now = new Date();
+    const options = { timeZone: 'America/Guayaquil', hour12: false }; 
+    const horas = now.toLocaleString('en-US', { hour: 'numeric', ...options }); 
+    const minutos = now.toLocaleString('en-US', { minute: 'numeric', ...options });
     
-      let temp = data.user.history_order || []
-      const resps = await axios.put('/api/auth/signup', {
-        _id:id,...data.user,history_order:[...temp,cartTemp]
-    });         
-   
-      const rpo = await update({
-          ...data,
-          user:{
-              ...data?.user,
-              history_order:[...temp,cartTemp]
-          }
-      })
+    const optionsFecha = { day: '2-digit', month: '2-digit', year: 'numeric' }; // Opciones para el formato de la fecha
+    const date = now.toLocaleDateString('es-ES', optionsFecha); //
+    let temp = data.user.history_order || []
+    let order = { items: cartTemp, fecha: date, hora: `${horas}:${minutos}`, total: total }
+    const resps = await axios.put('/api/auth/signup', {
+      _id: id, ...data.user, history_order: [...temp, order]
+    });
+
+    const rpo = await update({
+      ...data,
+      user: {
+        ...data?.user,
+        history_order: [...temp, order]
+      }
+    })
     let provincia = provincias[provinciaSeleccionada].provincia
     let canton = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].canton
     let parroquia = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias[parroquiaSeleccionada]
@@ -481,13 +495,6 @@ export default function CartPage() {
       window.location = response.data.url;
     }*/
   }
-  let total = 0;
-  for (const productId of cartProducts) {
-    const price = products.find(p => p._id === productId)?.price || 0;
-    total += price;
-  }
-
-
   return (
     <>
       <Header />

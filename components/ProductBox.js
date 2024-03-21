@@ -5,12 +5,14 @@ import Link from "next/link";
 import {useContext} from "react";
 import {CartContext} from "@/components/CartContext";
 import { Inter } from 'next/font/google'
+import { Lato } from 'next/font/google'
 import Image from "next/image";
 // If loading a variable font, you don't need to specify the font weight
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
 })
+
 const ProductWrapper = styled.div`
   background-color: #fff;
   border:1px solid #eee;
@@ -81,8 +83,8 @@ const AddCartButton= styled(Button)`
   height:30px;
   background:#FACC15;
   color:#000;
-  font-weight: 500;
-  font-family:'Inter', Courier, monospace;
+  font-weight: 400;
+  
 `
 export default function ProductBox({_id,title,description,price,images}) {
   const {addProduct} = useContext(CartContext);

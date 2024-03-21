@@ -1,12 +1,16 @@
+import { Product } from "@/models/Product";
+import { mongooseConnect } from "@/lib/mongoose";
+
 
 
 export default async function getOrders(ordersId){
+    await mongooseConnect()
     const productsIds = ordersId;
     const uniqueIds = [...new Set(productsIds)];
     console.log(productsIds)
-    //const productsInfos = await Product.find({_id:uniqueIds});
+    const productsInfos = await Product.find({_id:uniqueIds});
 
-    /*
+    
     let line_items = [];
     for (const productId of uniqueIds) {
       const productInfo = productsInfos.find(p => p._id.toString() === productId);
@@ -22,5 +26,5 @@ export default async function getOrders(ordersId){
         });
       }
     }
-    return line_items*/
+    return line_items
 }
