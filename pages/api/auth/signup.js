@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 
 import bcrypt from "bcryptjs"
 
+
 export default async function handle(req, res) {
   const { method } = req;
   await mongooseConnect();
@@ -65,15 +66,20 @@ export default async function handle(req, res) {
       province,      
       history_order} = req.body
       try {
-
+        //const values = Object.values(history_order);
+        //let line_items = await getOrders(values)
+        
         let response = await User.updateOne({_id},{
           name,
           lastname,
-          email,        
+          email,                  
           cellphone,        
+          perfil_image,    
           parish,canton,
+
           streetAddress,
           province,
+          history_order:history_order
           });
         console.log("PUT:",_id)
           res.json(true)     

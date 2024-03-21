@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -138,90 +138,104 @@ const Modal = ({ handleDisplayModal, data }) => {
 
     const [name, setName] = useState(data?.user.name || data?.user._doc.name);
     const [lastname, setLastName] = useState(data?.user.lastname || data?.user._doc.lastname);
-    const [email, setEmail] = useState(data?.user.email|| data?.user._doc.email);
+    const [email, setEmail] = useState(data?.user.email || data?.user._doc.email);
     const [cellphone, setCellphone] = useState(data?.user.cellphone || data?.user._doc.cellphone);
     const [parish, setparish] = useState(data?.user.parish || data?.user._doc.parish);
     const [canton, setPanton] = useState(data?.user.canton || data?.user._doc.canton);
     const [province, setPovince] = useState(data?.user.province || data?.user._doc.province);
     const [streetAddress, setstreetAddress] = useState(data?.user.streetAddress || data?.user._doc.streetAddress);
     const [perfilImage, setPerfilImage] = useState(data?.user.perfil_image || data?.user._doc.perfil_image);
-    
+
     const [provincias, setProvincias] = useState([]);
     const [cantones, setCantones] = useState([]);
     const [parroquias, setParroquias] = useState([]);
-    const [provinciaSeleccionada, setProvinciaSeleccionada] = useState('1'); 
-    const [cantonSeleccionada, setCantonSeleccionada] = useState('101'); 
-    const [parroquiaSeleccionada, setParroquiaSeleccionada] =useState("10101");
+    const [provinciaSeleccionada, setProvinciaSeleccionada] = useState('1');
+    const [cantonSeleccionada, setCantonSeleccionada] = useState('101');
+    const [parroquiaSeleccionada, setParroquiaSeleccionada] = useState("10101");
 
     const router = useRouter()
 
     useEffect(() => {
         // Realizar la solicitud a la API
         fetch('https://gist.githubusercontent.com/emamut/6626d3dff58598b624a1/raw/166183f4520c4603987c55498df8d2983703c316/provincias.json')
-          .then(response => response.json())
-          .then(data => {
-            // Actualizar el estado con los datos de las provincias
-            setProvincias(data);
-            setCantones(data[provinciaSeleccionada].cantones);                
-            setParroquias(data[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias)
-          })
-          .catch(error => {
-            console.error('Error al obtener datos:', error);
-          });
-      }, []);
-    
-    
-      const handleProvinciaChange = (event) => {    
-        const provinciaSelec = event.target.value;    
-        const cantonesDeProvincia = provincias[provinciaSelec]?.cantones || [];       
-        
-        setCantones(cantonesDeProvincia);  
+            .then(response => response.json())
+            .then(data => {
+                // Actualizar el estado con los datos de las provincias
+                setProvincias(data);
+                setCantones(data[provinciaSeleccionada].cantones);
+                setParroquias(data[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias)
+            })
+            .catch(error => {
+                console.error('Error al obtener datos:', error);
+            });
+    }, []);
+
+
+    const handleProvinciaChange = (event) => {
+        const provinciaSelec = event.target.value;
+        const cantonesDeProvincia = provincias[provinciaSelec]?.cantones || [];
+
+        setCantones(cantonesDeProvincia);
         setProvinciaSeleccionada(provinciaSelec);
         let cantonSelecc = String(Object.keys(provincias[provinciaSelec].cantones)[0])
         setCantonSeleccionada(cantonSelecc)
         let parroquiasSle = provincias[provinciaSelec]?.cantones[cantonSelecc].parroquias || []
         setParroquias(parroquiasSle);
         setParroquiaSeleccionada(String(Object.keys(parroquiasSle)[0]))
-        
-      };
-      const handleCantonChange = (event) => {    
-        
-        const cantonSeleccionada = event.target.value;    
+
+    };
+    const handleCantonChange = (event) => {
+
+        const cantonSeleccionada = event.target.value;
         const parroquias = provincias[provinciaSeleccionada]?.cantones[cantonSeleccionada].parroquias || []
-        
-        setParroquias(parroquias);  
+
+        setParroquias(parroquias);
         setParroquiaSeleccionada(String(Object.keys(parroquias)[0]))
         setCantonSeleccionada(cantonSeleccionada);
-      };
-    
-      const handleParroquiaChange = (event) => {
+    };
+
+    const handleParroquiaChange = (event) => {
         setParroquiaSeleccionada(event.target.value)
-      }
+    }
 
 
     async function handleSubmit(event) {
 
-        event.preventDefault()    
-        let id  = data?.user._doc._id
+        event.preventDefault()
+        let id = data?.user._doc._id
         let provincia = provincias[provinciaSeleccionada].provincia
         let canton = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].canton
         let parroquia = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias[parroquiaSeleccionada]
-        try {            
+        try {
             const imgRes = await uploadFile(perfilImage);
-            
+
             const response = await axios.put('/api/auth/signup', {
-                _id: id,name,lastname, email, cellphone,parish:parroquia,canton,streetAddress,province:provincia,perfil_image:imgRes,
-            });         
-             
+                _id: id,
+                name,
+                lastname,
+                email,
+                cellphone,
+                parish: parroquia,
+                canton,
+                streetAddress,
+                province: provincia,
+                perfil_image: imgRes,
+                history_order:{},
+            });
+
             const rpo = await update({
                 ...data,
-                user:{
+                user: {
                     ...data?.user,
                     name,
                     lastname,
                     email,
                     cellphone,
-                    parish:parroquia,canton,streetAddress,province:provincia,perfil_image:imgRes
+                    parish: parroquia,
+                    canton,
+                    streetAddress,
+                    province: provincia,
+                    perfil_image: imgRes
                 }
             })
             console.log(response)
@@ -231,11 +245,11 @@ const Modal = ({ handleDisplayModal, data }) => {
         }
 
     }
-    
+
     return (
         <ModalContainer >
             <ModalContentContainer>
-                
+
                 <ModalTitle>Actualizar Informacion</ModalTitle>
                 <HorizontalDivider backgroundColor="#007bFF" />
                 <ModalBodyContainer>
@@ -244,39 +258,39 @@ const Modal = ({ handleDisplayModal, data }) => {
                         <FormBox>
                             <Box>
                                 <Label>Nombre</Label>
-                                <Input 
+                                <Input
                                     value={name}
                                     onChange={ev => setName(ev.target.value)} />
                             </Box>
                             <Box>
                                 <Label>Apellido</Label>
-                                <Input 
+                                <Input
                                     value={lastname}
                                     onChange={ev => setLastname(ev.target.value)} />
                             </Box>
                         </FormBox>
                         <Label>Correo Electronico</Label>
-                        <Input 
+                        <Input
                             type="email"
-                            value={email} 
+                            value={email}
                             onChange={ev => setEmail(ev.target.value)} />
                         <Label>Celular</Label>
-                        <Input 
+                        <Input
                             type="number"
                             value={cellphone}
-                            onChange={e => setCellphone( e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10))}/>
+                            onChange={e => setCellphone(e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10))} />
                         <FormBox>
                             <Box>
                                 <Label>Provincia</Label>
                                 <Select type="text"
                                     onChange={handleProvinciaChange}
-                                    
+
                                 >
-                                    
+
                                     {
-                                    Object.entries(provincias).map((elm, inx) => (
-                                        <option key={elm[0]} value={elm[0]}>{provincias[elm[0]].provincia}</option>
-                                    ))
+                                        Object.entries(provincias).map((elm, inx) => (
+                                            <option key={elm[0]} value={elm[0]}>{provincias[elm[0]].provincia}</option>
+                                        ))
                                     }
                                 </Select>
                             </Box>
@@ -284,37 +298,37 @@ const Modal = ({ handleDisplayModal, data }) => {
                                 <Label>Canton</Label>
                                 <Select type="text"
                                     onChange={handleCantonChange}
-                                    
+
                                 >
                                     {
-                                    Object.entries(cantones)?.map((canton) => (
-                                        <option key={canton[0]} value={canton[0]}>
-                                        {cantones[canton[0]].canton}
-                                        </option>
-                                    ))
+                                        Object.entries(cantones)?.map((canton) => (
+                                            <option key={canton[0]} value={canton[0]}>
+                                                {cantones[canton[0]].canton}
+                                            </option>
+                                        ))
                                     }
                                 </Select>
                             </Box>
                         </FormBox>
                         <Label>Parroquia</Label>
-                        <Select type="text"                                        
-                        onChange={handleParroquiaChange}
+                        <Select type="text"
+                            onChange={handleParroquiaChange}
                         >
                             {
-                            Object.entries(parroquias).map((parroquia) => (
-                                <option key={parroquia[0]} value={parroquia[0]}>
-                                {parroquias[parroquia[0]]}
-                                </option>
-                            ))
+                                Object.entries(parroquias).map((parroquia) => (
+                                    <option key={parroquia[0]} value={parroquia[0]}>
+                                        {parroquias[parroquia[0]]}
+                                    </option>
+                                ))
                             }
                         </Select>
                         <Label>Direccion</Label>
-                        <Input type="text" 
-                        value={streetAddress}
-                        name="direccion"
-                        onChange={ev => setstreetAddress(ev.target.value)}  />
+                        <Input type="text"
+                            value={streetAddress}
+                            name="direccion"
+                            onChange={ev => setstreetAddress(ev.target.value)} />
                         <Label>Foto de perfil</Label>
-                        <Input type="file" onChange={e => setPerfilImage(e.target?.files[0])} accept="image/*"/>
+                        <Input type="file" onChange={e => setPerfilImage(e.target?.files[0])} accept="image/*" />
                         <FormBox>
                             <Button backgroundColor="#007bFF" color="white" onClick={e => handleSubmit(e)}>
                                 Actualizar
@@ -323,7 +337,7 @@ const Modal = ({ handleDisplayModal, data }) => {
                                 Cancelar
                             </Button>
                         </FormBox>
-                            
+
                     </Form>
                 </ModalBodyContainer>
             </ModalContentContainer>

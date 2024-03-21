@@ -13,6 +13,7 @@ import Image from "next/image";
 import { Montserrat, Lato } from 'next/font/google'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router';
+import { useSession } from "next-auth/react";
 
 
 const roboto = Montserrat({
@@ -338,20 +339,29 @@ const ContCantity = styled.div`
   
 `
 export default function CartPage() {
+  const { data,update } = useSession()
   const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [email, setEmail] = useState('');
-  const [celular, setCelular] = useState('');
-  const [direccion, setDireccion] = useState('');
+
+  const [nombre, setNombre] = useState(data.user.name || data.user._doc.name);
+  const [apellido, setApellido] = useState(data.user.lastname || data.user._doc.lastname);
+  const [email, setEmail] = useState(data.user.email || data.user._doc.email);
+  const [celular, setCelular] = useState(data.user.cellphone || data.user._doc.cellphone);
+
+  
+  const [parish, setparish] = useState(data?.user.parish || data?.user._doc.parish);
+  const [canton, setPanton] = useState(data?.user.canton || data?.user._doc.canton);
+  const [province, setPovince] = useState(data?.user.province || data?.user._doc.province);
+
+  const [direccion, setDireccion] = useState(data.user.streetAddress || data.user._doc.streetAddress);
+
 
   const [provincias, setProvincias] = useState([]);
   const [cantones, setCantones] = useState([]);
   const [parroquias, setParroquias] = useState([]);
-  const [provinciaSeleccionada, setProvinciaSeleccionada] = useState('1'); 
-  const [cantonSeleccionada, setCantonSeleccionada] = useState('101'); 
-  const [parroquiaSeleccionada, setParroquiaSeleccionada] =useState("10101");
+  const [provinciaSeleccionada, setProvinciaSeleccionada] = useState('1');
+  const [cantonSeleccionada, setCantonSeleccionada] = useState('101');
+  const [parroquiaSeleccionada, setParroquiaSeleccionada] = useState("10101");
 
   const router = useRouter();
   useEffect(() => {
@@ -371,7 +381,7 @@ export default function CartPage() {
       .then(data => {
         // Actualizar el estado con los datos de las provincias
         setProvincias(data);
-        setCantones(data[provinciaSeleccionada].cantones);                
+        setCantones(data[provinciaSeleccionada].cantones);
         setParroquias(data[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias)
       })
       .catch(error => {
@@ -380,25 +390,25 @@ export default function CartPage() {
   }, []);
 
 
-  const handleProvinciaChange = (event) => {    
-    const provinciaSelec = event.target.value;    
-    const cantonesDeProvincia = provincias[provinciaSelec]?.cantones || [];       
-    
-    setCantones(cantonesDeProvincia);  
+  const handleProvinciaChange = (event) => {
+    const provinciaSelec = event.target.value;
+    const cantonesDeProvincia = provincias[provinciaSelec]?.cantones || [];
+
+    setCantones(cantonesDeProvincia);
     setProvinciaSeleccionada(provinciaSelec);
     let cantonSelecc = String(Object.keys(provincias[provinciaSelec].cantones)[0])
     setCantonSeleccionada(cantonSelecc)
     let parroquiasSle = provincias[provinciaSelec]?.cantones[cantonSelecc].parroquias || []
     setParroquias(parroquiasSle);
     setParroquiaSeleccionada(String(Object.keys(parroquiasSle)[0]))
-    
+
   };
-  const handleCantonChange = (event) => {    
-    
-    const cantonSeleccionada = event.target.value;    
+  const handleCantonChange = (event) => {
+
+    const cantonSeleccionada = event.target.value;
     const parroquias = provincias[provinciaSeleccionada]?.cantones[cantonSeleccionada].parroquias || []
-    
-    setParroquias(parroquias);  
+
+    setParroquias(parroquias);
     setParroquiaSeleccionada(String(Object.keys(parroquias)[0]))
     setCantonSeleccionada(cantonSeleccionada);
   };
@@ -414,12 +424,12 @@ export default function CartPage() {
   }
 
   async function goToPayment() {
-    
+    let id = data?.user._doc._id
     if (nombre == "" || apellido == "" || email == "" || celular == "" || direccion == "") {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Parece que te faltan algunos campos de llenar",        
+        text: "Parece que te faltan algunos campos de llenar",
       });
       return
     }
@@ -428,15 +438,36 @@ export default function CartPage() {
       text: "Nos comunicaremos contigo para continuar con la compra",
       icon: "success",
       button: "OK"
-    });   
+    });
+    /*
+    if(data.user.history_order){
+      let lastKey = Object.keys(data.user.history_order).length;
+      cartTemp = cartProducts.reduce((acc, value, index) => {
+          acc[lastKey + index] = value;
+          return acc;
+      }, {});
+    }*/
+    let  cartTemp = cartProducts
     
+      let temp = data.user.history_order || []
+      const resps = await axios.put('/api/auth/signup', {
+        _id:id,...data.user,history_order:[...temp,cartTemp]
+    });         
+   
+      const rpo = await update({
+          ...data,
+          user:{
+              ...data?.user,
+              history_order:[...temp,cartTemp]
+          }
+      })
     let provincia = provincias[provinciaSeleccionada].provincia
     let canton = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].canton
     let parroquia = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias[parroquiaSeleccionada]
-    
-    
+
+
     const response = await axios.post('/api/checkout', {
-      name:nombre + apellido, email, cellphone:celular, parish:parroquia, canton, streetAddress:direccion, province:provincia,
+      name: nombre + apellido, email, cellphone: celular, parish: parroquia, canton, streetAddress: direccion, province: provincia,
       cartProducts,
     });
     clearCart()
@@ -540,8 +571,8 @@ export default function CartPage() {
                 <Input type="number"
                   value={celular}
                   name="celular"
-                  
-                  onChange={e => setCelular( e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,10))} />
+
+                  onChange={e => setCelular(e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10))} />
               </ContInput>
               <InputBox>
                 <ContInput>
@@ -550,7 +581,7 @@ export default function CartPage() {
 
                   <Select type="text"
                     onChange={handleProvinciaChange}
-                    
+
                   >
                     {
                       Object.entries(provincias).map((elm, inx) => (
@@ -564,32 +595,32 @@ export default function CartPage() {
                   <Label>Canton</Label>
                   <Select type="text"
                     onChange={handleCantonChange}
-                    
+
                   >
                     {
-                     Object.entries(cantones)?.map((canton) => (
+                      Object.entries(cantones)?.map((canton) => (
                         <option key={canton[0]} value={canton[0]}>
                           {cantones[canton[0]].canton}
                         </option>
                       ))
-                     }
+                    }
                   </Select>
                 </ContInput>
 
               </InputBox>
               <ContInput>
                 <Label>Parroquia</Label>
-                <Select type="text"                                        
-                onChange={handleParroquiaChange}
-                  >
-                    {
-                     Object.entries(parroquias).map((parroquia) => (
-                        <option key={parroquia[0]} value={parroquia[0]}>
-                          {parroquias[parroquia[0]]}
-                        </option>
-                      ))
-                     }
-                  </Select>
+                <Select type="text"
+                  onChange={handleParroquiaChange}
+                >
+                  {
+                    Object.entries(parroquias).map((parroquia) => (
+                      <option key={parroquia[0]} value={parroquia[0]}>
+                        {parroquias[parroquia[0]]}
+                      </option>
+                    ))
+                  }
+                </Select>
               </ContInput>
               <ContInput>
                 <Label>Direccion</Label>

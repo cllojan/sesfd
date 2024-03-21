@@ -1,12 +1,15 @@
 "use client"
 import Header from "@/components/Header";
 import Modal from "@/components/Modal";
+import {User }from "@/models/User";
+
+
 import axios from "axios";
 import { useSession } from "next-auth/react"
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import Swal from 'sweetalert2'
+
 
 const ContainerProfile = styled.div`
     position: relative;
@@ -71,7 +74,7 @@ const ButtonSend = styled.button`
   background-color:  #007bFF;
   cursor:pointer;
 `
-function ProfilePage() {
+function ProfilePage({userData}) {
     const { data, update } = useSession();
     
     const name = data?.user.name || data?.user._doc.name;
@@ -82,12 +85,17 @@ function ProfilePage() {
     const canton = data?.user.canton || data?.user._doc.canton;
     const province = data?.user.province || data?.user._doc.province;
     const streetAddress = data?.user.streetAddress || data?.user._doc.streetAddress;
-    console.log(data)
+
+    const [orders, setOrders] = useState()
+    console.log(userData)
     const [isOpen, setIsOpen] = useState(false);
     function handleDisplayModal() {
 
         setIsOpen(!isOpen);
     };
+
+    
+    
     return <>
         <Header />
         {isOpen && <Modal handleDisplayModal={handleDisplayModal} data={data} />}
