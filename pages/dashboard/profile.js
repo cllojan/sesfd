@@ -37,15 +37,49 @@ const Profile = styled.div`
     position: relative;     
     display: flex;
     gap:20px;
-    align-items: center;
+    
     background-color:#ECF0F1 ;
 `
 
 const Info = styled.div`
     width: 300px;
 `
-const HistoryOrder = styled.div`
-    max-width: 400px;
+const HistoryOrder = styled.table`
+    border-collapse: collapse;
+    width: 100%;
+    color: #333;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-align: left;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    & th {
+  background-color: #ff9800;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #ccc;
+}
+& tr:nth-child(even) td {
+  background-color: #f2f2f2;
+}
+
+& tr:hover td {
+  background-color: #ffedcc;
+}
+& td {
+  background-color: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  font-weight: bold;
+}
 `
 const Order = styled.div``
 const NavInfo = styled.div`
@@ -74,6 +108,22 @@ const ButtonSend = styled.button`
   color:#fff;
   background-color:  #007bFF;
   cursor:pointer;
+`
+const TableOrder = styled.div`
+
+   
+   max-width: calc(100% - 2em);
+   margin: 1em auto;
+   overflow: hidden;
+   width: 800px;
+`
+const TableTitle = styled.div`
+
+   color: #000;
+   font-size: 1.5em;
+   padding: 1rem;
+   text-align: left;
+   text-transform: uppercase;
 `
 function ProfilePage({data,orders}) {
         
@@ -143,13 +193,56 @@ function ProfilePage({data,orders}) {
                     </NavInfo>
                     <ButtonSend onClick={handleDisplayModal} >Actualizar</ButtonSend>
                 </Info>
-                <HistoryOrder>
-                   {
-                    orders.map(elm => (
-                        <h1>{elm.hora}</h1>
+                <TableOrder >
+                    <TableTitle>Historial de Ordenes</TableTitle>
+   
+                    <HistoryOrder >
+                    
+                        <thead>
+                            <tr>
+                            <td>
+                                Nro
+                            </td>
+                            <td>
+                                Items
+                            </td>
+                            
+                            <td>
+                                Fecha
+                            </td>
+                            <td>
+                                Hora
+                            </td>
+                            <td>
+                                Total
+                            </td>
+                            <td>
+                                Acciones
+                            </td>
+                            </tr>
+                            
+                        </thead>
+                        
+                        <tbody>
+                        {
+                    orders.map((elm, inx) => (
+                        <tr>
+                            <td>{inx+1}</td>
+                            <td>{elm.hora}</td>
+                            <td>{elm.fecha}</td>
+                            <td>{elm.hora}</td>
+                            <td>{elm.total}</td>
+                            <td>
+                                <button>Eliminar</button>
+                            </td>
+                        </tr>
                     ))
                    }
+                        </tbody>
+                    
+                   
                 </HistoryOrder>
+                </TableOrder>
             </Profile>
         </ContainerProfile>
     </>
