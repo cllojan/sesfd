@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/components/CartContext";
 import axios from "axios";
 
+import emailjs from '@emailjs/nodejs';
+
 import CartIcon from '@/components/icons/CartIcon';
 import Link from "next/link";
 import Image from "next/image";
@@ -14,7 +16,12 @@ import { Montserrat, Lato } from 'next/font/google'
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router';
 import { useSession } from "next-auth/react";
+import { Inter } from 'next/font/google'
 
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 const roboto = Montserrat({
   weight: '500',
@@ -76,7 +83,7 @@ const Box = styled.div`
 `;
 const Input = styled.input`  
   height:15px;
-  font-family:"Inter";
+  
   font-size:14px;
   font-weight:500;
   padding:10px;
@@ -98,7 +105,7 @@ const Input = styled.input`
 const Select = styled.select`
   width: 100%;
   
-  font-family:"Inter";
+  
   font-size:14px;
   font-weight:500;
   padding:8px;
@@ -149,21 +156,21 @@ const ProductInfoCell = styled.td`
 `;
 
 const Span = styled.span`
-  font-family:"Inter";
+  
   font-size:14px;
   font-weight:500;
   color:#374151;
 `
 const Label = styled.label`
   
-  font-family:"Inter";
+  
   font-size:14px;
   font-weight:500;
   color:#374151;
 `
 const Td = styled.td`
   
-  font-family:"Inter";
+  
   font-size:15px;
   font-weight:500;
   color:#374151;
@@ -202,7 +209,7 @@ const Empty = styled.div`
       vertical-align: middle;
       font-weight: 500;
       cursor:pointer;      
-      font-family:'Inter', Courier, monospace;
+      
       display:flex;
       gap:10px;
       align-items:center;
@@ -252,7 +259,7 @@ const ButtonSend = styled.button`
   border:none;
   width:100%;
   height:40px;
-  font-family:"Inter";
+  
   font-weight:500;
   border-radius:5px;
   color:#fff;
@@ -325,7 +332,7 @@ const Total = styled.p`
 const ProductInfo = styled.div`
   
   p{
-    font-family:"Inter";
+    
     color:#111827 ;
     font-weight:500;
   }
@@ -339,21 +346,23 @@ const ContCantity = styled.div`
   
 `
 export default function CartPage() {
+  
   const { data, update } = useSession()
+    
   const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
   const [products, setProducts] = useState([]);
 
-  const [nombre, setNombre] = useState(data.user.name || data.user._doc.name);
-  const [apellido, setApellido] = useState(data.user.lastname || data.user._doc.lastname);
-  const [email, setEmail] = useState(data.user.email || data.user._doc.email);
-  const [celular, setCelular] = useState(data.user.cellphone || data.user._doc.cellphone);
+  const [nombre, setNombre] = useState( data?.user.name || data?.user._doc.name);
+  const [apellido, setApellido] = useState(data?.user.lastname || data?.user._doc.lastname);
+  const [email, setEmail] = useState(data?.user.email || data?.user._doc.email);
+  const [celular, setCelular] = useState(data?.user.cellphone || data?.user._doc.cellphone);
 
 
   const [parish, setparish] = useState(data?.user.parish || data?.user._doc.parish);
   const [canton, setPanton] = useState(data?.user.canton || data?.user._doc.canton);
   const [province, setPovince] = useState(data?.user.province || data?.user._doc.province);
 
-  const [direccion, setDireccion] = useState(data.user.streetAddress || data.user._doc.streetAddress);
+  const [direccion, setDireccion] = useState(data?.user.streetAddress || data?.user._doc.streetAddress);
 
 
   const [provincias, setProvincias] = useState([]);
@@ -462,10 +471,10 @@ export default function CartPage() {
     
     const optionsFecha = { day: '2-digit', month: '2-digit', year: 'numeric' }; // Opciones para el formato de la fecha
     const date = now.toLocaleDateString('es-ES', optionsFecha); //
-    let temp = data.user.history_order || []
+    let temp = data?.user.history_order || []
     let order = { items: cartTemp, fecha: date, hora: `${horas}:${minutos}`, total: total }
     const resps = await axios.put('/api/auth/signup', {
-      _id: id, ...data.user, history_order: [...temp, order]
+      _id: id, ...data?.user, history_order: [...temp, order]
     });
 
     const rpo = await update({
@@ -475,6 +484,29 @@ export default function CartPage() {
         history_order: [...temp, order]
       }
     })
+
+    emailjs.send(
+      "service_7kb4if6",
+      "template_zte5gge",
+      {
+        to_email: email,
+        user_name: nombre,
+        lista_productos: "raizen",
+        precio_total: total,
+        fecha_orden: `${date} - ${horas}:${minutos}`,
+        direccion: direccion,
+        },{
+          publicKey: "onhd841m1THfb0I-F",
+          privateKey:"NLUSM4a15zOSfSdqJ2ANl"
+        }
+    ).then(
+      (response) => {
+        console.log('SUCCESS!', response.status, response.text);
+      },
+      (err) => {
+        console.log('FAILED...', err);
+      },
+    );
     let provincia = provincias[provinciaSeleccionada].provincia
     let canton = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].canton
     let parroquia = provincias[provinciaSeleccionada].cantones[cantonSeleccionada].parroquias[parroquiaSeleccionada]
@@ -513,13 +545,13 @@ export default function CartPage() {
           )}
 
           {products?.length > 0 && (
-            <Box>
+            <Box className={inter.className}>
               {products.map((product, inx) => (
                 <ContProduct key={inx}>
                   <Product>
                     <Image src={product.images[0]} alt={product.title} width="100" height="100" />
-                    <ProductInfo>
-                      <p>{product.title}</p>
+                    <ProductInfo className={inter.className}>
+                      <p >{product.title}</p>
                       <span>$ {product.price}</span>
                     </ProductInfo>
                   </Product>
@@ -550,7 +582,7 @@ export default function CartPage() {
                 <ContInput className="">
                   <Label htmlFor="">Nombre</Label>
                   <Input type="text"
-
+                    className={inter.className}
                     value={nombre}
                     name="nombre"
                     onChange={ev => setNombre(ev.target.value)} />
@@ -559,6 +591,7 @@ export default function CartPage() {
                   <Label htmlFor="">Apellido</Label>
                   <Input type="text"
                     value={apellido}
+                    className={inter.className}
                     name="apellido"
                     onChange={ev => setApellido(ev.target.value)} />
                 </ContInput>
@@ -567,7 +600,7 @@ export default function CartPage() {
               <ContInput>
                 <Label htmlFor="">Email</Label>
                 <Input type="text"
-
+                  className={inter.className}
                   value={email}
                   name="email"
                   onChange={ev => setEmail(ev.target.value)} />
@@ -578,7 +611,7 @@ export default function CartPage() {
                 <Input type="number"
                   value={celular}
                   name="celular"
-
+                  className={inter.className}
                   onChange={e => setCelular(e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10))} />
               </ContInput>
               <InputBox>
@@ -588,7 +621,7 @@ export default function CartPage() {
 
                   <Select type="text"
                     onChange={handleProvinciaChange}
-
+                    className={inter.className}
                   >
                     {
                       Object.entries(provincias).map((elm, inx) => (
@@ -602,7 +635,7 @@ export default function CartPage() {
                   <Label>Canton</Label>
                   <Select type="text"
                     onChange={handleCantonChange}
-
+                    className={inter.className}
                   >
                     {
                       Object.entries(cantones)?.map((canton) => (
@@ -618,11 +651,12 @@ export default function CartPage() {
               <ContInput>
                 <Label>Parroquia</Label>
                 <Select type="text"
+                className={inter.className}
                   onChange={handleParroquiaChange}
                 >
                   {
                     Object.entries(parroquias).map((parroquia) => (
-                      <option key={parroquia[0]} value={parroquia[0]}>
+                      <option key={parroquia[0]} value={parroquia[0]} >
                         {parroquias[parroquia[0]]}
                       </option>
                     ))
@@ -632,7 +666,7 @@ export default function CartPage() {
               <ContInput>
                 <Label>Direccion</Label>
                 <Input type="text"
-
+                  className={inter.className}
                   value={direccion}
                   name="direccion"
                   onChange={ev => setDireccion(ev.target.value)} />
@@ -640,6 +674,7 @@ export default function CartPage() {
 
               <ContInput>
                 <ButtonSend black block
+                  className={inter.className}
                   onClick={goToPayment}>
                   Enviar
                 </ButtonSend>

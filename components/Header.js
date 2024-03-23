@@ -69,6 +69,12 @@ const StyledNav = styled.nav`
     position: static;
     padding: 0;
   }
+  @media screen and (max-width: 988px) {
+    display: none;
+    align-items:center;
+    position: static;
+    padding: 0;
+  }
 `;
 const NavLink = styled(Link)`
   display: block;
@@ -91,24 +97,25 @@ const NavReg= styled(NavLink)`
 `
 const NavLogin = styled(NavLink)`
     display: block;
-    color:#fEfefe;
+    color:#333333;
+    font-weight: 500;
     text-decoration:none;
-    background-color: #007bFF;
     padding: 10px 10px;
     border-radius: 7px;
 `
 const NavButton = styled.button`
+  display: none;
   background-color: transparent;
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   border:0;
-  color: white;
+  color: #333333;
   cursor: pointer;
   position: relative;
   
   z-index: 3;
-  @media screen and (min-width: 768px) {
-    display: none;
+  @media screen and (max-width: 988px) {
+    display: block;
   }
 `;
 const ContInput = styled.form`
@@ -195,7 +202,7 @@ export default function Header() {
   const [mobileNavActive,setMobileNavActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const {data, status} = useSession();
-  
+  console.log(useSession())
   const handleSearch = (event) => {    
     event.preventDefault();
     // Redirigir a la página de búsqueda con el término de búsqueda en la URL

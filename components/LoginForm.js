@@ -5,6 +5,13 @@ import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import Button from "@/components/Button";
 import ErrorIcon from "./icons/Error";
+import { Inter } from 'next/font/google'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
+
 const InputContainer = styled.div`    
   
   display:flex;
@@ -29,7 +36,6 @@ const InputBox = styled.div`
 
 const Label = styled.label`
   
-  font-family:"Inter";
   font-size:14px;
   font-weight:500;
   color:#374151;
@@ -66,7 +72,7 @@ const ButtonSend = styled.button`
   border:none;
   width:100%;
   height:40px;
-  font-family:"Inter";
+  
   font-weight:500;
   border-radius:5px;
   color:#fff;
@@ -89,8 +95,8 @@ const Form = styled.div`
 const Input = styled.input`  
 width:400px;
   height:15px;
-  font-family:"Inter";
-  font-size:14px;
+  
+  font-size:15px;
   font-weight:500;
   padding:10px;
   margin-bottom: 5px;
@@ -134,7 +140,7 @@ export default function LoginForm() {
         <FormContainer>
 
             <InputContainer>
-                <h1>Login</h1>
+                <h1 >Iniciar Sesion</h1>
                 {error ?
                     <ContError>
                         <ErrorIcon/>
@@ -147,24 +153,24 @@ export default function LoginForm() {
                 <ContInput>
                     <Label htmlFor="">Correo electrónico</Label>
                     <Input type="text"
-
+                        className={inter.className}
                         value={email}
                         name="email"
                         onChange={ev => setEmail(ev.target.value)} />
                 </ContInput>
 
                 <ContInput>
-                    <Label>Contraseña</Label>
+                    <Label className={inter.className}>Contraseña</Label>
                     <Input type="password"
                         value={password}
                         name="celular"
-
+                        className={inter.className}
                         onChange={e => setPassword(e.target.value)} />
                 </ContInput>
                 <InputBox>
 
-                    <ButtonSend onClick={e => handleSubmit(e)}>Iniciar Sesion</ButtonSend>
-                    <ButtonSend onClick={e => router.push("/register")}>Registrar</ButtonSend>
+                    <ButtonSend className={inter.className} onClick={e => handleSubmit(e)}>Iniciar Sesion</ButtonSend>
+                    <ButtonSend className={inter.className} onClick={e => router.push("/register")}>Registrar</ButtonSend>
                 </InputBox>
 
 

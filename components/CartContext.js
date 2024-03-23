@@ -1,4 +1,5 @@
 import {createContext, useEffect, useState} from "react";
+import Swal from "sweetalert2";
 
 export const CartContext = createContext({});
 
@@ -16,6 +17,21 @@ export function CartContextProvider({children}) {
     }
   }, []);
   function addProduct(productId) {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "¡Producto añadido! 🛒"
+    });
     setCartProducts(prev => [...prev,productId]);
   }
   function removeProduct(productId) {

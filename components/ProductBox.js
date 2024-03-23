@@ -43,6 +43,7 @@ const Title = styled(Link)`
   color:#333;
   text-decoration:none;
   margin:0;
+  overflow: hidden;
   white-space:nowrap;
   text-overflow:ellipsis;
 `;

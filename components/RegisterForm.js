@@ -3,7 +3,12 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
+import { Inter } from 'next/font/google'
 
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+})
 const InputContainer = styled.div`    
   
   display:flex;
@@ -28,7 +33,7 @@ const InputBox = styled.div`
 
 const Label = styled.label`
   
-  font-family:"Inter";
+  
   font-size:14px;
   font-weight:500;
   color:#374151;
@@ -48,7 +53,7 @@ const ButtonSend = styled.button`
   border:none;
   width:100%;
   height:40px;
-  font-family:"Inter";
+  
   font-weight:500;
   border-radius:5px;
   color:#fff;
@@ -70,7 +75,7 @@ const Form = styled.div`
 `
 const Input = styled.input`  
   height:15px;
-  font-family:"Inter";
+  
   font-size:14px;
   font-weight:500;
   padding:10px;
@@ -119,12 +124,12 @@ export default function RegisterForm() {
         <FormContainer>
             
              <InputContainer>
-             <h1>Register</h1>
+             <h1>Registrar</h1>
               <InputBox>
                 <ContInput className="">
                   <Label htmlFor="">Nombre</Label>
                   <Input type="text"
-
+                    className={inter.className}
                     value={name}
                     name="nombre"
                     onChange={ev => setName(ev.target.value)} />
@@ -134,6 +139,7 @@ export default function RegisterForm() {
                   <Input type="text"
                     value={lastname}
                     name="apellido"
+                    className={inter.className}
                     onChange={ev => setLastname(ev.target.value)} />
                 </ContInput>
 
@@ -141,7 +147,7 @@ export default function RegisterForm() {
               <ContInput>
                 <Label htmlFor="">Email</Label>
                 <Input type="text"
-
+                  className={inter.className}
                   value={email}
                   name="email"
                   onChange={ev => setEmail(ev.target.value)} />
@@ -152,11 +158,11 @@ export default function RegisterForm() {
                 <Input type="password"
                   value={password}
                   name="password"
-                  
+                  className={inter.className}
                   onChange={e => setPassword( e.target.value)} />
               </ContInput>
               
-              <ButtonSend onClick={e => handleSubmit(e)}>Registrar</ButtonSend>
+              <ButtonSend className={inter.className} onClick={e => handleSubmit(e)}>Registrar</ButtonSend>
               
               </InputContainer>
            

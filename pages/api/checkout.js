@@ -5,6 +5,7 @@ import { Product } from "@/models/Product";
 
 
 
+
 export default async function handler(req,res) {
   if (req.method !== 'POST') {
     res.json('should be a POST request');
@@ -42,8 +43,9 @@ export default async function handler(req,res) {
     line_items,name,email,cellphone,parish,canton,
     streetAddress,province,paid:false,
   });
-
-
+  
+   
+  
   res.json({
     status:200
   })

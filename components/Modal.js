@@ -220,7 +220,7 @@ const Modal = ({ handleDisplayModal, data }) => {
                 streetAddress,
                 province: provincia,
                 perfil_image: imgRes,
-                history_order:{},
+                
             });
 
             
