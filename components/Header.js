@@ -243,7 +243,7 @@ export default function Header() {
                 :(
             <><NavLink href={'/dashboard/profile'} >
               
-                <img src={data?.user?.perfil_image} width="35px" height="35px"/>
+                <img src={data?.user?.perfil_image ? data?.user?.perfil_image : "/avatar.png" } width="45px" height="45px"/>
               </NavLink></>
               )
             }

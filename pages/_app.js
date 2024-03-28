@@ -20,15 +20,13 @@ const GlobalStyles = createGlobalStyle`
 
 export default function App({ Component, pageProps }) {
   return (
-    <>      
-      <GlobalStyles />                 
-      <CartContextProvider >   
-          <SessionProvider>            
-                                                   
-                  <Component  {...pageProps}  />             
-              
-          </SessionProvider>                                  
-      </CartContextProvider>            
+    <>
+      <GlobalStyles />
+      <CartContextProvider >
+          <SessionProvider>
+            <Component  {...pageProps}  />
+          </SessionProvider>
+      </CartContextProvider>
     </>
   );
 }

@@ -17,6 +17,7 @@ import Swal from 'sweetalert2'
 import { useRouter } from 'next/router';
 import { useSession } from "next-auth/react";
 import { Inter } from 'next/font/google'
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -685,6 +686,7 @@ export default function CartPage() {
           )}
         </ColumnsWrapper>
       </ConstCart>
+      <Footer/>
     </>
   );
 }

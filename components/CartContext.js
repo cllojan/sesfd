@@ -17,6 +17,7 @@ export function CartContextProvider({children}) {
     }
   }, []);
   function addProduct(productId) {
+    
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",
@@ -43,11 +44,15 @@ export function CartContextProvider({children}) {
       return prev;
     });
   }
+  function removeItem(productId){
+    console.log(cartProducts)
+  }
   function clearCart() {
     setCartProducts([]);
+    ls.clear()
   }
   return (
-    <CartContext.Provider value={{cartProducts,setCartProducts,addProduct,removeProduct,clearCart}}>
+    <CartContext.Provider value={{cartProducts,setCartProducts,addProduct,removeProduct,clearCart, removeItem}}>
       {children}
     </CartContext.Provider>
   );

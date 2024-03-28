@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import getOrders from "@/utils/getOrders";
 import { Inter } from 'next/font/google'
+import Footer from "@/components/Footer";
 
 const inter = Inter({
     subsets: ['latin'],
@@ -293,6 +294,7 @@ function ProfilePage({ data, orders }) {
                 </TableOrder>
             </Profile>
         </ContainerProfile>
+        <Footer/>
     </>
 }
 
