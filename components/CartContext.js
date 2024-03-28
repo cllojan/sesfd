@@ -45,6 +45,10 @@ export function CartContextProvider({children}) {
     });
   }
   function removeItem(productId){
+    
+    const nuevoArray = cartProducts.filter(item => item !== productId);
+    // Actualizar el estado con el nuevo array sin ocurrencias repetidas del elemento específico
+    setCartProducts(nuevoArray);
     console.log(cartProducts)
   }
   function clearCart() {

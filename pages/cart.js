@@ -31,7 +31,7 @@ const roboto = Montserrat({
 
 
 const ConstCart = styled.div`
-  
+  height:100vh;
   margin:20px;
   @media (max-width:768px){
     width: 100vw;
@@ -350,7 +350,7 @@ export default function CartPage() {
   
   const { data, update } = useSession()
     
-  const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
+  const { cartProducts, addProduct, removeProduct, clearCart,removeItem } = useContext(CartContext);
   const [products, setProducts] = useState([]);
 
   const [nombre, setNombre] = useState( data?.user.name || data?.user._doc.name);
@@ -432,7 +432,9 @@ export default function CartPage() {
   function lessOfThisProduct(id) {
     removeProduct(id);
   }
-
+  function remove(id){
+    removeItem(id)
+  }
 
   let total = 0;
   for (const productId of cartProducts) {
@@ -564,6 +566,8 @@ export default function CartPage() {
                     </QuantityLabel>
                     <Button
                       onClick={() => moreOfThisProduct(product._id)}>+</Button>
+                      <Button
+                      onClick={() => remove(product._id)}>Remove</Button>
                   </ContCantity>
                   <div>${cartProducts.filter(id => id === product._id).length * product.price}</div>
                 </ContProduct>
@@ -680,9 +684,9 @@ export default function CartPage() {
                   Enviar
                 </ButtonSend>
               </ContInput>
-
+                    
             </InputContainer>
-
+            
           )}
         </ColumnsWrapper>
       </ConstCart>
