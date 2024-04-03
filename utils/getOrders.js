@@ -7,7 +7,8 @@ export default async function getOrders(ordersId){
     await mongooseConnect()
     const productsIds = ordersId;
     const uniqueIds = [...new Set(productsIds)];
-    console.log(productsIds)
+    console.log("prdocuts",productsIds)
+    console.log("orders",ordersId)
     const productsInfos = await Product.find({_id:uniqueIds});
 
     

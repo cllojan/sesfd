@@ -8,9 +8,12 @@ import { getSession, useSession } from "next-auth/react"
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import getOrders from "@/utils/getOrders";
-import { Inter } from 'next/font/google'
 import Footer from "@/components/Footer";
-
+import { Inter } from 'next/font/google'
+import Link from "next/link";
+import CartIcon from "@/components/icons/CartIcon";
+import Image from "next/image";
+import axios from "axios";
 const inter = Inter({
     subsets: ['latin'],
     display: 'swap',
@@ -19,6 +22,7 @@ const inter = Inter({
 
 const ContainerProfile = styled.div`
     position: relative;
+    
 `
 const BackgroundProfile = styled.div`
     width: 100%;
@@ -34,11 +38,13 @@ const ProfileImage = styled.img`
     max-width: 200px;
     max-height: 200px;
     top:200px;
-    left: 40px;
-  `;
+    left: 40px;    
+    border-radius: 50%;
+`;
 const Profile = styled.div`
     padding-top: 80px;
     padding-left: 80px;
+    padding-bottom: 30px;
     position: relative;     
     display: flex;
     gap:20px;
@@ -155,10 +161,55 @@ const Select = styled.select`
       color: #333;
     }
 `;
+const Empty = styled.div`
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:10px;
+    & p{
+        width:70%;
+    }
+    & span{
+      font-size:30px;
+      font-weight:500;
+    }
+    & a{
+      text-decoration:none;
+      border:none;
+      border-radius:4px;  
+      padding:0 10px;    
+      height:40px;
+      background:#FACC15;
+      color:#000;
+      font-weight:bolder;        
+      vertical-align: middle;
+      font-weight: 500;
+      cursor:pointer;      
+      
+      display:flex;
+      gap:10px;
+      align-items:center;
+      & span{
+        font-size:15px;
+        font-weight:500;
+      }
+    }
+`
 
+const EmptyCenter = styled.div`
+    
+  
+  display:flex;
+  align-items:center;
+  justify-content:center;
+    
+`
 function ProfilePage({ data, orders }) {
 
-
+    const [id, setId] = useState(data._id);
+    console.log(data)
     const [name, setName] = useState(data.name)
     const [lastname, setLastname] = useState(data.lastname)
     const [email, setEmail] = useState(data.email)
@@ -167,8 +218,8 @@ function ProfilePage({ data, orders }) {
     const [canton, setCanton] = useState(data.canton)
     const [province, setProvince] = useState(data.province)
     const [streetAddress, setStreetaddress] = useState(data.streetAddress)
-
-
+    const { datas, update } = useSession()
+    const [historyOrder, setHistoryOrder] = useState(orders)
 
     const [isOpen, setIsOpen] = useState(false);
     function handleDisplayModal() {
@@ -176,7 +227,23 @@ function ProfilePage({ data, orders }) {
         setIsOpen(!isOpen);
     };
 
-
+    async function deleteOrder(inx,ident){               
+        let order = [...data.history_order]
+        order.splice(inx, 1);                       
+        const response = await axios.put('/api/auth/signup', {
+            _id: ident,            
+            history_order:order
+        });
+        const rpo = await update({
+            ...datas,
+            user: {
+              ...datas?.user,
+              history_order: order
+            }
+          })
+      
+                
+    }
 
     return <>
         <Header />
@@ -193,39 +260,49 @@ function ProfilePage({ data, orders }) {
                         <li>
                             <Span>Email</Span>
                             <br />
-                            {email}
+                            {email ? email: "Campo vacío."}
                         </li>
                         <li>
                             <Span>Celular</Span>
                             <br />
-                            {cellphone}
+                            {cellphone?cellphone:"Campo vacío."}
                         </li>
                         <Hr />
                         <li>
                             <Span>Direccion</Span>
                             <br />
-                            {streetAddress}
+                            {streetAddress?streetAddress:"Campo vacío."}
                         </li>
                         <li>
                             <Span>Provincia</Span>
                             <br />
-                            {province}
+                            {province?province:"Campo vacío."}
                         </li>
                         <li>
                             <Span>Canton</Span>
                             <br />
-                            {canton}
+                            {canton?canton:"Campo vacío."}
                         </li>
                         <li>
                             <Span>Parroquia</Span>
                             <br />
-                            {parish}
+                            {parish?parish:"Campo vacío."}
                         </li>
                     </NavInfo>
                     <ButtonSend className={inter.className} onClick={handleDisplayModal} >Actualizar</ButtonSend>
                 </Info>
                 <TableOrder >
-                    {orders.length == 0 ? <h1>Aun no se an realizado compras</h1> :
+                    {orders.length == 0 ? 
+                    
+                    <EmptyCenter>
+                            <Empty>
+                                <Image src="/emptyCart.png" alt="Carrito " width={450} height={240} />
+                                <span>Tu carrito esta vacio</span>
+                                <p>¡Oops! Parece que tu carrito está un poco solitario. Descubre componentes increíbles que potenciarán tu computadora. 🖥️🛒✨</p>
+                                <Link href="/"><CartIcon /> <span>Ir a Comprar</span></Link>
+                            </Empty>
+                    </EmptyCenter>
+                     :
                         (
                             <>
                                 <TableTitle>Historial de Ordenes</TableTitle>
@@ -259,14 +336,14 @@ function ProfilePage({ data, orders }) {
 
                                     <tbody>
                                         {
-                                            orders.map((elm, inx) => (
+                                            historyOrder.map((elm, inx) => (
                                                 <tr>
                                                     <td>{inx + 1}</td>
                                                     <td>
                                                         <Select type="text" className={inter.className}
                                                         >{
                                                                 elm.items.map((item, inx) => (
-                                                                    <option className={inter.className} >
+                                                                    <option key={inx} className={inter.className} >
                                                                         {item.price_data.product_data.name}
                                                                     </option>
                                                                 ))
@@ -277,7 +354,7 @@ function ProfilePage({ data, orders }) {
                                                     <td>{elm.hora}</td>
                                                     <td>{elm.total}</td>
                                                     <td>
-                                                        <button>Eliminar</button>
+                                                        <button onClick={()=> deleteOrder(inx,id)}>Eliminar</button>
                                                     </td>
                                                 </tr>
                                             ))
@@ -294,7 +371,7 @@ function ProfilePage({ data, orders }) {
                 </TableOrder>
             </Profile>
         </ContainerProfile>
-        <Footer/>
+        <Footer />
     </>
 }
 
@@ -306,12 +383,13 @@ export async function getServerSideProps(ctx) {
     let id = session.user.sub
     const user = await User.findById(id);
     let order = user.history_order
-    console.log(order)
+    console.log("ooorder",order)
     var items = []
-    if (order.length > 0) {
+    if (order && order?.length > 0) {
 
         for (let e of order) {
             let itemp = {}
+            console.log("item",e)
             let rep = await getOrders(e.items)
             itemp["items"] = rep
             itemp["hora"] = e.hora

@@ -9,7 +9,7 @@ import LogoIcon from '@/components/icons/LogoIcon';
 import SearchIcon from '@/components/icons/Search';
 import { Montserrat } from 'next/font/google'
 
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 
 
 const StyledHeader = styled.header`
@@ -178,6 +178,7 @@ const CartLink= styled(NavLink)`
 const Account = styled.div`
   margin-left:20px;
   display: flex;
+  align-items: center;
   gap:20px;
 `
 const SpanCont = styled.span`
@@ -196,6 +197,9 @@ const SpanCont = styled.span`
   color:#17202A;
   font-weight: bold;
 `
+const ProfileImage = styled.img`
+  border-radius: 50%;
+`
 export default function Header() {
   const router = useRouter();
   const {cartProducts} = useContext(CartContext);
@@ -211,7 +215,10 @@ export default function Header() {
     });
     setSearchTerm("");
   };
-  
+  async function cerrarsesion(){
+    await signOut()
+
+  }
   return (
     <StyledHeader>      
         <Wrapper>
@@ -241,18 +248,21 @@ export default function Header() {
                 <NavReg href={'/register'}>Registrar</NavReg>
                 </>
                 :(
-            <><NavLink href={'/dashboard/profile'} >
-              
-                <img src={data?.user?.perfil_image ? data?.user?.perfil_image : "/avatar.png" } width="45px" height="45px"/>
-              </NavLink></>
+            <>
+              <NavLink href={'/dashboard/profile'} >              
+                <ProfileImage src={data?.user?.perfil_image ? data?.user?.perfil_image : "/avatar.png" } width="45px" height="45px"/>
+              </NavLink>
+              <NavLogin href={"/"} onClick={() => signOut({ callbackUrl: '/', redirect:true })}>Cerrar Sesion</NavLogin>
+              </>
               )
             }
             </Account>
 
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
-            <BarsIcon />
+            <BarsIcon />            
           </NavButton>
+          
         </Wrapper>
         
            

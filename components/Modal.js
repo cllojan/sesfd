@@ -1,10 +1,13 @@
 import styled from "styled-components";
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { uploadFile } from "@/pages/firebase/config";
+import { Inter } from 'next/font/google'
+const inter = Inter({
+    subsets: ['latin'],
+    display: 'swap',
+})
 const ModalContainer = styled.article`
   position: fixed;
   left: 0;
@@ -47,7 +50,7 @@ const ModalTitle = styled.h2`
 `;
 const Label = styled.label`
   
-  font-family: 'Lato', sans-serif;
+  
   font-size:14px;
   font-weight:500;
     align-self: flex-start;
@@ -62,7 +65,7 @@ const HorizontalDivider = styled.div`
 `;
 const Input = styled.input`  
   height:15px;
-  font-family: 'Lato', sans-serif;
+  
   font-size:14px;
   font-weight:500;
   padding:10px;
@@ -91,7 +94,7 @@ const Form = styled.form`
 const Button = styled.button`
     width:100%;
     height:40px;
-    font-family: 'Lato', sans-serif;
+    
     font-weight:500;
     border-radius:5px;
     color:#fff;
@@ -110,8 +113,7 @@ const Box = styled.div`
     gap:10px;
 `
 const Select = styled.select`
-  
-  font-family:"Inter";
+    
   font-size:14px;
   font-weight:500;
   padding:8px;
@@ -219,8 +221,7 @@ const Modal = ({ handleDisplayModal, data }) => {
                 canton,
                 streetAddress,
                 province: provincia,
-                perfil_image: imgRes,
-                
+                perfil_image: imgRes,                
             });
 
             
@@ -233,7 +234,7 @@ const Modal = ({ handleDisplayModal, data }) => {
 
     return (
         <ModalContainer >
-            <ModalContentContainer>
+            <ModalContentContainer className={inter.className}>
 
                 <ModalTitle>Actualizar Informacion</ModalTitle>
                 <HorizontalDivider backgroundColor="#007bFF" />
@@ -245,6 +246,7 @@ const Modal = ({ handleDisplayModal, data }) => {
                                 <Label>Nombre</Label>
                                 <Input
                                     value={name}
+                                    className={inter.className}
                                     onChange={ev => setName(ev.target.value)} />
                             </Box>
                             <Box>
@@ -258,23 +260,25 @@ const Modal = ({ handleDisplayModal, data }) => {
                         <Input
                             type="email"
                             value={email}
+                            className={inter.className}
                             onChange={ev => setEmail(ev.target.value)} />
                         <Label>Celular</Label>
                         <Input
                             type="number"
                             value={cellphone}
+                            className={inter.className}
                             onChange={e => setCellphone(e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 10))} />
                         <FormBox>
-                            <Box>
+                            <Box className={inter.className}>
                                 <Label>Provincia</Label>
                                 <Select type="text"
+                                    className={inter.className}
                                     onChange={handleProvinciaChange}
-
                                 >
 
                                     {
                                         Object.entries(provincias).map((elm, inx) => (
-                                            <option key={elm[0]} value={elm[0]}>{provincias[elm[0]].provincia}</option>
+                                            <option key={elm[0]} className={inter.className} value={elm[0]}>{provincias[elm[0]].provincia}</option>
                                         ))
                                     }
                                 </Select>
@@ -282,12 +286,15 @@ const Modal = ({ handleDisplayModal, data }) => {
                             <Box>
                                 <Label>Canton</Label>
                                 <Select type="text"
+                                    className={inter.className}
                                     onChange={handleCantonChange}
-
                                 >
                                     {
                                         Object.entries(cantones)?.map((canton) => (
-                                            <option key={canton[0]} value={canton[0]}>
+                                            <option 
+                                                key={canton[0]}
+                                                className={inter.className}
+                                                value={canton[0]}>
                                                 {cantones[canton[0]].canton}
                                             </option>
                                         ))
@@ -296,12 +303,17 @@ const Modal = ({ handleDisplayModal, data }) => {
                             </Box>
                         </FormBox>
                         <Label>Parroquia</Label>
-                        <Select type="text"
+                        <Select 
+                            type="text"
+                            className={inter.className}
                             onChange={handleParroquiaChange}
                         >
                             {
                                 Object.entries(parroquias).map((parroquia) => (
-                                    <option key={parroquia[0]} value={parroquia[0]}>
+                                    <option 
+                                        key={parroquia[0]} 
+                                        className={inter.className}
+                                        value={parroquia[0]}>
                                         {parroquias[parroquia[0]]}
                                     </option>
                                 ))
@@ -311,14 +323,25 @@ const Modal = ({ handleDisplayModal, data }) => {
                         <Input type="text"
                             value={streetAddress}
                             name="direccion"
+                            className={inter.className}
                             onChange={ev => setstreetAddress(ev.target.value)} />
                         <Label>Foto de perfil</Label>
-                        <Input type="file" onChange={e => setPerfilImage(e.target?.files[0])} accept="image/*" />
+                        <Input 
+                            type="file"
+                            className={inter.className}
+                            onChange={e => setPerfilImage(e.target?.files[0])} accept="image/*" />
                         <FormBox>
-                            <Button backgroundColor="#007bFF" color="white" onClick={e => handleSubmit(e)}>
+                            <Button 
+                                backgroundColor="#007bFF" 
+                                color="white" 
+                                className={inter.className}
+                                onClick={e => handleSubmit(e)}>
                                 Actualizar
                             </Button>
-                            <Button backgroundColor="#E74C3C " onClick={handleDisplayModal}>
+                            <Button 
+                                backgroundColor="#E74C3C "
+                                className={inter.className} 
+                                onClick={handleDisplayModal}>
                                 Cancelar
                             </Button>
                         </FormBox>

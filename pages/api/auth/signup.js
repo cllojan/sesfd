@@ -65,7 +65,7 @@ export default async function handle(req, res) {
       history_order} = req.body
       try {
         
-        
+        console.log(history_order)
         
         let response = await User.updateOne({_id},{
           name,
@@ -80,7 +80,7 @@ export default async function handle(req, res) {
           history_order:history_order
           });
         console.log("PUT:",_id)
-          res.json(true)     
+          res.json(response)     
       } catch (error) {
         console.log(error)
       }
