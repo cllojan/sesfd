@@ -1,10 +1,11 @@
-'use client'
+
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import  {uploadFile }  from "@/pages/firebase/config";
+
 import { Inter } from 'next/font/google'
+import uploadFile from "@/lib/firebase";
 const inter = Inter({
     subsets: ['latin'],
     display: 'swap',
