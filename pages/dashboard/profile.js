@@ -14,6 +14,8 @@ import Link from "next/link";
 import CartIcon from "@/components/icons/CartIcon";
 import Image from "next/image";
 import axios from "axios";
+import Button from "@/components/Button";
+import Trash from "@/components/icons/Trash";
 const inter = Inter({
     subsets: ['latin'],
     display: 'swap',
@@ -81,7 +83,7 @@ const HistoryOrder = styled.table`
 }
 
 & tr:hover td {
-  background-color: #ffedcc;
+  background-color: #F8F9F9;
 }
 & td {
   background-color: #fff;
@@ -206,6 +208,15 @@ const EmptyCenter = styled.div`
   justify-content:center;
     
 `
+const ButtonRemove = styled(Button)`
+  background: none;
+  font-size: 30px;
+  svg{
+    height:20px;
+    width:20px;
+    fill:#CB4335;
+  }
+`
 function ProfilePage({ data, orders }) {
 
     const [id, setId] = useState(data._id);
@@ -241,7 +252,7 @@ function ProfilePage({ data, orders }) {
               history_order: order
             }
           })
-      
+          window.location.reload()
                 
     }
 
@@ -354,7 +365,7 @@ function ProfilePage({ data, orders }) {
                                                     <td>{elm.hora}</td>
                                                     <td>{elm.total}</td>
                                                     <td>
-                                                        <button onClick={()=> deleteOrder(inx,id)}>Eliminar</button>
+                                                        <ButtonRemove onClick={()=> deleteOrder(inx,id)}><Trash/></ButtonRemove>
                                                     </td>
                                                 </tr>
                                             ))

@@ -10,6 +10,7 @@ import Button from "@/components/Button";
 import CartIcon from "@/components/icons/CartIcon";
 import {useContext} from "react";
 import {CartContext} from "@/components/CartContext";
+import Footer from "@/components/Footer";
 
 
 const Test = styled.div`
@@ -83,6 +84,7 @@ export default function ProductPage({product}) {
           </Info>
         </ColWrapper>
       </Test>
+      
     </>
   );
 }

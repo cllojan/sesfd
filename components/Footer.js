@@ -88,7 +88,13 @@ const Ul = styled.ul`
   align-items: center;
   
   justify-content: space-evenly;
+
+  & li a {
+    text-decoration: none;
+    color:#fff;
+  }
 `
+
 export default function Footer({product}) {
   const {addProduct} = useContext(CartContext);
   function addFeaturedToCart() {
@@ -108,9 +114,9 @@ export default function Footer({product}) {
             </Column>
             <Column>
               <Ul>
-                  <li>Inicio</li>
-                  <li>Productos</li>
-                  <li>Carrito</li>
+                  <li><a href="/">Inicio</a></li>
+                  <li><a href="/product">Productos</a></li>
+                  <li><a href="/cart">Carrito</a></li>
               </Ul>
             </Column>
           </ColumnsWrapper>
@@ -120,9 +126,10 @@ export default function Footer({product}) {
             <p>Copyright © 2022. All rights reserved.</p>
             </Column>
             <Column>
-              <Ul>
-                  <li>+5930990143583</li>
-                  <li>cllojan</li>
+              <Ul >
+                  <li>+5930990143583 </li>
+                  
+                  <li>     </li>
                   <li>cllcampoverde@gmail.com</li>
               </Ul>
             </Column>

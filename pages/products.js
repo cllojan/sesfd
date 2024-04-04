@@ -24,6 +24,7 @@ export default function ProductsPage({products,category}) {
       <ProductCom>        
         <FilterProduct category={category}></FilterProduct>
         <ProductsGrid products={products} />
+        
       </ProductCom>
       <Footer/>
     </>

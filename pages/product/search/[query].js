@@ -8,6 +8,7 @@ import ProductsGrid from "@/components/ProductsGrid";
 import Title from "@/components/Title";
 import mongoose from "mongoose";
 import FilterProduct from '@/components/FilterProduct';
+import Footer from "@/components/Footer";
 
 
 export default function SearchProduct({ products, category }) {
@@ -15,11 +16,11 @@ export default function SearchProduct({ products, category }) {
   return (
     <>
       <Header />
-
       <Center>                
           <FilterProduct category={category}></FilterProduct>
           <ProductsGrid products={products} />        
       </Center>
+      <Footer/>
     </>
   );
 }

@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { useSession } from "next-auth/react";
 import { Inter } from 'next/font/google'
 import Footer from "@/components/Footer";
+import Trash from "@/components/icons/Trash";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -281,12 +282,13 @@ const ContInput = styled.div`
 
 const ContProduct = styled.div`
   width: 98%;
-  display:grid;
+  display:flex;
   grid-template-columns: 3fr 1fr 0.5fr;
   padding:25px 0;
+  flex-wrap: nowrap;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   border: 1px solid rgb(229 231 235/1);  
   border-radius:5px;    
  
@@ -331,9 +333,12 @@ const Total = styled.p`
   }
 `
 const ProductInfo = styled.div`
-  
+  overflow: hidden;
   p{
-    
+    width:200px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     color:#111827 ;
     font-weight:500;
   }
@@ -345,6 +350,15 @@ const ProductInfo = styled.div`
 `
 const ContCantity = styled.div`
   
+`
+const ButtonRemove = styled(Button)`
+  background: none;
+  font-size: 30px;
+  svg{
+    height:20px;
+    width:20px;
+    fill:#CB4335;
+  }
 `
 export default function CartPage() {
   
@@ -488,13 +502,12 @@ export default function CartPage() {
       }
     })
 
-    emailjs.send(
+    let responseEmial = emailjs.send(
       "service_7kb4if6",
       "template_zte5gge",
       {
         to_email: email,
-        user_name: nombre,
-        lista_productos: "raizen",
+        user_name: `${nombre} ${apellido}`, 
         precio_total: total,
         fecha_orden: `${date} - ${horas}:${minutos}`,
         direccion: direccion,
@@ -502,6 +515,7 @@ export default function CartPage() {
           publicKey: "onhd841m1THfb0I-F",
           privateKey:"NLUSM4a15zOSfSdqJ2ANl"
         }
+      
     ).then(
       (response) => {
         console.log('SUCCESS!', response.status, response.text);
@@ -566,10 +580,11 @@ export default function CartPage() {
                     </QuantityLabel>
                     <Button
                       onClick={() => moreOfThisProduct(product._id)}>+</Button>
-                      <Button
-                      onClick={() => remove(product._id)}>Remove</Button>
                   </ContCantity>
+                                                                          
                   <div>${cartProducts.filter(id => id === product._id).length * product.price}</div>
+                  <ButtonRemove
+                      onClick={() => remove(product._id)}><Trash/></ButtonRemove>
                 </ContProduct>
 
               ))}

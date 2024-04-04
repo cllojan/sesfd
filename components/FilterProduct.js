@@ -3,11 +3,16 @@ import { useRouter } from 'next/router';
 import styled from "styled-components";
 import Button from "@/components/Button";
 import { Poppins } from 'next/font/google'
+import { Inter } from 'next/font/google'
 const roboto = Poppins({
     weight: '500',
     subsets: ['latin'],
   })
-
+  
+const inter = Inter({
+    subsets: ['latin'],
+    display: 'swap',
+})
 const FilterContainer = styled.div`
     height:100vh;
     margin:20px;
@@ -112,14 +117,14 @@ const AddCartButton = styled.button`
   font-weight: 500;
   cursor:pointer;
 
-  font-family:'Inter', Courier, monospace;
+  
 
 `
 export default function FilterProduct({ category }) {
     const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState([]);
     const [searchTerm, setSearchTerm] = useState(" ");
     const [priceMin, setPriceMin] = useState(0);
-    const [priceMax, setPriceMax] = useState(1000);
+    const [priceMax, setPriceMax] = useState(9000);
     const router = useRouter();
     
     const handleChange = (e) => {
@@ -205,7 +210,7 @@ export default function FilterProduct({ category }) {
                         ))
                     }
                 </Category>
-                <AddCartButton type="submit">Buscar</AddCartButton>
+                <AddCartButton className={inter.className} type="submit">Buscar</AddCartButton>
             </form>
         </FilterContainer>
 
