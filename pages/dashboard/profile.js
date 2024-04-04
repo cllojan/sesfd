@@ -348,7 +348,7 @@ function ProfilePage({ data, orders }) {
                                     <tbody>
                                         {
                                             historyOrder.map((elm, inx) => (
-                                                <tr>
+                                                <tr key={inx}>
                                                     <td>{inx + 1}</td>
                                                     <td>
                                                         <Select type="text" className={inter.className}

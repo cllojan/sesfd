@@ -114,9 +114,9 @@ export default function Footer({product}) {
             </Column>
             <Column>
               <Ul>
-                  <li><a href="/">Inicio</a></li>
-                  <li><a href="/product">Productos</a></li>
-                  <li><a href="/cart">Carrito</a></li>
+                  <li><Link href="/">Inicio</Link></li>
+                  <li><Link href="/product">Productos</Link></li>
+                  <li><Link href="/cart">Carrito</Link></li>
               </Ul>
             </Column>
           </ColumnsWrapper>
