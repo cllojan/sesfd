@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { Inter } from 'next/font/google'
+import ErrorIcon from "./icons/Error";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -30,7 +31,10 @@ const InputBox = styled.div`
     
   }
 `
+const H1 = styled.h1`
 
+color:#374151;
+`
 const Label = styled.label`
   
   
@@ -94,28 +98,55 @@ const Input = styled.input`
   }
      
 `;
+const ContError = styled.div`
+    width:100%;
+    height: 50px;
+    margin-top:5px;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color:#EC7063;
+    gap:0.5em;
+    border-radius: 7px;
+    svg{
+        height:20px;
+        width:20px;
+        fill:#374151;
+    }
+`
 export default function RegisterForm() {
     const [name, setName] = useState("")
     const [lastname, setLastname] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
     const router = useRouter()
     async function handleSubmit(event) {
         event.preventDefault()        
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+
         try {
+            if(name.length ==0 ) throw new Error("Ingrese  su nombre");
+            if(lastname.length ==0 ) throw new Error("Ingrese  su appelido");
+            if(!email.match(validRegex)) throw new Error("El email ingresado no es valido");
+            if(password.length ==0)throw new Error("No ha ingresado una contrasena");
             const response = await axios.post('/api/auth/signup', {
                 name:name,lastname:lastname, email, password,  perfil_image: `/avatar.png`
             });
+                        
             const res = await signIn("credentials", {
-                email: email,
-                password: password,
-                redirect: false
-            })
-            console.log(response)
+              email: email,
+              password: password,
+              redirect: false
+          })
             if (res.ok) return router.push("/dashboard/profile")
-            console.log(response)
-        } catch (e) {
-            console.log(e)
+        } catch (e) {        
+          console.log(e)
+            
+            setError(e?.response?.data?.message||e.message)
+            
         }
 
     }
@@ -124,7 +155,15 @@ export default function RegisterForm() {
         <FormContainer>
             
              <InputContainer>
-             <h1>Registrar</h1>
+             
+             <H1>Registrar</H1>
+             {error ?
+                <ContError>
+                    <ErrorIcon/>
+                      <Label htmlFor="">{error}</Label>
+                    </ContError> :
+                <ContInput>
+              </ContInput>}
               <InputBox>
                 <ContInput className="">
                   <Label htmlFor="">Nombre</Label>

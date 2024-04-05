@@ -1,8 +1,8 @@
 import Link from "next/link";
 import styled from "styled-components";
-import {useRouter} from 'next/router';
-import {useContext, useState} from "react";
-import {CartContext} from "@/components/CartContext";
+import { useRouter } from 'next/router';
+import { useContext, useState } from "react";
+import { CartContext } from "@/components/CartContext";
 import BarsIcon from "@/components/icons/Bars";
 import CartIcon from '@/components/icons/CartIcon';
 import LogoIcon from '@/components/icons/LogoIcon';
@@ -50,7 +50,7 @@ const Wrapper = styled.div`
 `;
 const StyledNav = styled.nav`
   margin-left: 180px;
-  ${props => (props.mobileNavActive || props.cartOpen) ? `
+  ${props => (props.mobileNavActive) ? `
     display: block;
   ` : `
     display: none;
@@ -92,7 +92,7 @@ const NavLink = styled(Link)`
     padding:0;
   }
 `;
-const NavReg= styled(NavLink)`
+const NavReg = styled(NavLink)`
   padding: 10px 10px;  
 `
 const NavLogin = styled(NavLink)`
@@ -170,7 +170,7 @@ const ButtonSearch = styled.button`
     width:20px;
   }
 `
-const CartLink= styled(NavLink)`
+const CartLink = styled(NavLink)`
 
   position:relative;  
   
@@ -200,72 +200,115 @@ const SpanCont = styled.span`
 const ProfileImage = styled.img`
   border-radius: 50%;
 `
+
+const ContModal = styled.div`
+
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  height: 30%;
+  background:#fff;
+`
+const ModalFlex = styled.div`
+  margin: 40px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+`
 export default function Header() {
   const router = useRouter();
-  const {cartProducts} = useContext(CartContext);
-  const [mobileNavActive,setMobileNavActive] = useState(false);
+  const { cartProducts } = useContext(CartContext);
+  const [mobileNavActive, setMobileNavActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const {data, status} = useSession();
+  const { data, status } = useSession();
   console.log(useSession())
-  const handleSearch = (event) => {    
+  const handleSearch = (event) => {
     event.preventDefault();
     // Redirigir a la página de búsqueda con el término de búsqueda en la URL
     router.push({
-      pathname:`/product/search/${searchTerm}`
+      pathname: `/product/search/${searchTerm}`
     });
     setSearchTerm("");
   };
-  async function cerrarsesion(){
+  async function cerrarsesion() {
     await signOut()
 
   }
   return (
-    <StyledHeader>      
-        <Wrapper>
-          <Logo href={'/'}>            
-            <LogoIcon/>
-            <p className={roboto.className}>e<span>-</span>shop</p>
-          </Logo>
-          
-          <ContInput onSubmit={handleSearch}>
-            
-            <InputSearch type="text" name="search" onChange={(e)=>setSearchTerm(e.target.value)}/>
-            <ButtonSearch type="submit">
-              <SearchIcon/>
-            </ButtonSearch>            
-          </ContInput>          
-          <StyledNav mobileNavActive={mobileNavActive} >
+    <StyledHeader>
+      <Wrapper>
+        <Logo href={'/'}>
+          <LogoIcon />
+          <p className={roboto.className}>e<span>-</span>shop</p>
+        </Logo>
+
+        <ContInput onSubmit={handleSearch}>
+
+          <InputSearch type="text" name="search" onChange={(e) => setSearchTerm(e.target.value)} />
+          <ButtonSearch type="submit">
+            <SearchIcon />
+          </ButtonSearch>
+        </ContInput>
+        {mobileNavActive ?  <ContModal>
+          <ModalFlex>
             {/*<NavLink href={'/'}>Inicio</NavLink>
               <NavLink href={"/categoria"}>Categorias</NavLink>
             */}
-            <NavLink href={'/products'}>Productos</NavLink>            
-            
-            <CartLink href={"/cart"}><CartIcon/> <SpanCont>{cartProducts.length}</SpanCont></CartLink>
+            <NavLink href={'/products'}>Productos</NavLink>
+
+            <CartLink href={"/cart"}>Carrito ({cartProducts.length})</CartLink>
             <Account>
+              {
+                status != "authenticated" ? <>
+                  <NavLogin href={'/login'}>Iniciar Sesión</NavLogin>
+                  <NavReg href={'/register'}>Registrar</NavReg>
+                </>
+                  : (
+                    <>
+                      <NavLink href={'/dashboard/profile'} >
+                        <ProfileImage src={data?.user?.perfil_image ? data?.user?.perfil_image : "/avatar.png"} width="45px" height="45px" />
+                      </NavLink>
+                      <NavLogin href={"/"} onClick={() => signOut({ callbackUrl: '/', redirect: true })}>Cerrar Sesion</NavLogin>
+                    </>
+                  )
+              }
+            </Account>
+
+          </ModalFlex>
+        </ContModal> : <></>}
+        <StyledNav  >
+          {/*<NavLink href={'/'}>Inicio</NavLink>
+              <NavLink href={"/categoria"}>Categorias</NavLink>
+            */}
+          <NavLink href={'/products'}>Productos</NavLink>
+
+          <CartLink href={"/cart"}><CartIcon /> <SpanCont>{cartProducts.length}</SpanCont></CartLink>
+          <Account>
             {
               status != "authenticated" ? <>
                 <NavLogin href={'/login'}>Iniciar Sesión</NavLogin>
                 <NavReg href={'/register'}>Registrar</NavReg>
-                </>
-                :(
-            <>
-              <NavLink href={'/dashboard/profile'} >              
-                <ProfileImage src={data?.user?.perfil_image ? data?.user?.perfil_image : "/avatar.png" } width="45px" height="45px"/>
-              </NavLink>
-              <NavLogin href={"/"} onClick={() => signOut({ callbackUrl: '/', redirect:true })}>Cerrar Sesion</NavLogin>
               </>
-              )
+                : (
+                  <>
+                    <NavLink href={'/dashboard/profile'} >
+                      <ProfileImage src={data?.user?.perfil_image ? data?.user?.perfil_image : "/avatar.png"} width="45px" height="45px" />
+                    </NavLink>
+                    <NavLogin href={"/"} onClick={() => signOut({ callbackUrl: '/', redirect: true })}>Cerrar Sesion</NavLogin>
+                  </>
+                )
             }
-            </Account>
+          </Account>
 
-          </StyledNav>
-          <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
-            <BarsIcon />            
-          </NavButton>
-          
-        </Wrapper>
-        
-           
+        </StyledNav>
+        <NavButton onClick={() => setMobileNavActive(!mobileNavActive)}>
+          <BarsIcon />
+        </NavButton>
+
+      </Wrapper>
+
+
 
 
     </StyledHeader>
