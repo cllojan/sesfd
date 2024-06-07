@@ -222,7 +222,7 @@ export default function Header() {
   const [mobileNavActive, setMobileNavActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const { data, status } = useSession();
-  console.log(useSession())
+  console.log("data:",data);
   const handleSearch = (event) => {
     event.preventDefault();
     // Redirigir a la página de búsqueda con el término de búsqueda en la URL
