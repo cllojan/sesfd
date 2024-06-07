@@ -43,6 +43,7 @@ const Logo = styled(Link)`
   }
 `;
 const Wrapper = styled.div`
+position:relative;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -50,19 +51,15 @@ const Wrapper = styled.div`
 `;
 const StyledNav = styled.nav`
   margin-left: 180px;
-  ${props => (props.mobileNavActive) ? `
-    display: block;
-  ` : `
-    display: none;
-  `}
+  display:block;
   gap: 15px;
-  position: fixed;
-  top: 0;
-  bottom: 0;
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
   left: 0;
   right: 0;
   padding: 70px 20px 20px;
- 
+  z-index: 2000;
   @media screen and (min-width: 768px) {
     display: flex;
     align-items:center;
@@ -202,12 +199,20 @@ const ProfileImage = styled.img`
 `
 
 const ContModal = styled.div`
-
+  z-index: 20;
+  display:${props=> props.mobileNavActive?"block":"none"};
   position: absolute;
-  top: 80px;
+  bottom:-200px;
   width: 100%;
-  height: 30%;
+  height:200px;
   background:#fff;
+  
+  @media screen and (min-width: 988px) {
+    display: none;
+    align-items:center;
+    position: static;
+    padding: 0;
+  }
 `
 const ModalFlex = styled.div`
   margin: 40px;
@@ -222,7 +227,7 @@ export default function Header() {
   const [mobileNavActive, setMobileNavActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const { data, status } = useSession();
-  console.log("data:",data);
+  console.log("data:",mobileNavActive);
   const handleSearch = (event) => {
     event.preventDefault();
     // Redirigir a la página de búsqueda con el término de búsqueda en la URL
@@ -250,7 +255,7 @@ export default function Header() {
             <SearchIcon />
           </ButtonSearch>
         </ContInput>
-        {mobileNavActive ?  <ContModal>
+        <ContModal mobileNavActive={mobileNavActive}>
           <ModalFlex>
             {/*<NavLink href={'/'}>Inicio</NavLink>
               <NavLink href={"/categoria"}>Categorias</NavLink>
@@ -267,7 +272,7 @@ export default function Header() {
                   : (
                     <>
                       <NavLink href={'/dashboard/profile'} >
-                        <ProfileImage src={data?.perfil_image ? data.perfil_image : "/avatar.png"} width="45px" height="45px" />
+                        <ProfileImage src={data?.user?.perfil_image ? data.user.perfil_image : "/avatar.png"} width="45px" height="45px" />
                       </NavLink>
                       <NavLogin href={"/"} onClick={() => signOut({ callbackUrl: '/', redirect: true })}>Cerrar Sesion</NavLogin>
                     </>
@@ -276,8 +281,8 @@ export default function Header() {
             </Account>
 
           </ModalFlex>
-        </ContModal> : <></>}
-        <StyledNav  >
+        </ContModal> 
+        <StyledNav   mobileNavActive ={mobileNavActive }>
           {/*<NavLink href={'/'}>Inicio</NavLink>
               <NavLink href={"/categoria"}>Categorias</NavLink>
             */}
@@ -293,7 +298,7 @@ export default function Header() {
                 : (
                   <>
                     <NavLink href={'/dashboard/profile'} >
-                      <ProfileImage src={data?.perfil_image ? data.perfil_image : "/avatar.png"} width="45px" height="45px" />
+                      <ProfileImage src={data?.user.perfil_image ? data.user.perfil_image : "/avatar.png"} width="45px" height="45px" />
                     </NavLink>
                     <NavLogin href={"/"} onClick={() => signOut({ callbackUrl: '/', redirect: true })}>Cerrar Sesion</NavLogin>
                   </>

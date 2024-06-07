@@ -220,7 +220,7 @@ const ButtonRemove = styled(Button)`
 function ProfilePage({ data, orders }) {
 
     const [id, setId] = useState(data._id);
-    console.log(data)
+    console.log("dataimage:",data.perfil_image)
     const [name, setName] = useState(data.name)
     const [lastname, setLastname] = useState(data.lastname)
     const [email, setEmail] = useState(data.email)
@@ -262,7 +262,7 @@ function ProfilePage({ data, orders }) {
 
         <ContainerProfile >
             <BackgroundProfile></BackgroundProfile>
-            <ProfileImage src={data?.perfil_image ? data.perfil_image : "/avatar.png"}  ></ProfileImage>
+            <ProfileImage src={data.perfil_image}  ></ProfileImage>
             <Profile className={inter.className}>
                 <Info>
                     <h1>{name} {lastname}</h1>

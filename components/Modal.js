@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
+import { signOut, useSession } from "next-auth/react"
 import { Inter } from 'next/font/google'
 import uploadFile from "@/lib/firebase";
 const inter = Inter({
@@ -156,7 +156,7 @@ const Modal = ({ handleDisplayModal, data }) => {
     const [provinciaSeleccionada, setProvinciaSeleccionada] = useState('1');
     const [cantonSeleccionada, setCantonSeleccionada] = useState('101');
     const [parroquiaSeleccionada, setParroquiaSeleccionada] = useState("10101");
-
+    const { datas, update } = useSession()
     const router = useRouter()
 
     useEffect(() => {
@@ -225,7 +225,12 @@ const Modal = ({ handleDisplayModal, data }) => {
                 province: provincia,
                 perfil_image: imgRes,                
             });
-
+            const rpo = await update({
+                ...datas,
+                user: {                  
+                  perfil_image:imgRes,                  
+                }
+              })
             
             if (response.status == 200) window.location.reload()
         } catch (e) {
