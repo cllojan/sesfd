@@ -293,7 +293,7 @@ export default function Header() {
                 : (
                   <>
                     <NavLink href={'/dashboard/profile'} >
-                      <ProfileImage src={data?.user?.perfil_image ? data?.user?.perfil_image : "/avatar.png"} width="45px" height="45px" />
+                      <ProfileImage src={data?.perfil_image ? data.perfil_image : "/avatar.png"} width="45px" height="45px" />
                     </NavLink>
                     <NavLogin href={"/"} onClick={() => signOut({ callbackUrl: '/', redirect: true })}>Cerrar Sesion</NavLogin>
                   </>
