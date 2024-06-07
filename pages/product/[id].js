@@ -77,7 +77,7 @@ export default function ProductPage({product}) {
               </div>
               <div>                
                 <AddCartButton primary onClick={() => addProduct(product._id)}>
-                  Add to cart
+                  Agregar al carrito
                 </AddCartButton>
               </div>
             </PriceRow>
