@@ -262,7 +262,7 @@ function ProfilePage({ data, orders }) {
 
         <ContainerProfile >
             <BackgroundProfile></BackgroundProfile>
-            <ProfileImage src={data?.user?.perfil_image ? data?.user?.perfil_image : "/avatar.png"}  ></ProfileImage>
+            <ProfileImage src={data?.perfil_image ? data.perfil_image : "/avatar.png"}  ></ProfileImage>
             <Profile className={inter.className}>
                 <Info>
                     <h1>{name} {lastname}</h1>
